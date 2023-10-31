@@ -1,6 +1,3 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.css";
 
 const style = {
@@ -11,9 +8,10 @@ const style = {
   secondary:
     "p-4 max-w-5xl grid gap-4 xs:grid-cols-2 bg-primarylight rounded-lg",
   main: "bg-pink-500",
-  prompt: "h-80 bg-blue-500 bg-secondary rounded-lg",
+  prompt: "h-80 bg-blue-500 bg-secondary rounded-lg ",
   settings: "h-56 bg-blue-500 bg-secondary rounded-lg",
-  preview: "h-72 bg-blue-500 bg-secondary rounded-lg",
+  preview: "relative h-72 bg-blue-500 bg-secondary rounded-lg",
+  iframe: "absolute top-0 left-0 w-full h-full",
   button: "bg-action p-1 text-white rounded-lg",
   element: "h-16 bg-blue-500",
 };
@@ -31,12 +29,17 @@ function App() {
             <button className={style.button}>muokkaa</button>
             <button className={style.button}>käyttäjä</button>
           </nav>
-          <div className={style.prompt}></div>
-          <div className={style.settings}></div>
+          <textarea className={style.prompt}></textarea>
+          <textarea className={style.settings}></textarea>
           <button className={style.button}>css framework</button>
         </div>
         <div className={style.secondary}>
-          <div className={style.preview}></div>
+          <div className={style.preview}>
+            <iframe
+              className={style.iframe}
+              src="https://todo-403206.lm.r.appspot.com"
+            ></iframe>
+          </div>
           <button className={style.button}>tallenna sivu</button>
         </div>
       </div>
