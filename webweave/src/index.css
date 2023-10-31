@@ -1,3 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+  background-color: #2c3e50;
+}
+
+@font-face {
+  font-family: "sometype";
+  src: url("./assets/fonts/SometypeMono-VariableFont_wght.ttf");
+}
+
+@font-face {
+  font-family: "sourcecode";
+  src: url("./assets/fonts/SourceCodePro-VariableFont_wght.ttf");
+}
