@@ -1,39 +1,21 @@
-import React, { useContext, useRef } from "react";
+import React, { useContext } from "react";
 import style from "../assets/style";
 import { AuthContext } from "../context/AuthContext";
 import { auth } from "../firebase";
 import { useState } from "react";
+import { LoginForm } from "../components/loginForm";
+import { RegisterForm } from "../components/RegisterForm";
 
 export const Login = () => {
   const user = useContext(AuthContext);
 
-  const emailRef = useRef<HTMLInputElement>(null);
-  const passwordRef = useRef<HTMLInputElement>(null);
-
-  const createAccount = async () => {
-    try {
-      await auth.createUserWithEmailAndPassword(
-        emailRef.current!.value,
-        passwordRef.current!.value
-      );
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const signIn = async () => {
-    try {
-      await auth.signInWithEmailAndPassword(
-        emailRef.current!.value,
-        passwordRef.current!.value
-      );
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const signOut = async () => {
     await auth.signOut();
+  };
+
+  const [formToggle, setFormToggle] = useState<boolean>(true);
+  const toggle = () => {
+    setFormToggle(!formToggle);
   };
 
   return (
@@ -49,36 +31,18 @@ export const Login = () => {
             <header className={style.header}>
               <h1>&lt;Webweave/&gt;</h1>
             </header>
-            <form className={style.form}>
-              <h2 className={style.h2}>Login</h2>
-              <form id="formEmail">
-                <input
-                  className={style.input}
-                  ref={emailRef}
-                  type="email"
-                  placeholder="email"
-                />
-              </form>
-              <form id="formPassword">
-                <input
-                  className={style.input}
-                  ref={passwordRef}
-                  type="password"
-                  placeholder="password"
-                />
-              </form>
-              <form>
-                <button className={style.button} onClick={signIn} type="button">
-                  Login
+            <div className={style.form}>
+              {formToggle ? <LoginForm /> : <RegisterForm toggle={toggle} />}
+            </div>
+            <form>
+              <p className={style.p}>
+                {formToggle
+                  ? "Don't have an account? "
+                  : "Already have an account? "}
+                <button className={style.link} onClick={toggle}>
+                  {formToggle ? "Sign up" : "Login"}
                 </button>
-
-                <p className={style.p}>
-                  Already have an account?{" "}
-                  <button className={style.link} onClick={createAccount}>
-                    Sign up
-                  </button>
-                </p>
-              </form>
+              </p>
             </form>
           </div>
         </div>
@@ -89,6 +53,7 @@ export const Login = () => {
               <h1>&lt;Webweave/&gt;</h1>
             </header>
             <h2 className={style.h2}>Welcome {user.email}</h2>
+            <button className={style.button}>Start crating!</button>
           </div>
         </div>
       )}

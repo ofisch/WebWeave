@@ -1,44 +1,52 @@
 import { useRef } from "react";
 import style from "../assets/style";
+import { auth } from "../firebase";
 
 export const RegisterForm = () => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
 
+  const createAccount = async () => {
+    try {
+      await auth.createUserWithEmailAndPassword(
+        emailRef.current!.value,
+        passwordRef.current!.value
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <>
-      <form className={style.form}>
-        <h2 className={style.h2}>Sign up</h2>
-        <form id="formEmail">
-          <input
-            className={style.input}
-            ref={emailRef}
-            type="email"
-            placeholder="email"
-          />
-        </form>
-        <form id="formPassword">
-          <input
-            className={style.input}
-            ref={passwordRef}
-            type="password"
-            placeholder="password"
-          />
-        </form>
-        <form>
-          <button
-            className={style.button}
-            onClick={createAccount}
-            type="button"
-          >
-            Sign up
-          </button>
-
-          <p className={style.p}>
-            Already have an account?{" "}
-            <button className={style.link}>Login</button>
-          </p>
-        </form>
+      <h2 className={style.h2}>Sign up</h2>
+      <form id="formEmail">
+        <input
+          className={style.input}
+          ref={emailRef}
+          type="email"
+          placeholder="email"
+        />
+      </form>
+      <form id="formPassword">
+        <input
+          className={style.input}
+          ref={passwordRef}
+          type="password"
+          placeholder="password"
+        />
+      </form>
+      <form id="formCheck">
+        <input
+          className={style.input}
+          type="password"
+          placeholder="password again"
+        />
+      </form>
+      <form>
+        <button className={style.button} onClick={createAccount} type="button">
+          Sign up
+        </button>
       </form>
     </>
   );
