@@ -26,3 +26,35 @@
         </div>
       </div>
     </>
+
+
+
+    //login
+
+        <div className={style.container}>
+      <div className={style.top}>
+        <header className={style.header}>
+          <h1>&lt;Webweave/&gt;</h1>
+        </header>
+        <div className={style.form}>
+          <h2 className={style.h2}>Login</h2>
+          <input
+            className={style.input}
+            type="text"
+            placeholder="Username..."
+          />
+          <input
+            className={style.input}
+            type="text"
+            placeholder="Password..."
+          />
+          <button className={style.button}>Login</button>
+          <p className={style.p}>
+            Don't have an account?{" "}
+            <a className={style.link} href="#">
+              Sign up
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>

@@ -12,6 +12,12 @@ const style = {
   iframe: "absolute top-0 left-0 w-full h-full",
   button: "bg-action p-1 text-white rounded-lg",
   element: "h-16 bg-blue-500",
+
+  form: "w-full grid gap-4",
+  h2: "text-white text-2xl my-10",
+  input: "p-2 rounded-md",
+  p: "text-white",
+  link: "text-action",
 };
 
 export default style;
