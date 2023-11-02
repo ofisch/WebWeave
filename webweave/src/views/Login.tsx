@@ -3,7 +3,7 @@ import style from "../assets/style";
 import { AuthContext } from "../context/AuthContext";
 import { auth } from "../firebase";
 import { useState } from "react";
-import { LoginForm } from "../components/loginForm";
+import { LoginForm } from "../components/LoginForm";
 import { RegisterForm } from "../components/RegisterForm";
 
 export const Login = () => {
@@ -32,7 +32,7 @@ export const Login = () => {
               <h1>&lt;Webweave/&gt;</h1>
             </header>
             <div className={style.form}>
-              {formToggle ? <LoginForm /> : <RegisterForm toggle={toggle} />}
+              {formToggle ? <LoginForm /> : <RegisterForm />}
             </div>
             <form>
               <p className={style.p}>

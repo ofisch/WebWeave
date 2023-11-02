@@ -14,6 +14,10 @@ export default {
         sourcecode: ["sourcecode"],
       },
     },
+    scale: {
+      150: "1.5",
+      175: "1.75",
+    },
   },
   plugins: [],
 };

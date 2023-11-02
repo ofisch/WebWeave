@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import style from "../assets/style";
-import { auth } from "../firebase";
+import { auth } from "../firebase.tsx";
 
 export const LoginForm = () => {
   const emailRef = useRef<HTMLInputElement>(null);
