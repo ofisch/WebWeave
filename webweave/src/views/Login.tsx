@@ -8,8 +8,14 @@ export const Login = () => {
 
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
+  const passwordConfRef = useRef<HTMLInputElement>(null);
 
   const createAccount = async () => {
+    if (passwordRef.current!.value !== passwordConfRef.current!.value) {
+      alert("Password does not match");
+      return;
+    }
+
     try {
       await auth.createUserWithEmailAndPassword(
         emailRef.current!.value,
@@ -55,24 +61,28 @@ export const Login = () => {
             </header>
             <form className={style.form}>
               <h2 className={style.h2}>{formToggle ? "Login" : "Sign up"}</h2>
-              <form id="formEmail">
+              <input
+                className={style.input}
+                ref={emailRef}
+                type="email"
+                placeholder="email"
+              />
+              <input
+                className={style.input}
+                ref={passwordRef}
+                type="password"
+                placeholder="password"
+              />
+              {formToggle ? null : (
                 <input
                   className={style.input}
-                  ref={emailRef}
-                  type="email"
-                  placeholder="email"
-                />
-              </form>
-              <form id="formPassword">
-                <input
-                  className={style.input}
-                  ref={passwordRef}
+                  ref={passwordConfRef}
                   type="password"
-                  placeholder="password"
+                  placeholder="confirm password"
                 />
-              </form>
+              )}
               {formToggle ? (
-                <form>
+                <div className={style.form}>
                   <button
                     className={style.button}
                     onClick={signIn}
@@ -90,9 +100,9 @@ export const Login = () => {
                       Sign up
                     </button>
                   </p>
-                </form>
+                </div>
               ) : (
-                <form>
+                <div className={style.form}>
                   <button
                     className={style.button}
                     onClick={createAccount}
@@ -110,7 +120,7 @@ export const Login = () => {
                       Login
                     </button>
                   </p>
-                </form>
+                </div>
               )}
             </form>
           </div>
