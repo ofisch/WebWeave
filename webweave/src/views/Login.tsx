@@ -108,7 +108,7 @@ export const Login = () => {
   };
 
   const signIn = async () => {
-    const input = emailRef.current!.value; // The input can be either an email or a username
+    const input = emailRef.current!.value;
     const passwordValue = passwordRef.current!.value;
     const errors = [];
 
@@ -125,15 +125,12 @@ export const Login = () => {
       return;
     }
 
-    // Check if the input matches an email format
     const isEmail = emailPattern.test(input);
 
     try {
       if (isEmail) {
-        // Log in with email
         await auth.signInWithEmailAndPassword(input, passwordValue);
       } else {
-        // Fetch the user by username and log in
         const querySnapshot = await firestore
           .collection("users")
           .where("username", "==", input)
@@ -156,7 +153,7 @@ export const Login = () => {
     } catch (error) {
       if (error instanceof Error) {
         errors.push("Incorrect email, username, or password");
-        console.log(error); // You can log the error for debugging purposes
+        console.log(error);
       }
     }
 
