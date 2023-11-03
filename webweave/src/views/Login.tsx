@@ -156,13 +156,27 @@ export const Login = () => {
             <header className={style.header}>
               <h1>&lt;Webweave/&gt;</h1>
             </header>
-            <h2 className={style.h2}>Welcome {user.email}</h2>
-            <button className={style.button} onClick={() => goTo("/")}>
-              Start creating!
-            </button>
-            <button className={style.button} onClick={() => goTo("/profile")}>
-              My profile
-            </button>
+            <main className={style.profile}>
+              <h2 className={style.h2}>Welcome {user.email}</h2>
+              <ul className={style.list}>
+                <li>
+                  <button
+                    className={style.buttonPage}
+                    onClick={() => goTo("/")}
+                  >
+                    Start creating!
+                  </button>
+                </li>
+                <li>
+                  <button
+                    className={style.buttonPage}
+                    onClick={() => goTo("/profile")}
+                  >
+                    My profile
+                  </button>
+                </li>
+              </ul>
+            </main>
           </div>
         </div>
       )}

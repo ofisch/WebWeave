@@ -16,7 +16,7 @@ const style = {
   userInfo: "flex flex-col items-center gap-3 text-xl",
   element: "h-16 bg-blue-500",
   list: "grid gap-4",
-  form: "w-full grid gap-4",
+  form: "grid gap-4 mx-auto",
   h2: "text-white text-2xl my-10",
   input: "p-2 rounded-md text-black",
   p: "text-white",
