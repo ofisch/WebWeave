@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import style from "../assets/style";
 import { AuthContext } from "../context/AuthContext";
 import { auth } from "../firebase";
@@ -8,6 +8,9 @@ import { useNavigate } from "react-router-dom";
 export const Login = () => {
   const user = useContext(AuthContext);
 
+  const [username, setUsername] = useState("");
+
+  const usernameRef = useRef<HTMLInputElement>(null);
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const passwordConfRef = useRef<HTMLInputElement>(null);
@@ -17,9 +20,14 @@ export const Login = () => {
 
   const navigate = useNavigate();
 
-  const addUserToDatabase = async (id: string, email: string) => {
+  const addUserToDatabase = async (
+    id: string,
+    username: string,
+    email: string
+  ) => {
     try {
       await firestore.collection("users").doc(id).set({
+        username: username,
         email: email,
       });
     } catch (error) {
@@ -28,14 +36,31 @@ export const Login = () => {
   };
 
   const createAccount = async () => {
+    const usernameValue = usernameRef.current!.value;
     const emailValue = emailRef.current!.value;
     const passwordValue = passwordRef.current!.value;
     const passwordConfValue = passwordConfRef.current!.value;
+
+    const usersCollection = firestore.collection("users");
 
     const errors = [];
 
     if (!emailValue || !passwordValue || !passwordConfValue) {
       errors.push("Please fill in all of the fields");
+    }
+
+    if (usernameValue.length < 3) {
+      errors.push("Username should be atleast 3 characters");
+    }
+
+    if (usernameValue.length > 3) {
+      const querySnapshot = await usersCollection
+        .where("username", "==", usernameValue)
+        .get();
+
+      if (querySnapshot.size > 0) {
+        errors.push("Username already taken");
+      }
     }
 
     if (!emailPattern.test(emailValue)) {
@@ -50,16 +75,18 @@ export const Login = () => {
       errors.push("Password should be at least 6 charachters");
     }
 
+    if (errors.length > 0) {
+      setErrorMessage(errors.join(", "));
+      return;
+    }
+
     try {
-      await auth.createUserWithEmailAndPassword(
-        emailRef.current!.value,
-        passwordRef.current!.value
-      );
+      await auth.createUserWithEmailAndPassword(emailValue, passwordValue);
       //lisätään käyttäjä firestore-dokumenttiin sivujen tallennusta varten
       auth.onAuthStateChanged((user) => {
         if (user) {
           const uid = user.uid;
-          addUserToDatabase(uid, emailRef.current!.value);
+          addUserToDatabase(uid, usernameValue, emailValue);
         }
       });
     } catch (error) {
@@ -68,17 +95,15 @@ export const Login = () => {
 
         if (errorCode == "auth/email-already-in-use") {
           errors.push("Email already in use");
+
+          if (errors.length > 0) {
+            setErrorMessage(errors.join(", "));
+            return;
+          }
         } else {
           console.log(error);
         }
       }
-    }
-
-    if (errors.length > 0) {
-      setErrorMessage(errors.join(", "));
-      return;
-    } else {
-      setErrorMessage("");
     }
   };
 
@@ -96,34 +121,45 @@ export const Login = () => {
       errors.push("Invalid email format");
     }
 
+    if (errors.length > 0) {
+      setErrorMessage(errors.join(", "));
+      return;
+    }
+
     try {
-      await auth.signInWithEmailAndPassword(
-        emailRef.current!.value,
-        passwordRef.current!.value
-      );
+      await auth.signInWithEmailAndPassword(emailValue, passwordValue);
     } catch (error) {
       if (error instanceof Error) {
         const errorCode: string = error.code;
 
         if (errorCode === "auth/invalid-login-credentials") {
           errors.push("Incorrect email or password");
+
+          if (errors.length > 0) {
+            setErrorMessage(errors.join(", "));
+            return;
+          }
         } else {
           console.log(error);
         }
       }
-    }
-
-    if (errors.length > 0) {
-      setErrorMessage(errors.join(", "));
-      return;
-    } else {
-      setErrorMessage("");
     }
   };
 
   const signOut = async () => {
     await auth.signOut();
   };
+
+  useEffect(() => {
+    if (user) {
+      const userRef = firestore.collection("users").doc(user.uid);
+      userRef.get().then((doc) => {
+        if (doc.exists) {
+          setUsername(doc.data().username);
+        }
+      });
+    }
+  }, [user]);
 
   const goTo = (endpoint: string) => {
     navigate(endpoint);
@@ -150,6 +186,13 @@ export const Login = () => {
             </header>
             <form className={style.form}>
               <h2 className={style.h2}>{formToggle ? "Login" : "Sign up"}</h2>
+              {formToggle ? null : (
+                <input
+                  className={style.input}
+                  ref={usernameRef}
+                  placeholder="username"
+                />
+              )}
               <input
                 className={style.input}
                 ref={emailRef}
@@ -223,7 +266,7 @@ export const Login = () => {
               <h1>&lt;Webweave/&gt;</h1>
             </header>
             <main className={style.profile}>
-              <h2 className={style.h2}>Welcome {user.email}</h2>
+              <h2 className={style.h2}>Welcome {username}</h2>
               <ul className={style.list}>
                 <li>
                   <button
