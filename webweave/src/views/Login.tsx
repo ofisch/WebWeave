@@ -2,6 +2,8 @@ import React, { useContext, useRef, useState } from "react";
 import style from "../assets/style";
 import { AuthContext } from "../context/AuthContext";
 import { auth } from "../firebase";
+import { firestore } from "../firebase";
+import { useNavigate } from "react-router-dom";
 
 export const Login = () => {
   const user = useContext(AuthContext);
@@ -9,6 +11,18 @@ export const Login = () => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const passwordConfRef = useRef<HTMLInputElement>(null);
+
+  const navigate = useNavigate();
+
+  const addUserToDatabase = async (id: string, email: string) => {
+    try {
+      await firestore.collection("users").doc(id).set({
+        email: email,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const createAccount = async () => {
     if (passwordRef.current!.value !== passwordConfRef.current!.value) {
@@ -21,6 +35,13 @@ export const Login = () => {
         emailRef.current!.value,
         passwordRef.current!.value
       );
+      //lisätään käyttäjä firestore-dokumenttiin sivujen tallennusta varten
+      auth.onAuthStateChanged((user) => {
+        if (user) {
+          const uid = user.uid;
+          addUserToDatabase(uid, emailRef.current!.value);
+        }
+      });
     } catch (error) {
       console.error(error);
     }
@@ -39,6 +60,10 @@ export const Login = () => {
 
   const signOut = async () => {
     await auth.signOut();
+  };
+
+  const goTo = (endpoint: string) => {
+    navigate(endpoint);
   };
 
   const [formToggle, setFormToggle] = useState(true);
@@ -132,7 +157,12 @@ export const Login = () => {
               <h1>&lt;Webweave/&gt;</h1>
             </header>
             <h2 className={style.h2}>Welcome {user.email}</h2>
-            <button className={style.button}>Start crating!</button>
+            <button className={style.button} onClick={() => goTo("/")}>
+              Start creating!
+            </button>
+            <button className={style.button} onClick={() => goTo("/profile")}>
+              My profile
+            </button>
           </div>
         </div>
       )}

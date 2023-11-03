@@ -134,3 +134,14 @@ export const Login = () => {
     </>
   );
 };
+
+
+
+  /*
+      //sivujen tallennus käyttäjälle
+      firestore
+        .collection("users")
+        .doc(id)
+        .collection("pages")
+        .add({ pageName: "Sample page", content: "<h1>header</h1>" });
+        */
