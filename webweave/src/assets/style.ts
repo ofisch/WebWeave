@@ -21,6 +21,7 @@ const style = {
   h2: "text-white text-2xl my-10",
   input: "p-2 rounded-md text-black",
   p: "text-white",
+  error: "text-red-500",
   link: "text-action",
   icon: "scale-175 text-action",
 };

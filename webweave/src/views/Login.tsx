@@ -11,6 +11,9 @@ export const Login = () => {
   const emailRef = useRef<HTMLInputElement>(null);
   const passwordRef = useRef<HTMLInputElement>(null);
   const passwordConfRef = useRef<HTMLInputElement>(null);
+  const [errorMessage, setErrorMessage] = useState<string>("");
+
+  const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
   const navigate = useNavigate();
 
@@ -25,9 +28,26 @@ export const Login = () => {
   };
 
   const createAccount = async () => {
-    if (passwordRef.current!.value !== passwordConfRef.current!.value) {
-      alert("Password does not match");
-      return;
+    const emailValue = emailRef.current!.value;
+    const passwordValue = passwordRef.current!.value;
+    const passwordConfValue = passwordConfRef.current!.value;
+
+    const errors = [];
+
+    if (!emailValue || !passwordValue || !passwordConfValue) {
+      errors.push("Please fill in all of the fields");
+    }
+
+    if (!emailPattern.test(emailValue)) {
+      errors.push("Invalid email format");
+    }
+
+    if (passwordValue !== passwordConfValue) {
+      errors.push("Password doesn't match");
+    }
+
+    if (passwordValue.length < 6) {
+      errors.push("Password should be at least 6 charachters");
     }
 
     try {
@@ -43,18 +63,61 @@ export const Login = () => {
         }
       });
     } catch (error) {
-      console.error(error);
+      if (error instanceof Error) {
+        const errorCode: string = error.code;
+
+        if (errorCode == "auth/email-already-in-use") {
+          errors.push("Email already in use");
+        } else {
+          console.log(error);
+        }
+      }
+    }
+
+    if (errors.length > 0) {
+      setErrorMessage(errors.join(", "));
+      return;
+    } else {
+      setErrorMessage("");
     }
   };
 
   const signIn = async () => {
+    const emailValue = emailRef.current!.value;
+    const passwordValue = passwordRef.current!.value;
+
+    const errors = [];
+
+    if (!emailValue || !passwordValue) {
+      errors.push("Please fill in all of the fields");
+    }
+
+    if (!emailPattern.test(emailValue)) {
+      errors.push("Invalid email format");
+    }
+
     try {
       await auth.signInWithEmailAndPassword(
         emailRef.current!.value,
         passwordRef.current!.value
       );
     } catch (error) {
-      console.error(error);
+      if (error instanceof Error) {
+        const errorCode: string = error.code;
+
+        if (errorCode === "auth/invalid-login-credentials") {
+          errors.push("Incorrect email or password");
+        } else {
+          console.log(error);
+        }
+      }
+    }
+
+    if (errors.length > 0) {
+      setErrorMessage(errors.join(", "));
+      return;
+    } else {
+      setErrorMessage("");
     }
   };
 
@@ -69,6 +132,7 @@ export const Login = () => {
   const [formToggle, setFormToggle] = useState(true);
   const toggle = () => {
     setFormToggle(!formToggle);
+    setErrorMessage("");
   };
 
   return (
@@ -108,6 +172,7 @@ export const Login = () => {
               )}
               {formToggle ? (
                 <div className={style.form}>
+                  <p className={style.error}>{errorMessage}</p>
                   <button
                     className={style.button}
                     onClick={signIn}
@@ -128,6 +193,7 @@ export const Login = () => {
                 </div>
               ) : (
                 <div className={style.form}>
+                  <p className={style.error}>{errorMessage}</p>
                   <button
                     className={style.button}
                     onClick={createAccount}
