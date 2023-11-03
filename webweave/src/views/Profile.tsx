@@ -5,9 +5,13 @@ import style from "../assets/style";
 // ikonit
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { firestore } from "../firebase";
+import { useNavigate } from "react-router";
+import { pageToEdit, setPageToEdit } from "../context/PageEditContext";
 
 export const Profile = () => {
   const user = useContext(AuthContext);
+
+  const navigate = useNavigate();
 
   const usersCollection = firestore.collection("users");
   const userDocRef = usersCollection.doc(user?.uid);
@@ -31,9 +35,16 @@ export const Profile = () => {
 
   const listPages = pages.map((item, index) => (
     <li key={index}>
-      <button className={style.buttonPage}>{item}</button>
+      <button className={style.buttonPage} onClick={() => goEdit(item)}>
+        {item}
+      </button>
     </li>
   ));
+
+  const goEdit = (page: string) => {
+    setPageToEdit(page);
+    navigate("/edit");
+  };
 
   return (
     <>

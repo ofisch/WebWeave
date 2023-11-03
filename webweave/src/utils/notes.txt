@@ -136,6 +136,9 @@ export const Login = () => {
 };
 
 
+vanha style.iframe: 
+"absolute top-0 left-0 w-full h-full"
+
 
   /*
       //sivujen tallennus käyttäjälle
