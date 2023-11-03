@@ -13,7 +13,7 @@ export const Login = () => {
     await auth.signOut();
   };
 
-  const [formToggle, setFormToggle] = useState<boolean>(true);
+  const [formToggle, setFormToggle] = useState(true);
   const toggle = () => {
     setFormToggle(!formToggle);
   };
