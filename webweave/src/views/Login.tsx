@@ -108,17 +108,16 @@ export const Login = () => {
   };
 
   const signIn = async () => {
-    const emailValue = emailRef.current!.value;
+    const input = emailRef.current!.value; // The input can be either an email or a username
     const passwordValue = passwordRef.current!.value;
-
     const errors = [];
 
-    if (!emailValue || !passwordValue) {
+    if (!input || !passwordValue) {
       errors.push("Please fill in all of the fields");
     }
 
-    if (!emailPattern.test(emailValue)) {
-      errors.push("Invalid email format");
+    if (!passwordValue.length) {
+      errors.push("Password should be at least 6 characters");
     }
 
     if (errors.length > 0) {
@@ -126,28 +125,49 @@ export const Login = () => {
       return;
     }
 
+    // Check if the input matches an email format
+    const isEmail = emailPattern.test(input);
+
     try {
-      await auth.signInWithEmailAndPassword(emailValue, passwordValue);
-    } catch (error) {
-      if (error instanceof Error) {
-        const errorCode: string = error.code;
+      if (isEmail) {
+        // Log in with email
+        await auth.signInWithEmailAndPassword(input, passwordValue);
+      } else {
+        // Fetch the user by username and log in
+        const querySnapshot = await firestore
+          .collection("users")
+          .where("username", "==", input)
+          .get();
 
-        if (errorCode === "auth/invalid-login-credentials") {
-          errors.push("Incorrect email or password");
-
-          if (errors.length > 0) {
-            setErrorMessage(errors.join(", "));
-            return;
-          }
+        if (querySnapshot.size === 0) {
+          errors.push("Incorrect email, username, or password");
+          setErrorMessage(errors.join(", "));
         } else {
-          console.log(error);
+          querySnapshot.forEach(async (doc) => {
+            const user = doc.data();
+            try {
+              await auth.signInWithEmailAndPassword(user.email, passwordValue);
+            } catch (error) {
+              errors.push("Incorrect email, username, or password");
+            }
+          });
         }
       }
+    } catch (error) {
+      if (error instanceof Error) {
+        errors.push("Incorrect email, username, or password");
+        console.log(error); // You can log the error for debugging purposes
+      }
+    }
+
+    if (errors.length > 0) {
+      setErrorMessage(errors.join(", "));
     }
   };
 
   const signOut = async () => {
     await auth.signOut();
+    setErrorMessage("");
   };
 
   useEffect(() => {
@@ -197,7 +217,7 @@ export const Login = () => {
                 className={style.input}
                 ref={emailRef}
                 type="email"
-                placeholder="email"
+                placeholder={formToggle ? "username or email" : "email"}
               />
               <input
                 className={style.input}
