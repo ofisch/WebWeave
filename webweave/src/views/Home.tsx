@@ -15,10 +15,10 @@ export const Home = () => {
           <button className={style.button}>css framework</button>
         </div>
         <div className={style.secondary}>
-          <div className={style.preview}>
+          <div className={style.editorPreview}>
             <iframe
+              srcDoc={localStorage.getItem("html")}
               className={style.iframe}
-              src="https://todo-403206.lm.r.appspot.com"
             ></iframe>
           </div>
           <button className={style.button}>tallenna sivu</button>

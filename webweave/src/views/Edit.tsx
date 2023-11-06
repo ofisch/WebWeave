@@ -20,11 +20,15 @@ export const Edit = () => {
 
   let currentPage: string;
 
+  //tyhjennetään localStorage, jotta käyttäjä ei näe vilausta edellisestä muokatusta sivusta
+  localStorage.setItem("html", "");
+
   const checkPageName = () => {
     if (pageToEdit === undefined) {
       currentPage = localStorage.getItem("pageToEdit");
     } else {
       currentPage = pageToEdit;
+
       localStorage.setItem("pageToEdit", pageToEdit);
     }
   };
@@ -43,6 +47,9 @@ export const Edit = () => {
           //return doc.data().content;
           console.log(doc.data().content);
           localStorage.setItem("html", doc.data().content);
+          // asetetaan uuden muokattavan sivun html-sisältö esikatseluun
+          document.querySelector("iframe").srcdoc =
+            localStorage.getItem("html");
         }
       });
     } catch (error) {
