@@ -5,6 +5,8 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { AuthContext } from "../context/AuthContext";
 
 export const Heading = () => {
+  const user = useContext(AuthContext);
+
   const navigate = useNavigate();
 
   const goToIndex = () => {
@@ -12,7 +14,11 @@ export const Heading = () => {
   };
 
   const goToProfile = () => {
-    navigate("/profile");
+    if (!user) {
+      navigate("/login");
+    } else {
+      navigate("/profile");
+    }
   };
 
   return (
