@@ -27,6 +27,7 @@ const style = {
   editTitle: "text-white text-2xl underline my-5",
   input: "p-2 rounded-md text-black",
   p: "text-white",
+  error: "text-red-500",
   link: "text-action",
   icon: "scale-175 text-action",
 };
