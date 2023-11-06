@@ -4,6 +4,7 @@ import { AuthContext } from "../context/AuthContext";
 import { auth } from "../firebase";
 import { firestore } from "../firebase";
 import { useNavigate } from "react-router-dom";
+import { Heading } from "../components/Heading";
 
 export const Login = () => {
   const user = useContext(AuthContext);
@@ -82,7 +83,12 @@ export const Login = () => {
         <div className={style.container}>
           <div className={style.top}>
             <header className={style.header}>
-              <h1>&lt;Webweave/&gt;</h1>
+              <h1
+                onClick={() => goTo("/")}
+                className="transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70"
+              >
+                &lt;Webweave/&gt;
+              </h1>
             </header>
             <form className={style.form}>
               <h2 className={style.h2}>{formToggle ? "Login" : "Sign up"}</h2>
@@ -154,7 +160,12 @@ export const Login = () => {
         <div className={style.container}>
           <div className={style.top}>
             <header className={style.header}>
-              <h1>&lt;Webweave/&gt;</h1>
+              <h1
+                onClick={() => goTo("/")}
+                className="transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70"
+              >
+                &lt;Webweave/&gt;
+              </h1>
             </header>
             <main className={style.profile}>
               <h2 className={style.h2}>Welcome {user.email}</h2>

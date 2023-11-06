@@ -1,6 +1,8 @@
 const style = {
-  container: "max-w-5xl bg-primary font-sometype mx-auto text-white",
+  container: "max-w-5xl bg-primary font-sometype mx-auto text-white ",
   header: "text-4xl text-action xs:col-span-2 xs:w-1/2 font-sourcecode",
+  headerNav:
+    "text-4xl text-action xs:col-span-2 xs:w-1/2 flex justify-between font-sourcecode",
   nav: "flex gap-4 justify-center",
   navEdit: "flex gap-4 flex-col justify-center items-start",
   top: "py-4 max-w-5xl grid gap-4 xs:grid-cols-2",

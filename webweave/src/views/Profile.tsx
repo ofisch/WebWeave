@@ -7,6 +7,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { firestore } from "../firebase";
 import { useNavigate } from "react-router";
 import { pageToEdit, setPageToEdit } from "../context/PageEditContext";
+import { Heading } from "../components/Heading";
 
 export const Profile = () => {
   const user = useContext(AuthContext);
@@ -41,6 +42,10 @@ export const Profile = () => {
     </li>
   ));
 
+  const goTo = (endpoint: string) => {
+    navigate(endpoint);
+  };
+
   const goEdit = (page: string) => {
     setPageToEdit(page);
     navigate("/edit");
@@ -51,7 +56,12 @@ export const Profile = () => {
       <div className={style.container}>
         <div className={style.top}>
           <header className={style.header}>
-            <h1>&lt;Webweave/&gt;</h1>
+            <h1
+              onClick={() => goTo("/")}
+              className="transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70"
+            >
+              &lt;Webweave/&gt;
+            </h1>
           </header>
           <main className={style.profile}>
             <div className={style.userInfo}>

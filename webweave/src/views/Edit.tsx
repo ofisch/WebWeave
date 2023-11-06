@@ -4,9 +4,15 @@ import { firestore } from "../firebase";
 import { AuthContext } from "../context/AuthContext";
 import { Profile } from "./Profile";
 import { pageToEdit, setPageToEdit } from "../context/PageEditContext";
+import { useNavigate } from "react-router-dom";
+
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { Heading } from "../components/Heading";
 
 export const Edit = () => {
   const user = useContext(AuthContext);
+
+  const navigate = useNavigate();
 
   const usersCollection = firestore.collection("users");
   const userDocRef = usersCollection.doc(user?.uid);
@@ -45,6 +51,10 @@ export const Edit = () => {
     }
   };
 
+  const goToProfile = () => {
+    navigate("/profile");
+  };
+
   checkPageName();
   getPageContent();
 
@@ -52,12 +62,15 @@ export const Edit = () => {
     <>
       <div className={style.container}>
         <div className={style.top}>
-          <header className={style.header}>
-            <h1>&lt;Webweave/&gt;</h1>
+          <header className={style.headerNav}>
+            <Heading></Heading>
           </header>
           <h2 className={style.editTitle}>{currentPage}</h2>
           <nav className={style.navEdit}>
-            <button className={style.button}>omat sivut</button>
+            <button className={style.button} onClick={goToProfile}>
+              <ArrowBackIcon />
+              omat sivut
+            </button>
           </nav>
           <div className={style.editorPreview}>
             <iframe
