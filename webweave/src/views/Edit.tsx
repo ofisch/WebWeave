@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import style from "../assets/style";
-import { firestore } from "../firebase";
+import { firestore } from "../utils/firebase";
 import { AuthContext } from "../context/AuthContext";
 import { Profile } from "./Profile";
 import { pageToEdit, setPageToEdit } from "../context/PageEditContext";

@@ -4,7 +4,7 @@ import { AuthContext } from "../context/AuthContext";
 import style from "../assets/style";
 // ikonit
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { firestore } from "../firebase";
+import { firestore } from "../utils/firebase";
 import { useNavigate } from "react-router";
 import { pageToEdit, setPageToEdit } from "../context/PageEditContext";
 import { Heading } from "../components/Heading";

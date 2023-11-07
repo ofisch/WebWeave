@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
 import style from "../assets/style";
 import { AuthContext } from "../context/AuthContext";
-import { auth } from "../firebase";
-import { firestore } from "../firebase";
+import { auth } from "../utils/firebase";
+import { firestore } from "../utils/firebase";
 import { useNavigate } from "react-router-dom";
 import { Heading } from "../components/Heading";
 
