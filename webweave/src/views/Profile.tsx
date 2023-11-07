@@ -32,8 +32,9 @@ export const Profile = () => {
       }
     };
     getPages();
-  });
+  }, [pagesSubCollectionRef]);
 
+  // tulostetaan sivut listaksi
   const listPages = pages.map((item, index) => (
     <li key={index}>
       <button className={style.buttonPage} onClick={() => goEdit(item)}>
