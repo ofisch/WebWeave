@@ -1,7 +1,7 @@
 import React from "react";
 import style from "../assets/style";
 import { Heading } from "../components/Heading";
-import { makeApiRequest } from "../utils/openai";
+import { makeApiRequest, exportToJSONFile } from "../utils/openai";
 
 export const Home = () => {
   return (
@@ -12,9 +12,15 @@ export const Home = () => {
             <Heading></Heading>
           </header>
           <textarea className={style.prompt}></textarea>
-          <button className={style.buttonPage} onClick={makeApiRequest}>
-            api testi
-          </button>
+          <div className={style.nav}>
+            <button className={style.buttonPage} onClick={makeApiRequest}>
+              api testi
+            </button>
+            <button className={style.buttonPage} onClick={exportToJSONFile}>
+              testi log
+            </button>
+          </div>
+
           <textarea className={style.settings}></textarea>
           <button className={style.button}>css framework</button>
         </div>
