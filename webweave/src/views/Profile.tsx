@@ -12,6 +12,8 @@ import { Heading } from "../components/Heading";
 export const Profile = () => {
   const user = useContext(AuthContext);
 
+  const [username, setUsername] = useState("");
+
   const navigate = useNavigate();
 
   const usersCollection = firestore.collection("users");
@@ -33,6 +35,17 @@ export const Profile = () => {
     };
     getPages();
   });
+
+  useEffect(() => {
+    if (user) {
+      const userRef = firestore.collection("users").doc(user.uid);
+      userRef.get().then((doc) => {
+        if (doc.exists) {
+          setUsername(doc.data().username);
+        }
+      });
+    }
+  }, [user]);
 
   const listPages = pages.map((item, index) => (
     <li key={index}>
@@ -66,8 +79,10 @@ export const Profile = () => {
           <main className={style.profile}>
             <div className={style.userInfo}>
               {/*tarkistetaan, onko käyttäjää olemassa, jos on, tulostetaan sähköposti*/}
-              {user !== null ? <h3>{user.email}</h3> : <h3>sähköposti</h3>}
+              {user !== null ? <h3>{username}</h3> : <h3>käyttäjänimi</h3>}
               <AccountCircleIcon className={style.icon}></AccountCircleIcon>
+              {/*tarkistetaan, onko käyttäjää olemassa, jos on, tulostetaan käyttäjänimi*/}
+              {user !== null ? <h3>{user.email}</h3> : <h3>sähköposti</h3>}
             </div>
             <h2 className={style.h2}>tallennetut sivut</h2>
             <ul className={style.list}>{listPages}</ul>

@@ -21,6 +21,7 @@ export const Login = () => {
 
   const navigate = useNavigate();
 
+  // lisätään käyttäjä firestore-dokumenttiin
   const addUserToDatabase = async (
     id: string,
     username: string,
@@ -36,6 +37,7 @@ export const Login = () => {
     }
   };
 
+  // luodaan käyttäjä
   const createAccount = async () => {
     const usernameValue = usernameRef.current!.value;
     const emailValue = emailRef.current!.value;
@@ -108,6 +110,7 @@ export const Login = () => {
     }
   };
 
+  //  kirjaudutaan sisään
   const signIn = async () => {
     const input = emailRef.current!.value;
     const passwordValue = passwordRef.current!.value;

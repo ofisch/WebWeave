@@ -23,6 +23,7 @@ export const Edit = () => {
   //tyhjennetään localStorage, jotta käyttäjä ei näe vilausta edellisestä muokatusta sivusta
   localStorage.setItem("html", "");
 
+  // haetaan sivun nimi, jota muokataan
   const checkPageName = () => {
     if (pageToEdit === undefined) {
       currentPage = localStorage.getItem("pageToEdit");
@@ -33,6 +34,7 @@ export const Edit = () => {
     }
   };
 
+  // haetaan sivun sisältö firestoresta
   const getPageContent = async () => {
     try {
       const querySnapshot = await pagesSubcollectionRef.get();
@@ -58,6 +60,7 @@ export const Edit = () => {
     }
   };
 
+  // navigoidaan takaisin profiiliin
   const goToProfile = () => {
     navigate("/profile");
   };
