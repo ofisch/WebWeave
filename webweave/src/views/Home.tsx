@@ -18,6 +18,7 @@ export const Home = () => {
   // tyhjennetään localstorage
   //localStorage.setItem("htmlResponse", "");
 
+  // tallennetaan sivu firestoreen
   const savePage = async (content: string) => {
     const pageNameInput = window.prompt("Syötä sivun nimi");
     const page = {
