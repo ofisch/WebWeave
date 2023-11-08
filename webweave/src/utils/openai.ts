@@ -19,19 +19,50 @@ const requestData = {
     },
     {
       role: "system",
-      content:
+      content: "vastaus",
+      /*       content:
         "you are an ai tool that creates html pages from the user's prompt. you don't add any explanations or additional text, only the html code. add css and javascript to the same file. link to cdn libraries if needed.",
+ */
     },
   ],
 };
 
-const writeToLog = (prompt: string, response: string) => {
+const writeToLog = (
+  model: string,
+  tokenTotal: string,
+  role: string,
+  prompt: string,
+  tokenPrompt: string,
+  response: string,
+  tokenResponse: string
+) => {
   const logEntry = {
-    prompt,
-    response,
+    model,
+    role,
+    tokenTotal,
+    fullPrompt: {
+      prompt,
+      tokenPrompt,
+    },
+    fullResponse: {
+      response,
+      tokenResponse,
+    },
   };
 
-  let log: { prompt: string; response: string }[] = [];
+  let log: {
+    model: string;
+    role: string;
+    tokenTotal: string;
+    fullPrompt: {
+      prompt: string;
+      tokenPrompt: string;
+    };
+    fullResponse: {
+      response: string;
+      tokenResponse: string;
+    };
+  }[] = [];
   const logFileData = localStorage.getItem("log.json");
 
   if (logFileData) {
@@ -43,6 +74,7 @@ const writeToLog = (prompt: string, response: string) => {
   localStorage.setItem("log.json", JSON.stringify(log, null, 2));
 
   console.log("Log entry written to localStorage");
+  console.log("Log entry: ", logEntry);
 };
 
 const exportToJSONFile = () => {
@@ -74,12 +106,26 @@ const makeApiRequest = async (prompt: string) => {
   try {
     requestData.messages[0].content = prompt;
     const response = await axios.post(endpoint, requestData, { headers });
+    const responseModel = response.data.model;
+    const tokenTotal = response.data.usage.total_tokens;
+    const tokenPrompt = response.data.usage.prompt_tokens;
+    const tokenResponse = response.data.usage.completion_tokens;
+    const responseRole = response.data.choices[0].message.role;
     const responseText = response.data.choices[0].message.content;
     const promptText = requestData.messages[0].content;
     //console.log("Prompt:", promptText);
     //console.log("Response:", responseText);
-    writeToLog(promptText, responseText);
-    console.log("API response:", responseText);
+    //console.log(response);
+    writeToLog(
+      responseModel,
+      tokenTotal,
+      responseRole,
+      promptText,
+      tokenPrompt,
+      responseText,
+      tokenResponse
+    );
+    //console.log("API response:", responseText);
     return responseText;
   } catch (error) {
     console.error("API error:", error);
