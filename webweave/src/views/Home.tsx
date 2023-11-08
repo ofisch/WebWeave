@@ -6,6 +6,9 @@ import { makeApiRequest, exportToJSONFile } from "../utils/openai";
 export const Home = () => {
   const [prompt, setPrompt] = React.useState<string>("");
   const [response, setResponse] = useState<string>("");
+  const [requestTime, setRequestTime] = useState<string>("");
+  const [requestStatus, setRequestStatus] = useState<string>("");
+  const [formToggle, setFormToggle] = useState(true);
 
   // asetetaan prompt stateen
   const handlePromptChange = (
@@ -23,10 +26,38 @@ export const Home = () => {
 
   // lähetetään prompt openai-API:lle ja asetetaan vastaus responseen-stateen
   const handleApiRequest = async () => {
+    // ajastetaan API-pyynnön kesto ja tulostetaan se requestStatusiin
+    const startTime = performance.now();
+    setRequestStatus("API request in progress");
+    setFormToggle(false);
+
+    // lähetetään prompt openai-API:lle ja asetetaan vastaus responseen-stateen
     const apiResponse = await makeApiRequest(prompt);
     setResponse(apiResponse);
     localStorage.setItem("htmlResponse", apiResponse);
+
+    // lasketaan API-pyynnön kesto ja asetetaan se requestTime-stateen
+    const endTime = performance.now();
+    const elapsedTime = (endTime - startTime) / 1000;
+
+    // jos API-pyynnön kesto on yli minuutin, tulostetaan se minuutteina ja sekunteina
+    const formattedTime =
+      elapsedTime >= 60
+        ? `${Math.floor(elapsedTime / 60)}:${Math.floor(elapsedTime % 60)} min`
+        : `${Math.floor(elapsedTime)} sec`;
+
+    setRequestTime(formattedTime);
+    setFormToggle(true);
   };
+
+  // päivitetään requestStatusiin API-pyynnön kesto
+  useEffect(() => {
+    if (formToggle) {
+      setRequestStatus(requestTime ? "API Request Time: " + requestTime : "");
+    } else {
+      setRequestStatus("API request in progress");
+    }
+  }, [formToggle, requestTime]);
 
   return (
     <>
@@ -48,6 +79,7 @@ export const Home = () => {
               testi log
             </button>
           </div>
+          <p className={style.p}>{requestStatus}</p>
 
           <textarea
             className={style.settings}
