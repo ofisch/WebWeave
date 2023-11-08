@@ -19,10 +19,8 @@ const requestData = {
     },
     {
       role: "system",
-      content: "vastaus",
-      /*       content:
+      content:
         "you are an ai tool that creates html pages from the user's prompt. you don't add any explanations or additional text, only the html code. add css and javascript to the same file. link to cdn libraries if needed.",
- */
     },
   ],
 };
