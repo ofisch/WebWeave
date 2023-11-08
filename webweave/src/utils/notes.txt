@@ -28,7 +28,8 @@
     </>
 
 
-
+// testiprompti 
+create an html skeleton with bootstrap responsive design and responsive menu and responsive hamburger menu that works on mobile as well. And import all the necessary scripts before the closing body tag, such as jquery, popper and bootstrap
 
 
 // toimiva login.jsx

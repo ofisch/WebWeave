@@ -1,11 +1,39 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import style from "../assets/style";
 import { Heading } from "../components/Heading";
 import { makeApiRequest, exportToJSONFile } from "../utils/openai";
+import { firestore } from "../utils/firebase";
+import { AuthContext } from "../context/AuthContext";
 
 export const Home = () => {
   const [prompt, setPrompt] = React.useState<string>("");
   const [response, setResponse] = useState<string>("");
+
+  const user = useContext(AuthContext);
+
+  const usersCollection = firestore.collection("users");
+  const usersDocRef = usersCollection.doc(user?.uid);
+  const pagesSubCollection = usersDocRef.collection("pages");
+
+  // tyhjennetään localstorage
+  //localStorage.setItem("htmlResponse", "");
+
+  const savePage = async (content: string) => {
+    const pageNameInput = window.prompt("Syötä sivun nimi");
+    const page = {
+      pageName: pageNameInput,
+      content: content,
+    };
+
+    if (pageNameInput !== null && pageNameInput !== "") {
+      try {
+        await pagesSubCollection.add(page);
+        window.alert("✔️Sivu tallennettu");
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
 
   // asetetaan prompt stateen
   const handlePromptChange = (
@@ -21,11 +49,17 @@ export const Home = () => {
     setResponse(event.target.value);
   };
 
+  useEffect(() => {
+    setPrompt(localStorage.getItem("userPrompt") || "");
+    setResponse(localStorage.getItem("htmlResponse") || "");
+  }, []);
+
   // lähetetään prompt openai-API:lle ja asetetaan vastaus responseen-stateen
   const handleApiRequest = async () => {
     const apiResponse = await makeApiRequest(prompt);
     setResponse(apiResponse);
     localStorage.setItem("htmlResponse", apiResponse);
+    localStorage.setItem("userPrompt", prompt);
   };
 
   return (
@@ -36,6 +70,8 @@ export const Home = () => {
             <Heading></Heading>
           </header>
           <textarea
+            placeholder="kuvaile sivua tähän"
+            spellCheck="false"
             className={style.prompt}
             value={prompt}
             onChange={handlePromptChange}
@@ -50,6 +86,7 @@ export const Home = () => {
           </div>
 
           <textarea
+            spellCheck="false"
             className={style.settings}
             value={response}
             onChange={handleResponseChange}
@@ -63,7 +100,9 @@ export const Home = () => {
               className={style.iframe}
             ></iframe>
           </div>
-          <button className={style.button}>tallenna sivu</button>
+          <button className={style.button} onClick={() => savePage(response)}>
+            tallenna sivu
+          </button>
         </div>
       </div>
     </>

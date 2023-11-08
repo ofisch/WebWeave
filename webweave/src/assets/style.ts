@@ -23,6 +23,7 @@ const style = {
   element: "h-16 bg-blue-500",
   list: "grid gap-4",
   form: "grid gap-4 mx-auto",
+  username: "text-white text-2xl",
   h2: "text-white text-2xl my-10",
   editTitle: "text-white text-2xl underline my-5",
   input: "p-2 rounded-md text-black",
