@@ -16,7 +16,7 @@ const style = {
   editorPreview:
     "relative h-auto bg-blue-500 bg-secondary rounded-lg text-black",
   editorPrompt: "h-56 bg-blue-500 bg-secondary rounded-lg text-black",
-  iframe: "min-w-full max-w-full rounded-lg",
+  iframe: "min-w-full h-96 max-w-full rounded-lg",
   button: "bg-action p-1 text-black rounded-lg",
   buttonPage: "bg-action p-1 text-black rounded-lg w-full",
   userInfo: "flex flex-col items-center gap-3 text-xl",

@@ -1,7 +1,7 @@
-import { KEY } from "./secret.ts";
+import { API_KEY } from "./secret.ts";
 import axios from "axios";
 
-const apiKey = KEY;
+const apiKey = API_KEY;
 const endpoint = "https://api.openai.com/v1/chat/completions";
 
 const headers = {
@@ -11,11 +11,16 @@ const headers = {
 
 const requestData = {
   model: "gpt-3.5-turbo",
-  max_tokens: 50,
+  //max_tokens: 50,
   messages: [
     {
       role: "user",
-      content: "Who are you?",
+      content: "käyttäjän prompt",
+    },
+    {
+      role: "system",
+      content:
+        "you are an ai tool that creates html pages from the user's prompt. you don't add any explanations or additional text, only the html code. add css and javascript to the same file. link to cdn libraries if needed.",
     },
   ],
 };
@@ -63,20 +68,22 @@ const exportToJSONFile = () => {
   }
 };
 
-const makeApiRequest = async () => {
+let responseFinal: string;
+
+const makeApiRequest = async (prompt: string) => {
   try {
+    requestData.messages[0].content = prompt;
     const response = await axios.post(endpoint, requestData, { headers });
     const responseText = response.data.choices[0].message.content;
     const promptText = requestData.messages[0].content;
-    console.log("Prompt:", promptText);
-    console.log("Response:", responseText);
+    //console.log("Prompt:", promptText);
+    //console.log("Response:", responseText);
     writeToLog(promptText, responseText);
-
-    console.log(response);
-    console.log("API response:", response.data.choices[0].message.content);
+    console.log("API response:", responseText);
+    return responseText;
   } catch (error) {
     console.error("API error:", error);
   }
 };
 
-export { makeApiRequest, exportToJSONFile };
+export { makeApiRequest, exportToJSONFile, responseFinal };
