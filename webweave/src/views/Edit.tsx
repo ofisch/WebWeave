@@ -46,7 +46,6 @@ export const Edit = () => {
         */
         if (doc.data().pageName === currentPage) {
           //return doc.data().content;
-          console.log(doc.data().content);
           localStorage.setItem("html", doc.data().content);
           // asetetaan uuden muokattavan sivun html-sisältö esikatseluun
           document.querySelector("iframe").srcdoc =

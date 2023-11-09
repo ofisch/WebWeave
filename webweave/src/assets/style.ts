@@ -10,7 +10,7 @@ const style = {
     "p-4 max-w-5xl grid gap-4 xs:grid-cols-2 bg-primarylight rounded-lg",
   main: "",
   profile: "mx-auto xs:w-full",
-  prompt: "h-32 bg-blue-500 bg-secondary rounded-lg text-black",
+  prompt: "h-32 bg-blue-500 w-full bg-secondary rounded-lg text-black",
   settings: "h-56 bg-blue-500 bg-secondary rounded-lg text-black",
   preview: "relative h-72 bg-blue-500 bg-secondary rounded-lg text-black",
   editorPreview: "relative bg-blue-500 bg-secondary rounded-lg text-black",
@@ -30,6 +30,13 @@ const style = {
   error: "text-red-500",
   link: "text-action",
   icon: "scale-175 text-action",
+
+  promptBlock: "flex flex-col gap-4",
+  promptHeader: "font-sourcecode text-white text-2xl font-semibold self-start",
+  editBlock: "flex flex-col gap-4",
+  editHeader: "font-sourcecode text-white text-2xl font-semibold self-start",
+  previewBlock: "flex flex-col gap-4",
+  previewHeader: "font-sourcecode text-white text-2xl font-semibold self-start",
 };
 
 export default style;

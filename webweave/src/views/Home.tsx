@@ -158,45 +158,54 @@ export const Home = () => {
           <header className={style.headerNav}>
             <Heading></Heading>
           </header>
-          <textarea
-            id="promptArea"
-            placeholder=""
-            spellCheck="false"
-            ref={promptAreaRef}
-            className={style.prompt}
-            value={prompt}
-            onChange={handlePromptChange}
-          ></textarea>
-          <div className={style.nav}>
-            <button className={style.buttonPage} onClick={handleApiRequest}>
-              api testi
-            </button>
-            <button className={style.buttonPage} onClick={exportToJSONFile}>
-              testi log
-            </button>
+          <div className={style.promptBlock}>
+            <h2 className={style.promptHeader}>prompt</h2>
+            <textarea
+              id="promptArea"
+              placeholder=""
+              spellCheck="false"
+              ref={promptAreaRef}
+              className={style.prompt}
+              value={prompt}
+              onChange={handlePromptChange}
+            ></textarea>
+            <div className={style.nav}>
+              <button className={style.buttonPage} onClick={handleApiRequest}>
+                api testi
+              </button>
+              <button className={style.buttonPage} onClick={exportToJSONFile}>
+                testi log
+              </button>
+            </div>
           </div>
           <div>
             <p className={style.p}>{requestStatus}</p>
             {loading ? <p id="loading" className={style.p}></p> : null}
           </div>
 
-          <textarea
-            spellCheck="false"
-            className={style.settings}
-            value={response}
-            onChange={handleResponseChange}
-          ></textarea>
-          <button className={style.button}>css framework</button>
+          <div className={style.editBlock}>
+            <h2 className={style.editHeader}>muokkaa</h2>
+            <textarea
+              spellCheck="false"
+              className={style.settings}
+              value={response}
+              onChange={handleResponseChange}
+            ></textarea>
+            <button className={style.button}>css framework</button>
+          </div>
         </div>
         <div className={style.secondary}>
-          <div className={style.editorPreview}>
-            <AutoResizeIframe
-              contentSrc={localStorage.getItem("htmlResponse")}
-            ></AutoResizeIframe>
+          <div className={style.previewBlock}>
+            <h2 className={style.previewHeader}>esikatselu</h2>
+            <div className={style.editorPreview}>
+              <AutoResizeIframe
+                contentSrc={localStorage.getItem("htmlResponse")}
+              ></AutoResizeIframe>
+            </div>
+            <button className={style.button} onClick={() => savePage(response)}>
+              tallenna sivu
+            </button>
           </div>
-          <button className={style.button} onClick={() => savePage(response)}>
-            tallenna sivu
-          </button>
         </div>
       </div>
     </>
