@@ -1,3 +1,35 @@
+//home iframe
+   
+       <iframe
+              srcDoc={localStorage.getItem("htmlResponse")}
+              className={style.iframe}
+            ></iframe>
+   
+   
+// loadanimation
+
+export const loadingAnimation = (element: HTMLElement) => {
+  const dots = "...";
+  let index = 0;
+  const speed = 150;
+
+  const animationElement = document.createElement("div");
+  element.appendChild(animationElement);
+
+  function load() {
+    if (index === 4) {
+      index = 0;
+    }
+
+    if (index <= dots.length) {
+      animationElement.innerHTML = dots.slice(0, index);
+      index++;
+      setTimeout(load, speed);
+    }
+  }
+  load();
+};
+
     //etusivu
     
     <>

@@ -4,6 +4,9 @@ import { Heading } from "../components/Heading";
 import { makeApiRequest, exportToJSONFile } from "../utils/openai";
 import { firestore } from "../utils/firebase";
 import { AuthContext } from "../context/AuthContext";
+import { resizeIframeToFiContent } from "../utils/iframeFit";
+import AutoResizeIframe from "../components/AutoResizeIframe";
+import { loadingAnimation, typePlaceholder } from "../utils/animation";
 
 export const Home = () => {
   const [prompt, setPrompt] = React.useState<string>("");
@@ -11,12 +14,17 @@ export const Home = () => {
   const [requestTime, setRequestTime] = useState<string>("");
   const [requestStatus, setRequestStatus] = useState<string>("");
   const [formToggle, setFormToggle] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const user = useContext(AuthContext);
 
   const usersCollection = firestore.collection("users");
   const usersDocRef = usersCollection.doc(user?.uid);
   const pagesSubCollection = usersDocRef.collection("pages");
+
+  const promptAreaRef = React.useRef<HTMLTextAreaElement>(null);
+
+  //const iFrame = document.querySelector("iframe");
 
   // tyhjennetään localstorage
   //localStorage.setItem("htmlResponse", "");
@@ -51,7 +59,26 @@ export const Home = () => {
     event: React.ChangeEvent<HTMLTextAreaElement>
   ) => {
     setResponse(event.target.value);
+    // skaalataan iframe sen sisällä olevan sivun kokoiseksi, kun api palauttaa uuden sivun
+    //resizeIframeToFiContent(iFrame);
   };
+
+  // skaalataan iframe sen sisällä olevan sivun kokoiseksi, kun sivu ladataan
+  window.onload = () => {
+    //resizeIframeToFiContent(iFrame);
+  };
+
+  useEffect(() => {
+    if (promptAreaRef.current) {
+      typePlaceholder(promptAreaRef.current);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (loading) {
+      loadingAnimation(document.getElementById("loading")!);
+    }
+  }, [loading]);
 
   useEffect(() => {
     setPrompt(localStorage.getItem("userPrompt") || "");
@@ -64,6 +91,7 @@ export const Home = () => {
     const startTime = performance.now();
     setRequestStatus("API request in progress");
     setFormToggle(false);
+    setLoading(true);
 
     // lähetetään prompt openai-API:lle ja asetetaan vastaus responseen-stateen
     const apiResponse = await makeApiRequest(prompt);
@@ -117,6 +145,7 @@ export const Home = () => {
   useEffect(() => {
     if (formToggle) {
       setRequestStatus(requestTime ? "API Request Time: " + requestTime : "");
+      setLoading(false);
     } else {
       setRequestStatus("API request in progress");
     }
@@ -130,8 +159,10 @@ export const Home = () => {
             <Heading></Heading>
           </header>
           <textarea
-            placeholder="kuvaile sivua tähän"
+            id="promptArea"
+            placeholder=""
             spellCheck="false"
+            ref={promptAreaRef}
             className={style.prompt}
             value={prompt}
             onChange={handlePromptChange}
@@ -144,7 +175,10 @@ export const Home = () => {
               testi log
             </button>
           </div>
-          <p className={style.p}>{requestStatus}</p>
+          <div>
+            <p className={style.p}>{requestStatus}</p>
+            {loading ? <p id="loading" className={style.p}></p> : null}
+          </div>
 
           <textarea
             spellCheck="false"
@@ -156,10 +190,9 @@ export const Home = () => {
         </div>
         <div className={style.secondary}>
           <div className={style.editorPreview}>
-            <iframe
-              srcDoc={localStorage.getItem("htmlResponse")}
-              className={style.iframe}
-            ></iframe>
+            <AutoResizeIframe
+              contentSrc={localStorage.getItem("htmlResponse")}
+            ></AutoResizeIframe>
           </div>
           <button className={style.button} onClick={() => savePage(response)}>
             tallenna sivu

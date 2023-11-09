@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Heading } from "../components/Heading";
+import AutoResizeIframe from "../components/AutoResizeIframe";
 
 export const Edit = () => {
   const user = useContext(AuthContext);
@@ -80,10 +81,9 @@ export const Edit = () => {
             </button>
           </nav>
           <div className={style.editorPreview}>
-            <iframe
-              srcDoc={localStorage.getItem("html")}
-              className={style.iframe}
-            ></iframe>
+            <AutoResizeIframe
+              contentSrc={localStorage.getItem("html")}
+            ></AutoResizeIframe>
           </div>
           <textarea
             className={style.settings}

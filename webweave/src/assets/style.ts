@@ -10,11 +10,10 @@ const style = {
     "p-4 max-w-5xl grid gap-4 xs:grid-cols-2 bg-primarylight rounded-lg",
   main: "",
   profile: "mx-auto xs:w-full",
-  prompt: "h-80 bg-blue-500 bg-secondary rounded-lg text-black",
+  prompt: "h-32 bg-blue-500 bg-secondary rounded-lg text-black",
   settings: "h-56 bg-blue-500 bg-secondary rounded-lg text-black",
   preview: "relative h-72 bg-blue-500 bg-secondary rounded-lg text-black",
-  editorPreview:
-    "relative h-auto bg-blue-500 bg-secondary rounded-lg text-black",
+  editorPreview: "relative bg-blue-500 bg-secondary rounded-lg text-black",
   editorPrompt: "h-56 bg-blue-500 bg-secondary rounded-lg text-black",
   iframe: "min-w-full h-96 max-w-full rounded-lg",
   button: "bg-action p-1 text-black rounded-lg",

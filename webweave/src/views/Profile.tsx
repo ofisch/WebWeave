@@ -4,7 +4,7 @@ import { AuthContext } from "../context/AuthContext";
 import style from "../assets/style";
 // ikonit
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { firestore } from "../utils/firebase";
+import { auth, firestore } from "../utils/firebase";
 import { useNavigate } from "react-router";
 import { pageToEdit, setPageToEdit } from "../context/PageEditContext";
 import { Heading } from "../components/Heading";
@@ -56,6 +56,11 @@ export const Profile = () => {
     </li>
   ));
 
+  const signOut = async () => {
+    await auth.signOut();
+    navigate("/login");
+  };
+
   const goTo = (endpoint: string) => {
     navigate(endpoint);
   };
@@ -88,6 +93,11 @@ export const Profile = () => {
               <AccountCircleIcon className={style.icon}></AccountCircleIcon>
               {/*tarkistetaan, onko käyttäjää olemassa, jos on, tulostetaan sähköposti*/}
               {user !== null ? <h3>{user.email}</h3> : <h3>sähköposti</h3>}
+              {user && (
+                <button className={style.button} onClick={signOut}>
+                  Sign Out
+                </button>
+              )}
             </div>
             <h2 className={style.h2}>tallennetut sivut</h2>
             <ul className={style.list}>{listPages}</ul>
