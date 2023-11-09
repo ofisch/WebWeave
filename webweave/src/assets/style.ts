@@ -32,11 +32,11 @@ const style = {
   icon: "scale-175 text-action",
 
   promptBlock: "flex flex-col gap-4",
-  promptHeader: "font-sourcecode text-white text-2xl font-semibold self-start",
+  promptHeader: "font-sometype text-white text-2xl  self-start",
   editBlock: "flex flex-col gap-4",
-  editHeader: "font-sourcecode text-white text-2xl font-semibold self-start",
+  editHeader: "font-sometype text-white text-2xl  self-start",
   previewBlock: "flex flex-col gap-4",
-  previewHeader: "font-sourcecode text-white text-2xl font-semibold self-start",
+  previewHeader: "font-sometype text-white text-2xl self-start",
 };
 
 export default style;
