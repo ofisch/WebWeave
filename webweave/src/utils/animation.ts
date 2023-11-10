@@ -1,6 +1,8 @@
+import style from "../assets/style";
+
 // typewriter
-export function typePlaceholder(textArea: HTMLTextAreaElement) {
-  const placeholderText = "kuvaile sivua tähän...";
+export function typePlaceholder(textArea: HTMLTextAreaElement, text: string) {
+  const placeholderText = text;
   let index = 0;
   const typingSpeed = 80; // Adjust the typing speed (milliseconds per character)
 
@@ -22,7 +24,8 @@ export const loadingAnimation = (element: HTMLElement) => {
   element.appendChild(animationElement);
 
   function load() {
-    const dot = ".";
+    const color = "#00BFFF";
+    const dot = `<span style="color: ${color}">.</span>`;
     animationElement.innerHTML = dot;
     setTimeout(() => {
       animationElement.innerHTML = dot + dot;

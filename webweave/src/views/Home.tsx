@@ -70,7 +70,7 @@ export const Home = () => {
 
   useEffect(() => {
     if (promptAreaRef.current) {
-      typePlaceholder(promptAreaRef.current);
+      typePlaceholder(promptAreaRef.current, "kuvaile sivua tähän...");
     }
   }, []);
 

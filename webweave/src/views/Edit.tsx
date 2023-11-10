@@ -9,15 +9,23 @@ import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Heading } from "../components/Heading";
 import AutoResizeIframe from "../components/AutoResizeIframe";
+import { loadingAnimation, typePlaceholder } from "../utils/animation";
+import { makeApiRequest } from "../utils/openai";
 
 export const Edit = () => {
   const user = useContext(AuthContext);
 
   const navigate = useNavigate();
 
-  let [htmlEdit, setHtmlEdit] = useState<string>(
+  const [htmlEdit, setHtmlEdit] = useState<string>(
     localStorage.getItem("html") || ""
   );
+  const [prompt, setPrompt] = React.useState<string>("");
+  const promptAreaRef = React.useRef<HTMLTextAreaElement>(null);
+
+  const [response, setResponse] = useState<string>("");
+
+  const [loading, setLoading] = useState(false);
 
   const usersCollection = firestore.collection("users");
   const userDocRef = usersCollection.doc(user?.uid);
@@ -92,14 +100,49 @@ export const Edit = () => {
     }
   };
 
-  //todo: tallenna muokattu sivu firestoreen (tallenna-nappi)
+  // ai-editori
+  const handleApiRequest = async () => {
+    const editPrompt = `edit this code: "${htmlEdit}" ${prompt}`;
+    console.log("editPrompt", editPrompt);
+    setLoading(true);
+    const apiResponse = await makeApiRequest(editPrompt);
+    console.log("apiResponse", apiResponse);
+    setResponse(apiResponse);
+    setHtmlEdit(apiResponse);
+    setLoading(false);
+    localStorage.setItem("html", apiResponse);
+    localStorage.setItem("editPrompt", prompt);
+  };
+
+  useEffect(() => {
+    if (promptAreaRef.current) {
+      typePlaceholder(
+        promptAreaRef.current,
+        "ehdota muutoksia sivuun tähän..."
+      );
+    }
+  }, []);
+
+  useEffect(() => {
+    if (loading) {
+      loadingAnimation(document.getElementById("loading")!);
+    }
+  }, [loading]);
+
+  const handlePromptChange = (
+    event: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    setPrompt(event.target.value);
+  };
+
+  // todo: tallenna muokattu sivu firestoreen (tallenna-nappi)
 
   const handleHtmlEditChange = (
     event: React.ChangeEvent<HTMLTextAreaElement>
   ) => {
     const newHtml = event.target.value;
     localStorage.setItem("html", newHtml);
-    setHtmlEdit((htmlEdit = newHtml));
+    setHtmlEdit(newHtml);
   };
 
   const goToProfile = () => {
@@ -127,8 +170,25 @@ export const Edit = () => {
             <AutoResizeIframe contentSrc={htmlEdit}></AutoResizeIframe>
           </div>
           <textarea
+            placeholder="ehdota muutoksia sivuun tähän..."
+            spellCheck="false"
+            ref={promptAreaRef}
+            className={style.prompt}
+            value={prompt}
+            onChange={handlePromptChange}
+          ></textarea>
+          {loading ? (
+            <p id="loading" className={style.p}></p>
+          ) : (
+            <button className={style.button} onClick={handleApiRequest}>
+              generoi muutokset
+            </button>
+          )}
+
+          <textarea
             className={style.settings}
             placeholder="html-editori (?) sivun muokkaukseen"
+            spellCheck="false"
             value={htmlEdit}
             onChange={handleHtmlEditChange}
           ></textarea>
