@@ -15,6 +15,10 @@ export const Edit = () => {
 
   const navigate = useNavigate();
 
+  let [htmlEdit, setHtmlEdit] = useState<string>(
+    localStorage.getItem("html") || ""
+  );
+
   const usersCollection = firestore.collection("users");
   const userDocRef = usersCollection.doc(user?.uid);
   const pagesSubcollectionRef = userDocRef.collection("pages");
@@ -22,7 +26,8 @@ export const Edit = () => {
   let currentPage: string;
 
   //tyhjennetään localStorage, jotta käyttäjä ei näe vilausta edellisestä muokatusta sivusta
-  localStorage.setItem("html", "");
+  //debugia varten kommentoitu
+  //localStorage.setItem("html", "");
 
   const checkPageName = () => {
     if (pageToEdit === undefined) {
@@ -33,6 +38,34 @@ export const Edit = () => {
       localStorage.setItem("pageToEdit", pageToEdit);
     }
   };
+
+  /*
+  // tehokkaampi tapa hakea sivun sisältö firestoresta, vähemmän kutsuja. 
+  //  ei iteroi koko kokoelmaa läpi, vaan hakee tiettyä dokumenttia heti 
+  const getPageContent = async () => {
+  try {
+    const docSnapshot = await pagesSubcollectionRef
+      .where("pageName", "==", currentPage)
+      .get();
+
+    if (!docSnapshot.empty) {
+      const docData = docSnapshot.docs[0].data();
+      const content = docData.content;
+
+      localStorage.setItem("html", content);
+      setHtmlEdit(content);
+
+      // Set the content of the iframe
+      document.querySelector("iframe").srcdoc = content;
+    } else {
+      // Handle the case when the document is not found
+      console.log("Document not found for pageName:", currentPage);
+    }
+  } catch (error) {
+    console.error("Error fetching document:", error);
+  }
+};
+  */
 
   const getPageContent = async () => {
     try {
@@ -47,6 +80,7 @@ export const Edit = () => {
         if (doc.data().pageName === currentPage) {
           //return doc.data().content;
           localStorage.setItem("html", doc.data().content);
+          setHtmlEdit(localStorage.getItem("html")!);
           // asetetaan uuden muokattavan sivun html-sisältö esikatseluun
           document.querySelector("iframe").srcdoc =
             localStorage.getItem("html");
@@ -56,6 +90,16 @@ export const Edit = () => {
       //return null;
       console.log("hehe");
     }
+  };
+
+  //todo: tallenna muokattu sivu firestoreen (tallenna-nappi)
+
+  const handleHtmlEditChange = (
+    event: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    const newHtml = event.target.value;
+    localStorage.setItem("html", newHtml);
+    setHtmlEdit((htmlEdit = newHtml));
   };
 
   const goToProfile = () => {
@@ -80,15 +124,15 @@ export const Edit = () => {
             </button>
           </nav>
           <div className={style.editorPreview}>
-            <AutoResizeIframe
-              contentSrc={localStorage.getItem("html")}
-            ></AutoResizeIframe>
+            <AutoResizeIframe contentSrc={htmlEdit}></AutoResizeIframe>
           </div>
           <textarea
             className={style.settings}
             placeholder="html-editori (?) sivun muokkaukseen"
+            value={htmlEdit}
+            onChange={handleHtmlEditChange}
           ></textarea>
-          <button className={style.button}>css framework</button>
+          <button className={style.button}>tallenna</button>
         </div>
       </div>
     </>

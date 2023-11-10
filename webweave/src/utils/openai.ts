@@ -20,7 +20,7 @@ const requestData = {
     {
       role: "system",
       content:
-        "you are an ai tool that creates html pages from the user's prompt. you don't add any explanations or additional text, only the html code. add modern styling to the page. add css and javascript to the same file. link to cdn libraries if needed.",
+        "you are an ai tool that creates html pages from the user's prompt. you don't add any explanations or additional text, only the html code. don't add any source to img tags. add modern styling to the page. add css and javascript to the same file. link to cdn libraries if needed.",
     },
   ],
 };
