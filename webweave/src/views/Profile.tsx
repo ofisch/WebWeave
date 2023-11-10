@@ -23,6 +23,8 @@ export const Profile = () => {
   const [pages, setPages] = useState<string[]>([]);
 
   // haetaan sivut firestoresta ja lisätään pages-statetaulukoon
+  // todo: tarkista, onko pages-taulukossa jo sisältöä, jos on, ei tarvitse hakea uudestaan
+  // todo: tee haku kuitenkin uudestaan, kun käyttäjä tallentaa uuden sivun
   useEffect(() => {
     const getPages = async () => {
       try {
