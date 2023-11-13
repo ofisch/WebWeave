@@ -35,7 +35,7 @@ export const Edit = () => {
 
   //tyhjennetään localStorage, jotta käyttäjä ei näe vilausta edellisestä muokatusta sivusta
   //debugia varten kommentoitu
-  //localStorage.setItem("html", "");
+  localStorage.setItem("html", "");
 
   const checkPageName = () => {
     if (pageToEdit === undefined) {
@@ -47,56 +47,57 @@ export const Edit = () => {
     }
   };
 
-  /*
-  // tehokkaampi tapa hakea sivun sisältö firestoresta, vähemmän kutsuja. 
-  //  ei iteroi koko kokoelmaa läpi, vaan hakee tiettyä dokumenttia heti 
-  const getPageContent = async () => {
-  try {
-    const docSnapshot = await pagesSubcollectionRef
-      .where("pageName", "==", currentPage)
-      .get();
-
-    if (!docSnapshot.empty) {
-      const docData = docSnapshot.docs[0].data();
-      const content = docData.content;
-
-      localStorage.setItem("html", content);
-      setHtmlEdit(content);
-
-      // Set the content of the iframe
-      document.querySelector("iframe").srcdoc = content;
-    } else {
-      // Handle the case when the document is not found
-      console.log("Document not found for pageName:", currentPage);
-    }
-  } catch (error) {
-    console.error("Error fetching document:", error);
-  }
-};
-  */
-
+  // sivun sisällön haku firestoresta
+  // tehokkaampi tapa hakea sivun sisältö firestoresta, vähemmän kutsuja.
+  //  ei iteroi koko kokoelmaa läpi, vaan hakee tiettyä dokumenttia heti
   const getPageContent = async () => {
     try {
-      const querySnapshot = await pagesSubcollectionRef.get();
+      const docSnapshot = await pagesSubcollectionRef
+        .where("pageName", "==", currentPage)
+        .get();
 
-      querySnapshot.forEach((doc) => {
-        /*
-        const pageData = doc.data();
-        const content = pageData.content;
-        console.log("content", content);
-        */
-        if (doc.data().pageName === currentPage) {
-          //return doc.data().content;
-          localStorage.setItem("html", doc.data().content);
-          setHtmlEdit(localStorage.getItem("html")!);
-          // asetetaan uuden muokattavan sivun html-sisältö esikatseluun
-          document.querySelector("iframe").srcdoc =
-            localStorage.getItem("html");
-        }
-      });
+      if (!docSnapshot.empty) {
+        const docData = docSnapshot.docs[0].data();
+        console.log("docData", docData);
+        const content = docData.content;
+
+        localStorage.setItem("html", content);
+        setHtmlEdit(localStorage.getItem("html")!);
+
+        // Set the content of the iframe
+        document.querySelector("iframe").srcdoc = localStorage.getItem("html")!;
+      } else {
+        // Handle the case when the document is not found
+        console.log("Document not found for pageName:", currentPage);
+      }
     } catch (error) {
-      //return null;
-      console.log("hehe");
+      console.error("Error fetching document:", error);
+    }
+  };
+
+  // sivun tallennus firestoreen
+  const handlePageSave = async () => {
+    try {
+      // haetaan sivun dokumentti
+      const docRef = await pagesSubcollectionRef
+        .where("pageName", "==", currentPage)
+        .get();
+
+      if (!docRef.empty) {
+        const docSnapshot = docRef.docs[0];
+        const docId = docSnapshot.id;
+
+        // päivitetään dokumentti
+        await pagesSubcollectionRef.doc(docId).update({
+          content: htmlEdit,
+        });
+
+        console.log("Tallennus onnistui");
+      } else {
+        console.log("Dokumenttia ei löydy sivulle:", currentPage);
+      }
+    } catch (error) {
+      console.error("Tallennus epäonnistui", error);
     }
   };
 
@@ -150,7 +151,9 @@ export const Edit = () => {
   };
 
   checkPageName();
-  getPageContent();
+  useEffect(() => {
+    getPageContent();
+  }, []);
 
   return (
     <>
@@ -192,7 +195,9 @@ export const Edit = () => {
             value={htmlEdit}
             onChange={handleHtmlEditChange}
           ></textarea>
-          <button className={style.button}>tallenna</button>
+          <button className={style.button} onClick={handlePageSave}>
+            tallenna
+          </button>
         </div>
       </div>
     </>
