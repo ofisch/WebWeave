@@ -4,27 +4,23 @@ import { Heading } from "../components/Heading";
 import { makeApiRequest, exportToJSONFile } from "../utils/openai";
 import { firestore } from "../utils/firebase";
 import { AuthContext } from "../context/AuthContext";
-import { resizeIframeToFiContent } from "../utils/iframeFit";
-import AutoResizeIframe from "../components/AutoResizeIframe";
-import { loadingAnimation, typePlaceholder } from "../utils/animation";
+import { SketchPicker } from "react-color";
 
 export const Home = () => {
+  const [color, setColor] = useState('#ff0000');
+  const [framework, setFrameworkSettings] = React.useState<string>("");
+  const [font, setFontSettings] = React.useState<string>("");
   const [prompt, setPrompt] = React.useState<string>("");
   const [response, setResponse] = useState<string>("");
   const [requestTime, setRequestTime] = useState<string>("");
   const [requestStatus, setRequestStatus] = useState<string>("");
   const [formToggle, setFormToggle] = useState(true);
-  const [loading, setLoading] = useState(false);
 
   const user = useContext(AuthContext);
 
   const usersCollection = firestore.collection("users");
   const usersDocRef = usersCollection.doc(user?.uid);
   const pagesSubCollection = usersDocRef.collection("pages");
-
-  const promptAreaRef = React.useRef<HTMLTextAreaElement>(null);
-
-  //const iFrame = document.querySelector("iframe");
 
   // tyhjennetään localstorage
   //localStorage.setItem("htmlResponse", "");
@@ -53,48 +49,63 @@ export const Home = () => {
   ) => {
     setPrompt(event.target.value);
   };
-
+  // asetetaan font stateen
+  const handleFontSettingsChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setFontSettings(event.target.value)
+  }
+  // asetetaan css framework stateen
+  const handleFrameworkSettingsChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setFrameworkSettings(event.target.value)
+  };
   // asetetaan vastaus responseen-stateen
   const handleResponseChange = (
     event: React.ChangeEvent<HTMLTextAreaElement>
   ) => {
     setResponse(event.target.value);
-    // skaalataan iframe sen sisällä olevan sivun kokoiseksi, kun api palauttaa uuden sivun
-    //resizeIframeToFiContent(iFrame);
   };
-
-  // skaalataan iframe sen sisällä olevan sivun kokoiseksi, kun sivu ladataan
-  window.onload = () => {
-    //resizeIframeToFiContent(iFrame);
-  };
-
-  useEffect(() => {
-    if (promptAreaRef.current) {
-      typePlaceholder(promptAreaRef.current);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (loading) {
-      loadingAnimation(document.getElementById("loading")!);
-    }
-  }, [loading]);
 
   useEffect(() => {
     setPrompt(localStorage.getItem("userPrompt") || "");
     setResponse(localStorage.getItem("htmlResponse") || "");
+    setFrameworkSettings("none selected");
+    setFontSettings("none selected");
   }, []);
-
+  // luodaan prompt openai-API:lle
+  const makePrompt = () => {
+    let finalPrompt = "";
+    let frameworkPrompt = framework;
+    let fontPrompt = font;
+    if (framework === "none selected") {
+      frameworkPrompt = "";
+    }
+    else {
+      frameworkPrompt = " Use " + framework + " css framework.";
+    }
+    console.log("framework = " + framework);
+    console.log("fontti = " + font);
+    if (font === "none selected") {
+      fontPrompt = "";
+    }
+    else {
+      fontPrompt = " Use " + font + " font.";
+    }
+    finalPrompt = prompt + " Use " + color + " as main color." + frameworkPrompt + fontPrompt;
+    return finalPrompt;
+  }
+  
   // lähetetään prompt openai-API:lle ja asetetaan vastaus responseen-stateen
   const handleApiRequest = async () => {
     // ajastetaan API-pyynnön kesto ja tulostetaan se requestStatusiin
     const startTime = performance.now();
     setRequestStatus("API request in progress");
     setFormToggle(false);
-    setLoading(true);
-
     // lähetetään prompt openai-API:lle ja asetetaan vastaus responseen-stateen
-    const apiResponse = await makeApiRequest(prompt);
+    const settingPrompt = makePrompt();
+    const apiResponse = await makeApiRequest(settingPrompt);
     setResponse(apiResponse);
     localStorage.setItem("htmlResponse", apiResponse);
     localStorage.setItem("userPrompt", prompt);
@@ -145,11 +156,11 @@ export const Home = () => {
   useEffect(() => {
     if (formToggle) {
       setRequestStatus(requestTime ? "API Request Time: " + requestTime : "");
-      setLoading(false);
     } else {
       setRequestStatus("API request in progress");
     }
   }, [formToggle, requestTime]);
+
 
   return (
     <>
@@ -158,54 +169,99 @@ export const Home = () => {
           <header className={style.headerNav}>
             <Heading></Heading>
           </header>
-          <div className={style.promptBlock}>
-            <h2 className={style.promptHeader}>prompt</h2>
-            <textarea
-              id="promptArea"
-              placeholder=""
-              spellCheck="false"
-              ref={promptAreaRef}
-              className={style.prompt}
-              value={prompt}
-              onChange={handlePromptChange}
-            ></textarea>
-            <div className={style.nav}>
-              <button className={style.buttonPage} onClick={handleApiRequest}>
-                api testi
-              </button>
-              <button className={style.buttonPage} onClick={exportToJSONFile}>
-                testi log
-              </button>
-            </div>
-          </div>
-          <div>
-            <p className={style.p}>{requestStatus}</p>
-            {loading ? <p id="loading" className={style.p}></p> : null}
-          </div>
+          <textarea
+            placeholder="kuvaile sivua tähän"
+            spellCheck="false"
+            className={style.prompt}
+            value={prompt}
+            onChange={handlePromptChange}
+          ></textarea>
+          <div className={style.secondary}>
+            <h1>css framework:</h1>
+            <select name="cssframeworkSelect" className={style.select} onChange={handleFrameworkSettingsChange}>
+              <option className={style.selectOption}>
+                none selected
+              </option>
+              <option className={style.selectOption}>
+                tailwindcss
+              </option>
+              <option className={style.selectOption}>
+                materialui
+              </option>
+            </select>
+            <h1>font style:</h1>
+            <select name="fontSelect" className={style.select} onChange={handleFontSettingsChange}>
+              <option className={style.selectOption}>
+                none selected
+              </option>
+              <option className={style.selectOption}>
+                Arial
+              </option>
+              <option className={style.selectOption}>
+                Verdana 
+              </option>
+              <option className={style.selectOption}>
+                Tahoma
+              </option>
+              <option className={style.selectOption}>
+                Trebuchet MS
+              </option>
+              <option className={style.selectOption}>
+                Times New Roman
+              </option>
+              <option className={style.selectOption}>
+                Georgia
+              </option>
+              <option className={style.selectOption}>
+                Garamond
+              </option>
+              <option className={style.selectOption}>
+                Courier New
+              </option>
+              <option className={style.selectOption}>
+                Brush Script MT
+              </option>
+            </select>
 
-          <div className={style.editBlock}>
-            <h2 className={style.editHeader}>muokkaa</h2>
-            <textarea
-              spellCheck="false"
-              className={style.settings}
-              value={response}
-              onChange={handleResponseChange}
-            ></textarea>
-            <button className={style.button}>css framework</button>
-          </div>
-        </div>
-        <div className={style.secondary}>
-          <div className={style.previewBlock}>
-            <h2 className={style.previewHeader}>esikatselu</h2>
-            <div className={style.editorPreview}>
-              <AutoResizeIframe
-                contentSrc={localStorage.getItem("htmlResponse")}
-              ></AutoResizeIframe>
+            <div>
+              <SketchPicker
+                color={color}
+                onChangeComplete={ (color) => {setColor(color.hex)} }
+              />
             </div>
-            <button className={style.button} onClick={() => savePage(response)}>
-              tallenna sivu
+            <div className={style.colorDisplayBox} style={{
+              backgroundColor: color
+            }}>
+            </div>
+          </div>
+          <div className={style.nav}>
+            <button className={style.buttonPage} onClick={handleApiRequest}>
+              api testi
+            </button>
+            <button className={style.buttonPage} onClick={exportToJSONFile}>
+              testi log
             </button>
           </div>
+          <p className={style.p}>{requestStatus}</p>
+
+          <textarea
+            spellCheck="false"
+            className={style.settings}
+            value={response}
+            onChange={handleResponseChange}
+          ></textarea>
+          <button className={style.button}>css framework</button>
+        </div>
+        <div className={style.secondary}>
+          <div className={style.editorPreview}>
+            <iframe
+              srcDoc={localStorage.getItem("htmlResponse")}
+              className={style.iframe}
+            ></iframe>
+          </div>
+          <button className={style.button} onClick={() => savePage(response)}>
+            tallenna sivu
+          </button>
         </div>
       </div>
     </>

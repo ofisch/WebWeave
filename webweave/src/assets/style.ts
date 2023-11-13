@@ -9,7 +9,10 @@ const style = {
   secondary:
     "p-4 max-w-5xl grid gap-4 xs:grid-cols-2 bg-primarylight rounded-lg",
   main: "",
+  select: "text-black",
+  selectOption: "text-black",
   profile: "mx-auto xs:w-full",
+  colorDisplayBox: "w-8 h-8 rounded-lg",
   prompt: "h-32 bg-blue-500 w-full bg-secondary rounded-lg text-black",
   settings: "h-56 bg-blue-500 bg-secondary rounded-lg text-black",
   preview: "relative h-72 bg-blue-500 bg-secondary rounded-lg text-black",
