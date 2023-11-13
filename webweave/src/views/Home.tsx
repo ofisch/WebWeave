@@ -47,6 +47,20 @@ export const Home = () => {
     }
   };
 
+  const downloadPage = () => {
+    const fileNameInput = window.prompt("Nimeä tiedosto");
+
+    if (fileNameInput !== null && fileNameInput !== "") {
+      const html = localStorage.getItem("htmlResponse") || "";
+      const blob = new Blob([html], { type: "text/html" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.download = `${fileNameInput}.html`;
+      link.href = url;
+      link.click();
+    }
+  };
+
   // asetetaan prompt stateen
   const handlePromptChange = (
     event: React.ChangeEvent<HTMLTextAreaElement>
@@ -204,6 +218,7 @@ export const Home = () => {
             <h2 className={style.editHeader}>muokkaa</h2>
             <textarea
               spellCheck="false"
+              readOnly
               className={style.settings}
               value={response}
               onChange={handleResponseChange}
@@ -219,9 +234,17 @@ export const Home = () => {
                 contentSrc={localStorage.getItem("htmlResponse")}
               ></AutoResizeIframe>
             </div>
-            <button className={style.button} onClick={() => savePage(response)}>
-              tallenna sivu
-            </button>
+            <div className={style.navHomePrompt}>
+              <button className={style.buttonDownload} onClick={downloadPage}>
+                lataa sivu
+              </button>
+              <button
+                className={style.buttonSave}
+                onClick={() => savePage(response)}
+              >
+                tallenna sivu profiiliin
+              </button>
+            </div>
           </div>
         </div>
       </div>

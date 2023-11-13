@@ -11,6 +11,8 @@ const style = {
   textGenerate: "animate-pulse",
   buttonClear: "bg-action p-1 text-black rounded-lg w-1/4",
   buttonLog: "bg-action p-1 text-black rounded-lg w-1/4",
+  buttonSave: "bg-action p-1 text-black rounded-lg w-3/4 h-12",
+  buttonDownload: "bg-action p-1 text-black rounded-lg w-1/4 h-12",
   top: "py-4 max-w-5xl grid gap-4 xs:grid-cols-2",
   secondary:
     "p-4 max-w-5xl grid gap-4 xs:grid-cols-2 bg-primarylight rounded-lg",
