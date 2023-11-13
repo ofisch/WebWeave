@@ -141,6 +141,13 @@ export const Home = () => {
     }
   };
 
+  const clearPrompt = () => {
+    localStorage.removeItem("userPrompt");
+    localStorage.removeItem("htmlResponse");
+    setPrompt("");
+    setResponse("");
+  };
+
   // päivitetään requestStatusiin API-pyynnön kesto
   useEffect(() => {
     if (formToggle) {
@@ -169,12 +176,22 @@ export const Home = () => {
               value={prompt}
               onChange={handlePromptChange}
             ></textarea>
-            <div className={style.nav}>
-              <button className={style.buttonPage} onClick={handleApiRequest}>
-                api testi
+            <div className={style.navHomePrompt}>
+              <button className={style.buttonClear} onClick={clearPrompt}>
+                tyhjennä
               </button>
-              <button className={style.buttonPage} onClick={exportToJSONFile}>
+              <button className={style.buttonLog} onClick={exportToJSONFile}>
                 testi log
+              </button>
+              <button
+                className={`${
+                  loading
+                    ? `${style.buttonGenerate} pointer-events-none disabled`
+                    : style.buttonGenerate
+                }`}
+                onClick={handleApiRequest}
+              >
+                <p className={loading ? style.textGenerate : ""}>generoi</p>
               </button>
             </div>
           </div>

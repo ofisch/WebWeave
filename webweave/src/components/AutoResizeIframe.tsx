@@ -19,9 +19,12 @@ const AutoResizeIframe: React.FC<AutoResizeIframeProps> = ({ contentSrc }) => {
         }
       };
 
-      iframe.srcdoc = contentSrc;
+      if (contentSrc != null) {
+        iframe.srcdoc = contentSrc;
+      } else {
+        iframe.srcdoc = "";
+      }
       iframe.onload = adjustIframeSize;
-
       adjustIframeSize();
     }
   }, [contentSrc]);

@@ -35,7 +35,7 @@ export const Edit = () => {
 
   //tyhjennetään localStorage, jotta käyttäjä ei näe vilausta edellisestä muokatusta sivusta
   //debugia varten kommentoitu
-  localStorage.setItem("html", "");
+  //localStorage.setItem("html", "");
 
   const checkPageName = () => {
     if (pageToEdit === undefined) {
@@ -92,7 +92,7 @@ export const Edit = () => {
           content: htmlEdit,
         });
 
-        console.log("Tallennus onnistui");
+        alert("✅ Tallennus onnistui!");
       } else {
         console.log("Dokumenttia ei löydy sivulle:", currentPage);
       }
@@ -148,9 +148,11 @@ export const Edit = () => {
 
   const goToProfile = () => {
     navigate("/profile");
+    localStorage.setItem("html", "");
   };
 
   checkPageName();
+
   useEffect(() => {
     getPageContent();
   }, []);

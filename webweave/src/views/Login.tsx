@@ -191,11 +191,6 @@ export const Login = () => {
 
   return (
     <>
-      {user && (
-        <button className={style.button} onClick={signOut}>
-          Sign Out
-        </button>
-      )}
       {!user ? (
         <div className={style.container}>
           <div className={style.top}>
@@ -294,7 +289,7 @@ export const Login = () => {
               </h1>
             </header>
             <main className={style.profile}>
-              <h2 className={style.h2}>Welcome {username}</h2>
+              <h2 className={style.h2}>Welcome {username}!</h2>
               <ul className={style.list}>
                 <li>
                   <button
