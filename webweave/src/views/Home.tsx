@@ -7,6 +7,7 @@ import { AuthContext } from "../context/AuthContext";
 import { resizeIframeToFiContent } from "../utils/iframeFit";
 import AutoResizeIframe from "../components/AutoResizeIframe";
 import { loadingAnimation, typePlaceholder } from "../utils/animation";
+import CustomModal from "../components/CustomModal";
 
 export const Home = () => {
   const [prompt, setPrompt] = React.useState<string>("");
@@ -30,21 +31,38 @@ export const Home = () => {
   //localStorage.setItem("htmlResponse", "");
 
   // tallennetaan sivu firestoreen
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [content, setContent] = useState("");
+
   const savePage = async (content: string) => {
-    const pageNameInput = window.prompt("Syötä sivun nimi");
+    setContent(content);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleModalSubmit = async (pageNameInput: string) => {
     const page = {
       pageName: pageNameInput,
       content: content,
     };
 
-    if (pageNameInput !== null && pageNameInput !== "") {
+    if (
+      pageNameInput !== undefined &&
+      pageNameInput !== null &&
+      pageNameInput !== ""
+    ) {
       try {
         await pagesSubCollection.add(page);
-        window.alert("✔️Sivu tallennettu");
+        window.alert("✔️Page saved successfully!");
       } catch (error) {
         console.log(error);
       }
     }
+
+    closeModal();
   };
 
   const downloadPage = () => {
@@ -174,6 +192,15 @@ export const Home = () => {
 
   return (
     <>
+      <div className={style.pageContainer}>
+        <CustomModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          onSubmit={handleModalSubmit}
+          content={content}
+        />
+      </div>
+
       <div className={style.container}>
         <div className={style.top}>
           <header className={style.headerNav}>

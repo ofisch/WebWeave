@@ -45,6 +45,18 @@ const style = {
   editHeader: "font-sometype text-white text-2xl  self-start",
   previewBlock: "flex flex-col gap-4",
   previewHeader: "font-sometype text-white text-2xl self-start",
+
+  pageContainer: "flex items-center justify-center h-screen hidden",
+  modal: "flex align-center justify-center",
+  modalOverlay: "bg-action bg-opacity-50 flex align-center justify-center",
+  modalH1: "text-white text-2xl m-2 mb-4",
+  modalInput: "border p-2 mb-6 w-full rounded-md",
+  modalButtons: "grid gap-4 grid-cols-2",
+  cancelButtonModal: "bg-secondary p-1 text-black rounded-lg w-full p-2",
+  saveButtonModal: "bg-action p-1 text-black rounded-lg w-full p-2",
+  modalContainer:
+    "bg-primary bg-opacity-90 rounded-lg overflow-hidden w-300p p-2 max-w-full mx-auto fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2",
+  modalContent: "w-full p-4",
 };
 
 export default style;
