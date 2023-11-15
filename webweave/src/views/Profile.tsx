@@ -21,22 +21,34 @@ export const Profile = () => {
   const pagesSubCollectionRef = userDocRef.collection("pages");
 
   const [pages, setPages] = useState<string[]>([]);
+  const [pagesLoaded, setPagesLoaded] = useState<boolean>(false);
 
   // haetaan sivut firestoresta ja lisätään pages-statetaulukoon
-  // todo: tarkista, onko pages-taulukossa jo sisältöä, jos on, ei tarvitse hakea uudestaan
+  // TEHTY: tarkista, onko pages-taulukossa jo sisältöä, jos on, ei tarvitse hakea uudestaan
   // todo: tee haku kuitenkin uudestaan, kun käyttäjä tallentaa uuden sivun
   useEffect(() => {
     const getPages = async () => {
       try {
         const querySnapshot = await pagesSubCollectionRef.get();
         const pageNames = querySnapshot.docs.map((doc) => doc.data().pageName);
+        setPagesLoaded(true);
         setPages(pageNames);
+        localStorage.setItem("pages", JSON.stringify(pageNames));
+        console.log("pages:", pages);
       } catch (error) {
         console.error("Error fetching pages:", error);
       }
     };
-    getPages();
-  }, [pagesSubCollectionRef]);
+    const storedPagesJson = localStorage.getItem("pages");
+    const localPages: string | null = storedPagesJson
+      ? JSON.parse(storedPagesJson)
+      : null;
+    if (!localPages || localPages.length === 0) {
+      getPages();
+    } else {
+      setPages(localPages);
+    }
+  }, [pagesLoaded]);
 
   useEffect(() => {
     if (user) {
@@ -59,6 +71,7 @@ export const Profile = () => {
   ));
 
   const signOut = async () => {
+    localStorage.removeItem("pages");
     await auth.signOut();
     navigate("/login");
   };

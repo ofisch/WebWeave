@@ -56,6 +56,9 @@ export const Home = () => {
     ) {
       try {
         await pagesSubCollection.add(page);
+        const savedPages = JSON.parse(localStorage.getItem("pages"));
+        savedPages.push(pageNameInput);
+        localStorage.setItem("pages", JSON.stringify(savedPages));
         window.alert("✔️Page saved successfully!");
       } catch (error) {
         console.log(error);
