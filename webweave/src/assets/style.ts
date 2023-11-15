@@ -57,6 +57,17 @@ const style = {
   modalContainer:
     "bg-primary bg-opacity-90 rounded-lg overflow-hidden w-300p p-2 max-w-full mx-auto fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2",
   modalContent: "w-full p-4",
+
+  sites: "grid grid-cols-3 gap-4",
+  sitesEdit: "grid grid-cols-3 gap-4 mt-8",
+  editH2: "text-white text-2xl col-start-2 my-10",
+  editButton:
+    "bg-red-500 w-1/2 m-auto p-2 text-black rounded-lg w-full col-start-3 col-span-1",
+  sitesButton:
+    "bg-action p-2 text-black rounded-lg w-full col-start-2 col-span-1 transition-all duration-500 bg-gradient-to-tl from-emerald-500 via-cyan-300 to-action bg-size-200 bg-pos-0 hover:bg-pos-100",
+  iconContainer: "justify-center flex flex-col",
+  sitesIconButton: "",
+  sitesIcon: "scale-150 text-red-500",
 };
 
 export default style;

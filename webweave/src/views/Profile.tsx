@@ -4,6 +4,8 @@ import { AuthContext } from "../context/AuthContext";
 import style from "../assets/style";
 // ikonit
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { IconButton } from "@mui/material";
 import { auth, firestore } from "../utils/firebase";
 import { useNavigate } from "react-router";
 import { pageToEdit, setPageToEdit } from "../context/PageEditContext";
@@ -13,6 +15,7 @@ export const Profile = () => {
   const user = useContext(AuthContext);
 
   const [username, setUsername] = useState<string>("");
+  const [isEditMode, setIsEditMode] = useState(false);
 
   const navigate = useNavigate();
 
@@ -61,12 +64,58 @@ export const Profile = () => {
     }
   }, [user]);
 
+  const toggleEditMode = () => {
+    setIsEditMode((prevMode) => !prevMode);
+  };
+
+  const handleDelete = async (pageName) => {
+    const confirmDelete = window.confirm(
+      `Are you sure you want to delete the page "${pageName}"?`
+    );
+
+    if (confirmDelete) {
+      try {
+        // Query the Firestore to find the document with the given pageName
+        const docRef = await pagesSubCollectionRef
+          .where("pageName", "==", pageName)
+          .get();
+
+        if (!docRef.empty) {
+          // Delete the document from Firestore
+          const docSnapshot = docRef.docs[0];
+          await pagesSubCollectionRef.doc(docSnapshot.id).delete();
+
+          // Update state to reflect the changes only if Firestore deletion is successful
+          const updatedPages = pages.filter((page) => page !== pageName);
+          setPages(updatedPages);
+          localStorage.setItem("pages", JSON.stringify(updatedPages));
+
+          console.log(`Page "${pageName}" deleted successfully.`);
+        } else {
+          console.log("Document not found for page:", pageName);
+        }
+      } catch (error) {
+        console.error("Error deleting page:", error);
+      }
+    }
+  };
+
   // tulostetaan sivut listaksi
   const listPages = pages.map((item, index) => (
-    <li key={index}>
-      <button className={style.buttonPage} onClick={() => goEdit(item)}>
+    <li key={index} className={style.sites}>
+      <button className={style.sitesButton} onClick={() => goEdit(item)}>
         {item}
       </button>
+      <div className={style.iconContainer}>
+        {isEditMode && (
+          <IconButton
+            className={style.sitesIconButton}
+            onClick={() => handleDelete(item)}
+          >
+            <DeleteIcon className={style.sitesIcon} />
+          </IconButton>
+        )}
+      </div>
     </li>
   ));
 
@@ -106,6 +155,7 @@ export const Profile = () => {
                 <h2 className={style.username}>käyttäjänimi</h2>
               )}
               <AccountCircleIcon className={style.icon}></AccountCircleIcon>
+
               {/*tarkistetaan, onko käyttäjää olemassa, jos on, tulostetaan sähköposti*/}
               {user !== null ? <h3>{user.email}</h3> : <h3>sähköposti</h3>}
               {user && (
@@ -114,7 +164,12 @@ export const Profile = () => {
                 </button>
               )}
             </div>
-            <h2 className={style.h2}>tallennetut sivut</h2>
+            <div className={style.sitesEdit}>
+              <h2 className={style.editH2}>tallennetut sivut</h2>
+              <button className={style.editButton} onClick={toggleEditMode}>
+                {isEditMode ? "Done" : "Edit"}
+              </button>
+            </div>
             <ul className={style.list}>{listPages}</ul>
           </main>
         </div>
