@@ -108,12 +108,12 @@ export const Profile = () => {
       </button>
       <div className={style.iconContainer}>
         {isEditMode && (
-          <IconButton
+          <button
             className={style.sitesIconButton}
             onClick={() => handleDelete(item)}
           >
             <DeleteIcon className={style.sitesIcon} />
-          </IconButton>
+          </button>
         )}
       </div>
     </li>
