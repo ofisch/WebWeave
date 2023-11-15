@@ -11,6 +11,7 @@ const headers = {
 
 const requestData = {
   model: "gpt-3.5-turbo-1106",
+  //model: "gpt-4-0613",
   //max_tokens: 50,
   messages: [
     {
@@ -20,7 +21,7 @@ const requestData = {
     {
       role: "system",
       content:
-        "you are an ai tool that creates html pages from the user's prompt. you don't add any explanations or additional text, only the html code. add modern styling to the page. add css and javascript to the same file. link to cdn libraries if needed.",
+        "you are an ai tool that creates html pages from the user's prompt. you don't add any explanations or additional text, only the html code. don't add any markdown. add modern styling to the page. add css and javascript to the same file. link to cdn libraries if needed.",
     },
   ],
 };
