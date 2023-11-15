@@ -1,20 +1,16 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
-import style from "../assets/style";
+import style from "../../assets/style";
 
 Modal.setAppElement("#root");
 
-interface CustomModalProps {
+interface SaveModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (value: string) => void;
 }
 
-const CustomModal: React.FC<CustomModalProps> = ({
-  isOpen,
-  onClose,
-  onSubmit,
-}) => {
+const SaveModal: React.FC<SaveModalProps> = ({ isOpen, onClose, onSubmit }) => {
   const [inputValue, setInputValue] = useState("");
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -56,4 +52,4 @@ const CustomModal: React.FC<CustomModalProps> = ({
   );
 };
 
-export default CustomModal;
+export default SaveModal;

@@ -7,7 +7,7 @@ import { AuthContext } from "../context/AuthContext";
 import { resizeIframeToFiContent } from "../utils/iframeFit";
 import AutoResizeIframe from "../components/AutoResizeIframe";
 import { loadingAnimation, typePlaceholder } from "../utils/animation";
-import CustomModal from "../components/CustomModal";
+import SaveModal from "../components/modals/NewSaveModal";
 
 export const Home = () => {
   const [prompt, setPrompt] = React.useState<string>("");
@@ -196,7 +196,7 @@ export const Home = () => {
   return (
     <>
       <div className={style.pageContainer}>
-        <CustomModal
+        <SaveModal
           isOpen={isModalOpen}
           onClose={closeModal}
           onSubmit={handleModalSubmit}

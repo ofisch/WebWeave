@@ -11,7 +11,7 @@ import { Heading } from "../components/Heading";
 import AutoResizeIframe from "../components/AutoResizeIframe";
 import { loadingAnimation, typePlaceholder } from "../utils/animation";
 import { makeApiRequest } from "../utils/openai";
-import CustomModal from "../components/CustomModal";
+import CustomModal from "../components/modals/NewSaveModal";
 
 export const Edit = () => {
   const user = useContext(AuthContext);
