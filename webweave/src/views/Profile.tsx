@@ -61,6 +61,8 @@ export const Profile = () => {
     }
   }, [user]);
 
+  pages.sort();
+
   // tulostetaan sivut listaksi
   const listPages = pages.map((item, index) => (
     <li key={index}>
