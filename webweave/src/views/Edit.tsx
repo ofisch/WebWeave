@@ -11,6 +11,7 @@ import { Heading } from "../components/Heading";
 import AutoResizeIframe from "../components/AutoResizeIframe";
 import { loadingAnimation, typePlaceholder } from "../utils/animation";
 import { makeApiRequest } from "../utils/openai";
+import CustomModal from "../components/CustomModal";
 
 export const Edit = () => {
   const user = useContext(AuthContext);
@@ -101,6 +102,44 @@ export const Edit = () => {
     }
   };
 
+  //uuden version tallennus firestoreen
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [content, setContent] = useState("");
+
+  const savePage = async (content: string) => {
+    setContent(content);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleModalSubmit = async (pageNameInput: string) => {
+    const page = {
+      pageName: pageNameInput,
+      content: content,
+    };
+
+    if (
+      pageNameInput !== undefined &&
+      pageNameInput !== null &&
+      pageNameInput !== ""
+    ) {
+      try {
+        await pagesSubcollectionRef.add(page);
+        const savedPages = JSON.parse(localStorage.getItem("pages"));
+        savedPages.push(pageNameInput);
+        localStorage.setItem("pages", JSON.stringify(savedPages));
+        window.alert("✔️Page saved successfully!");
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    closeModal();
+  };
+
   // ai-editori
   const handleApiRequest = async () => {
     const editPrompt = `edit this code: "${htmlEdit}" ${prompt}`;
@@ -159,6 +198,15 @@ export const Edit = () => {
 
   return (
     <>
+      <div className={style.pageContainer}>
+        <CustomModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          onSubmit={handleModalSubmit}
+          content={content}
+        />
+      </div>
+
       <div className={style.container}>
         <div className={style.top}>
           <header className={style.headerNav}>
@@ -185,7 +233,7 @@ export const Edit = () => {
           {loading ? (
             <p id="loading" className={style.p}></p>
           ) : (
-            <button className={style.button} onClick={handleApiRequest}>
+            <button className={style.buttonPage} onClick={handleApiRequest}>
               generoi muutokset
             </button>
           )}
@@ -197,9 +245,17 @@ export const Edit = () => {
             value={htmlEdit}
             onChange={handleHtmlEditChange}
           ></textarea>
-          <button className={style.button} onClick={handlePageSave}>
-            tallenna
-          </button>
+          <div className={style.navHomePrompt}>
+            <button
+              className={style.buttonLog}
+              onClick={() => savePage(htmlEdit)}
+            >
+              tallenna uusi versio
+            </button>
+            <button className={style.buttonSave} onClick={handlePageSave}>
+              tallenna muutokset
+            </button>
+          </div>
         </div>
       </div>
     </>
