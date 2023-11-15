@@ -67,7 +67,7 @@ const style = {
     "bg-action p-2 text-black rounded-lg w-full col-start-2 col-span-1 transition-all duration-500 bg-gradient-to-tl from-emerald-500 via-cyan-300 to-action bg-size-200 bg-pos-0 hover:bg-pos-100",
   iconContainer: "justify-center flex flex-col",
   sitesIconButton:
-    "transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",
+    "justify-self-start transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",
   sitesIcon: "scale-150 text-red-500",
 };
 

@@ -106,16 +106,15 @@ export const Profile = () => {
       <button className={style.sitesButton} onClick={() => goEdit(item)}>
         {item}
       </button>
-      <div className={style.iconContainer}>
-        {isEditMode && (
-          <button
-            className={style.sitesIconButton}
-            onClick={() => handleDelete(item)}
-          >
-            <DeleteIcon className={style.sitesIcon} />
-          </button>
-        )}
-      </div>
+
+      {isEditMode && (
+        <button
+          className={style.sitesIconButton}
+          onClick={() => handleDelete(item)}
+        >
+          <DeleteIcon className={style.sitesIcon} />
+        </button>
+      )}
     </li>
   ));
 
