@@ -131,13 +131,10 @@ export const Edit = () => {
         const savedPages = JSON.parse(localStorage.getItem("pages"));
         savedPages.push(pageNameInput);
         localStorage.setItem("pages", JSON.stringify(savedPages));
-        window.alert("✔️Page saved successfully!");
       } catch (error) {
         console.log(error);
       }
     }
-
-    closeModal();
   };
 
   // ai-editori
