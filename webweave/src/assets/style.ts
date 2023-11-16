@@ -53,7 +53,7 @@ const style = {
 
   pageContainer: "flex items-center justify-center h-screen hidden",
   modal: "flex align-center justify-center",
-  modalOverlay: "bg-action bg-opacity-40 flex align-center justify-center",
+  modalOverlay: "fixed inset-0 bg-black bg-opacity-40 z-50",
   modalAlert: "text-green-500 text-2xl text-center m-2 mb-4",
   modalH1: "text-white text-2xl text-center m-2 mb-4",
   modalInput: "border p-2 mb-3 w-full rounded-md",
