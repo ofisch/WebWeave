@@ -247,10 +247,7 @@ export const Home = () => {
                 onClick={handleApiRequest}
               >
                 <p className={loading ? style.textGenerate : "flex-auto"}>
-                  generoi
-                </p>
-                <p className="ml-auto">
-                  <SendIcon />
+                  generoi <SendIcon />
                 </p>
               </button>
             </div>
@@ -282,18 +279,16 @@ export const Home = () => {
             </div>
             <div className={style.navHomePrompt}>
               <button className={style.buttonDownload} onClick={downloadPage}>
-                <p className="flex-auto">lataa sivu</p>
-                <p className="ml-auto">
-                  <DownloadIcon />
+                <p className="flex-auto">
+                  lataa sivu <DownloadIcon />
                 </p>
               </button>
               <button
                 className={style.buttonSave}
                 onClick={() => savePage(response)}
               >
-                <p className="flex-auto">tallenna sivu profiiliin</p>
-                <p className="ml-auto">
-                  <SaveIcon />
+                <p className="flex-auto">
+                  tallenna sivu profiiliin <SaveIcon />
                 </p>
               </button>
             </div>
