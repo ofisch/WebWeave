@@ -17,7 +17,12 @@ const style = {
   secondary:
     "p-4 max-w-5xl grid gap-4 xs:grid-cols-2 bg-primarylight rounded-lg",
   main: "",
+  select: "text-black",
+  selectOption: "text-black",
   profile: "mx-auto xs:w-full",
+  colorDisplayBox: "w-8 h-8 rounded-lg",
+  colorListItem: "text-left",
+  colorList: "flex gap-4",
   prompt: "h-32 bg-blue-500 w-full bg-secondary rounded-lg text-black",
   settings: "h-56 bg-blue-500 bg-secondary rounded-lg text-black",
   preview: "relative h-72 bg-blue-500 bg-secondary rounded-lg text-black",
@@ -41,7 +46,7 @@ const style = {
 
   promptBlock: "flex flex-col gap-4",
   promptHeader: "font-sometype text-white text-2xl  self-start",
-  editBlock: "flex flex-col gap-4",
+  editBlock: "flex flex-col gap-4 mb-8",
   editHeader: "font-sometype text-white text-2xl  self-start",
   previewBlock: "flex flex-col gap-4",
   previewHeader: "font-sometype text-white text-2xl self-start",
@@ -71,6 +76,11 @@ const style = {
   sitesIconButton:
     "justify-self-start transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",
   sitesIcon: "scale-150 text-red-500",
+
+  settingsHeader: "font-sometype text-white text-2xl text-left",
+  picker: "grid grid-cols-3 gap-4",
+  colors: "grid grid-cols-1 gap-4",
+  drop: "grid grid-cols-1 gap-4",
 };
 
 export default style;
