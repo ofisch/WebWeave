@@ -160,7 +160,7 @@ export const Profile = () => {
       </div>
 
       <div className={style.container}>
-        <div className={style.top}>
+        <div className={style.profileTop}>
           <header className={style.header}>
             <div onClick={() => goTo("/")}>
               <h1>&lt;Webweave/&gt;</h1>{" "}
@@ -189,12 +189,14 @@ export const Profile = () => {
             </div>
             <div className={style.sitesEdit}>
               <h2 className={style.editH2}>tallennetut sivut</h2>
-              <button className={style.editButton} onClick={toggleEditMode}>
-                {isEditMode ? "Done" : "Edit"}
-              </button>
             </div>
             <ul className={style.list}>{listPages}</ul>
           </main>
+        </div>
+        <div className={style.editSection}>
+          <button className={style.editButton} onClick={toggleEditMode}>
+            {isEditMode ? "Done" : "Edit"}
+          </button>
         </div>
       </div>
     </>

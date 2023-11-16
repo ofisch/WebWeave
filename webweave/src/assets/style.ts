@@ -66,10 +66,8 @@ const style = {
   modalContent: "w-full p-4",
 
   sites: "grid grid-cols-3 gap-4",
-  sitesEdit: "grid grid-cols-3 gap-4 mt-8",
+  sitesEdit: "grid grid-cols-3 gap-8 mt-8",
   editH2: "text-white text-2xl col-start-2 my-10",
-  editButton:
-    "bg-red-500 w-1/2 m-auto p-2 text-black rounded-lg w-full col-start-3 col-span-1",
   sitesButton:
     "bg-action p-2 text-black rounded-lg w-full col-start-2 col-span-1 transition-all duration-500 bg-gradient-to-tl from-emerald-500 via-cyan-300 to-action bg-size-200 bg-pos-0 hover:bg-pos-100",
   iconContainer: "justify-center flex flex-col",
@@ -81,6 +79,12 @@ const style = {
   picker: "grid grid-cols-3 gap-4",
   colors: "grid grid-cols-1 gap-4",
   drop: "grid grid-cols-1 gap-4",
+
+  profileTop: "py-4 max-w-5xl grid gap-4 xs:grid-cols-2 mb-32",
+  editSection:
+    "bg-primary h-32 fixed inset-x-0 bottom-0 grid grid-cols-3 gap-8 mt-8",
+  editButton:
+    "bg-red-500 w-32 h-fit m-auto self-center p-2 text-black rounded-lg col-start-2 col-span-1",
 };
 
 export default style;

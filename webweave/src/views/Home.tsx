@@ -319,26 +319,6 @@ export const Home = () => {
               value={prompt}
               onChange={handlePromptChange}
             ></textarea>
-            <div className={style.navHomePrompt}>
-              <button className={style.buttonClear} onClick={clearPrompt}>
-                tyhjennä
-              </button>
-              <button className={style.buttonLog} onClick={exportToJSONFile}>
-                testi log
-              </button>
-              <button
-                className={`${
-                  loading
-                    ? `${style.buttonGenerate} pointer-events-none disabled`
-                    : style.buttonGenerate
-                }`}
-                onClick={handleApiRequest}
-              >
-                <p className={loading ? style.textGenerate : "flex-auto"}>
-                  generoi <SendIcon />
-                </p>
-              </button>
-            </div>
           </div>
 
           <div className={style.secondary}>
@@ -437,6 +417,26 @@ export const Home = () => {
                 </div>
               </div>
             </div>
+          </div>
+          <div className={style.navHomePrompt}>
+            <button className={style.buttonClear} onClick={clearPrompt}>
+              tyhjennä
+            </button>
+            <button className={style.buttonLog} onClick={exportToJSONFile}>
+              testi log
+            </button>
+            <button
+              className={`${
+                loading
+                  ? `${style.buttonGenerate} pointer-events-none disabled`
+                  : style.buttonGenerate
+              }`}
+              onClick={handleApiRequest}
+            >
+              <p className={loading ? style.textGenerate : "flex-auto"}>
+                generoi <SendIcon />
+              </p>
+            </button>
           </div>
           <div>
             <p className={style.p}>{requestStatus}</p>
