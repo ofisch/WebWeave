@@ -1,21 +1,25 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
-import style from "../assets/style";
+import style from "../../assets/style";
+import { useNavigate } from "react-router";
 
-Modal.setAppElement("#root");
-
-interface CustomModalProps {
+interface SaveModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: (value: string) => void;
+  content: string;
 }
 
-const CustomModal: React.FC<CustomModalProps> = ({
+const SaveModal: React.FC<SaveModalProps> = ({
   isOpen,
   onClose,
   onSubmit,
+  content,
 }) => {
   const [inputValue, setInputValue] = useState("");
+  const [showAlert, setShowAlert] = useState(false);
+
+  const navigate = useNavigate();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
@@ -24,6 +28,13 @@ const CustomModal: React.FC<CustomModalProps> = ({
   const handleSubmit = () => {
     onSubmit(inputValue);
     setInputValue("");
+    setShowAlert(true);
+
+    setTimeout(() => {
+      setShowAlert(false);
+      onClose();
+      navigate("/profile");
+    }, 2500);
   };
 
   return (
@@ -42,6 +53,9 @@ const CustomModal: React.FC<CustomModalProps> = ({
             onChange={handleInputChange}
             className={style.modalInput}
           />
+          {showAlert && (
+            <p className={style.modalAlert}>Page saved successfully!</p>
+          )}
           <div className={style.modalButtons}>
             <button onClick={onClose} className={style.cancelButtonModal}>
               Cancel
@@ -56,4 +70,4 @@ const CustomModal: React.FC<CustomModalProps> = ({
   );
 };
 
-export default CustomModal;
+export default SaveModal;

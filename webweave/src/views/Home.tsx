@@ -7,7 +7,7 @@ import { AuthContext } from "../context/AuthContext";
 import { resizeIframeToFiContent } from "../utils/iframeFit";
 import AutoResizeIframe from "../components/AutoResizeIframe";
 import { loadingAnimation, typePlaceholder } from "../utils/animation";
-import CustomModal from "../components/CustomModal";
+import SaveModal from "../components/modals/SaveModal";
 import SendIcon from "@mui/icons-material/Send";
 import DownloadIcon from "@mui/icons-material/Download";
 import SaveIcon from "@mui/icons-material/Save";
@@ -70,13 +70,10 @@ export const Home = () => {
         const savedPages = JSON.parse(localStorage.getItem("pages"));
         savedPages.push(pageNameInput);
         localStorage.setItem("pages", JSON.stringify(savedPages));
-        window.alert("✔️Page saved successfully!");
       } catch (error) {
         console.log(error);
       }
     }
-
-    closeModal();
   };
 
   const downloadPage = () => {
@@ -207,7 +204,7 @@ export const Home = () => {
   return (
     <>
       <div className={style.pageContainer}>
-        <CustomModal
+        <SaveModal
           isOpen={isModalOpen}
           onClose={closeModal}
           onSubmit={handleModalSubmit}

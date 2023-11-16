@@ -14,6 +14,7 @@ import { auth, firestore } from "../utils/firebase";
 import { useNavigate } from "react-router";
 import { pageToEdit, setPageToEdit } from "../context/PageEditContext";
 import { Heading } from "../components/Heading";
+import DeleteModal from "../components/modals/DeleteModal";
 
 export const Profile = () => {
   const user = useContext(AuthContext);
@@ -72,36 +73,44 @@ export const Profile = () => {
     setIsEditMode((prevMode) => !prevMode);
   };
 
-  const handleDelete = async (pageName) => {
-    const confirmDelete = window.confirm(
-      `Are you sure you want to delete the page "${pageName}"?`
-    );
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [pageToDelete, setPageToDelete] = useState("");
 
-    if (confirmDelete) {
-      try {
-        // Query the Firestore to find the document with the given pageName
-        const docRef = await pagesSubCollectionRef
-          .where("pageName", "==", pageName)
-          .get();
+  const handleDelete = (pageName: string) => {
+    setPageToDelete(pageName);
+    setDeleteModalOpen(true);
+  };
 
-        if (!docRef.empty) {
-          // Delete the document from Firestore
-          const docSnapshot = docRef.docs[0];
-          await pagesSubCollectionRef.doc(docSnapshot.id).delete();
+  const handleConfirmDelete = async () => {
+    setDeleteModalOpen(false);
 
-          // Update state to reflect the changes only if Firestore deletion is successful
-          const updatedPages = pages.filter((page) => page !== pageName);
-          setPages(updatedPages);
-          localStorage.setItem("pages", JSON.stringify(updatedPages));
+    try {
+      // Query the Firestore to find the document with the given pageName
+      const docRef = await pagesSubCollectionRef
+        .where("pageName", "==", pageToDelete)
+        .get();
 
-          console.log(`Page "${pageName}" deleted successfully.`);
-        } else {
-          console.log("Document not found for page:", pageName);
-        }
-      } catch (error) {
-        console.error("Error deleting page:", error);
+      if (!docRef.empty) {
+        // Delete the document from Firestore
+        const docSnapshot = docRef.docs[0];
+        await pagesSubCollectionRef.doc(docSnapshot.id).delete();
+
+        // Update state to reflect the changes only if Firestore deletion is successful
+        const updatedPages = pages.filter((page) => page !== pageToDelete);
+        setPages(updatedPages);
+        localStorage.setItem("pages", JSON.stringify(updatedPages));
+
+        console.log(`Page "${pageToDelete}" deleted successfully.`);
+      } else {
+        console.log("Document not found for page:", pageToDelete);
       }
+    } catch (error) {
+      console.error("Error deleting page:", error);
     }
+  };
+
+  const handleCancelDelete = () => {
+    setDeleteModalOpen(false);
   };
 
   pages.sort();
@@ -141,6 +150,15 @@ export const Profile = () => {
 
   return (
     <>
+      <div className={style.pageContainer}>
+        <DeleteModal
+          open={deleteModalOpen}
+          onClose={handleCancelDelete}
+          onConfirm={handleConfirmDelete}
+          pageName={pageToDelete}
+        />
+      </div>
+
       <div className={style.container}>
         <div className={style.top}>
           <header className={style.header}>
