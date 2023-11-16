@@ -7,7 +7,11 @@ import { AuthContext } from "../context/AuthContext";
 import { SketchPicker } from "react-color";
 
 export const Home = () => {
-  const [color, setColor] = useState('#ff0000');
+  const [color, setColor] = useState('#ffffff');
+  const [currentColor, setCurrentColor] = useState(1);
+  const [color1, setColor1] = useState('#ffffff');
+  const [color2, setColor2] = useState('#ffffff');
+  const [color3, setColor3] = useState('#ffffff');
   const [framework, setFrameworkSettings] = React.useState<string>("");
   const [font, setFontSettings] = React.useState<string>("");
   const [prompt, setPrompt] = React.useState<string>("");
@@ -15,16 +19,13 @@ export const Home = () => {
   const [requestTime, setRequestTime] = useState<string>("");
   const [requestStatus, setRequestStatus] = useState<string>("");
   const [formToggle, setFormToggle] = useState(true);
-
   const user = useContext(AuthContext);
-
   const usersCollection = firestore.collection("users");
   const usersDocRef = usersCollection.doc(user?.uid);
   const pagesSubCollection = usersDocRef.collection("pages");
 
   // tyhjennetään localstorage
   //localStorage.setItem("htmlResponse", "");
-
   // tallennetaan sivu firestoreen
   const savePage = async (content: string) => {
     const pageNameInput = window.prompt("Syötä sivun nimi");
@@ -42,7 +43,6 @@ export const Home = () => {
       }
     }
   };
-
   // asetetaan prompt stateen
   const handlePromptChange = (
     event: React.ChangeEvent<HTMLTextAreaElement>
@@ -75,10 +75,25 @@ export const Home = () => {
     setFontSettings("none selected");
   }, []);
   // luodaan prompt openai-API:lle
+  const colorSwitch = (id: string) => {
+      if (id === "Main") {
+        setCurrentColor(1);
+        setColor(color1);
+      }
+      if (id === "Accent") {
+        setCurrentColor(2);
+        setColor(color2);
+      }
+      if (id === "Action") {
+        setCurrentColor(3);
+        setColor(color3);
+      }
+  }
   const makePrompt = () => {
     let finalPrompt = "";
     let frameworkPrompt = framework;
     let fontPrompt = font;
+    let colorPrompt = "";
     if (framework === "none selected") {
       frameworkPrompt = "";
     }
@@ -93,10 +108,27 @@ export const Home = () => {
     else {
       fontPrompt = " Use " + font + " font.";
     }
-    finalPrompt = prompt + " Use " + color + " as main color." + frameworkPrompt + fontPrompt;
+    finalPrompt = prompt + " Use " + color + " as main color." + frameworkPrompt + fontPrompt + " Use " + color1 + " as main color." + " Use " + color2 + " as accent color." + " Use " + color3 + " as action color.";
     return finalPrompt;
   }
-  
+  const handleColorChange = (newColor) => {
+    setColor(newColor.hex);
+    const main = document.getElementById('MainColorCode');
+    const accent = document.getElementById('AccentColorCode');
+    const action = document.getElementById('ActionColorCode');
+    if (currentColor === 1) {
+      setColor1(newColor.hex);
+      main.innerHTML = newColor.hex;
+    }
+    if (currentColor === 2) {
+      setColor2(newColor.hex);
+      accent.innerHTML = newColor.hex;
+    }
+    if (currentColor === 3) { 
+      setColor3(newColor.hex);
+      action.innerHTML = newColor.hex;
+    }
+  };
   // lähetetään prompt openai-API:lle ja asetetaan vastaus responseen-stateen
   const handleApiRequest = async () => {
     // ajastetaan API-pyynnön kesto ja tulostetaan se requestStatusiin
@@ -226,14 +258,31 @@ export const Home = () => {
             <div>
               <SketchPicker
                 color={color}
-                onChangeComplete={ (color) => {setColor(color.hex)} }
+                onChangeComplete={(newColor) => handleColorChange(newColor)}
               />
+            <ul>
+              <li id="Main" className={style.colorListItem} onClick={() => colorSwitch("Main")}>
+              <p>Main</p>
+              <div className={style.colorDisplayBox} style={{ backgroundColor: color1 }}>
+              </div>
+              <p id="MainColorCode" style={{ color: color1 }}>#FFFFFF</p>
+              </li>
+
+              <li id="Accent" className={style.colorListItem} onClick={() => colorSwitch("Accent")}>
+              <p>Accent</p>
+              <div className={style.colorDisplayBox} style={{ backgroundColor: color2 }}>
+              </div>
+              <p id="AccentColorCode" style={{ color: color2 }}>#FFFFFF</p>
+              </li>
+
+              <li id="Action" className={style.colorListItem} onClick={() => colorSwitch("Action")}>
+              <p>Action</p>
+              <div className={style.colorDisplayBox} style={{ backgroundColor: color3 }}>
+              </div>
+              <p id="ActionColorCode" style={{ color: color3 }}>#FFFFFF</p>
+              </li>
+            </ul>
             </div>
-            <div className={style.colorDisplayBox} style={{
-              backgroundColor: color
-            }}>
-            </div>
-          </div>
           <div className={style.nav}>
             <button className={style.buttonPage} onClick={handleApiRequest}>
               api testi
@@ -263,6 +312,7 @@ export const Home = () => {
             tallenna sivu
           </button>
         </div>
+      </div>
       </div>
     </>
   );

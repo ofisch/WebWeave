@@ -13,8 +13,11 @@ const style = {
   selectOption: "text-black",
   profile: "mx-auto xs:w-full",
   colorDisplayBox: "w-8 h-8 rounded-lg",
+  colorListItem: "text-left",
+  colorList: "flex gap-4",
   prompt: "h-32 bg-blue-500 w-full bg-secondary rounded-lg text-black",
-  settings: "h-56 bg-blue-500 bg-secondary rounded-lg text-black",
+  settings:
+  "p-4 max-w-5xl grid gap-4 xs:grid-cols-2 bg-primarylight rounded-lg",
   preview: "relative h-72 bg-blue-500 bg-secondary rounded-lg text-black",
   editorPreview: "relative bg-blue-500 bg-secondary rounded-lg text-black",
   editorPrompt: "h-56 bg-blue-500 bg-secondary rounded-lg text-black",
