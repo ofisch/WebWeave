@@ -6,6 +6,10 @@ import style from "../assets/style";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { IconButton } from "@mui/material";
+import HomeIcon from "@mui/icons-material/Home";
+import BadgeIcon from "@mui/icons-material/Badge";
+import EmailIcon from "@mui/icons-material/Email";
+
 import { auth, firestore } from "../utils/firebase";
 import { useNavigate } from "react-router";
 import { pageToEdit, setPageToEdit } from "../context/PageEditContext";
@@ -140,12 +144,12 @@ export const Profile = () => {
       <div className={style.container}>
         <div className={style.top}>
           <header className={style.header}>
-            <h1
-              onClick={() => goTo("/")}
-              className="transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70"
-            >
-              &lt;Webweave/&gt;
-            </h1>
+            <div onClick={() => goTo("/")}>
+              <h1>&lt;Webweave/&gt;</h1>{" "}
+              <button className="transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70">
+                <HomeIcon />
+              </button>
+            </div>
           </header>
           <main className={style.profile}>
             <div className={style.userInfo}>

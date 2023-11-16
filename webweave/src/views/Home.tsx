@@ -8,6 +8,10 @@ import { resizeIframeToFiContent } from "../utils/iframeFit";
 import AutoResizeIframe from "../components/AutoResizeIframe";
 import { loadingAnimation, typePlaceholder } from "../utils/animation";
 import CustomModal from "../components/CustomModal";
+import SendIcon from "@mui/icons-material/Send";
+import DownloadIcon from "@mui/icons-material/Download";
+import SaveIcon from "@mui/icons-material/Save";
+import { useNavigate } from "react-router-dom";
 
 export const Home = () => {
   const [prompt, setPrompt] = React.useState<string>("");
@@ -25,6 +29,8 @@ export const Home = () => {
 
   const promptAreaRef = React.useRef<HTMLTextAreaElement>(null);
 
+  const navigate = useNavigate();
+
   //const iFrame = document.querySelector("iframe");
 
   // tyhjennetään localstorage
@@ -35,8 +41,13 @@ export const Home = () => {
   const [content, setContent] = useState("");
 
   const savePage = async (content: string) => {
-    setContent(content);
-    setIsModalOpen(true);
+    if (user === null) {
+      window.alert("⚠️Kirjaudu sisään tallentaaksesi sivun!");
+      navigate("/login");
+    } else {
+      setContent(content);
+      setIsModalOpen(true);
+    }
   };
 
   const closeModal = () => {
@@ -235,7 +246,12 @@ export const Home = () => {
                 }`}
                 onClick={handleApiRequest}
               >
-                <p className={loading ? style.textGenerate : ""}>generoi</p>
+                <p className={loading ? style.textGenerate : "flex-auto"}>
+                  generoi
+                </p>
+                <p className="ml-auto">
+                  <SendIcon />
+                </p>
               </button>
             </div>
           </div>
@@ -266,13 +282,19 @@ export const Home = () => {
             </div>
             <div className={style.navHomePrompt}>
               <button className={style.buttonDownload} onClick={downloadPage}>
-                lataa sivu
+                <p className="flex-auto">lataa sivu</p>
+                <p className="ml-auto">
+                  <DownloadIcon />
+                </p>
               </button>
               <button
                 className={style.buttonSave}
                 onClick={() => savePage(response)}
               >
-                tallenna sivu profiiliin
+                <p className="flex-auto">tallenna sivu profiiliin</p>
+                <p className="ml-auto">
+                  <SaveIcon />
+                </p>
               </button>
             </div>
           </div>

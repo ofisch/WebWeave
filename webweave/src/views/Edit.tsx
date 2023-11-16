@@ -103,7 +103,7 @@ export const Edit = () => {
 
   // ai-editori
   const handleApiRequest = async () => {
-    const editPrompt = `edit this code: "${htmlEdit}" ${prompt}`;
+    const editPrompt = `edit this code: "${htmlEdit}" ${prompt} do not do any other changes.`;
     console.log("editPrompt", editPrompt);
     setLoading(true);
     const apiResponse = await makeApiRequest(editPrompt);
