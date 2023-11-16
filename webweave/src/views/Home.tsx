@@ -7,7 +7,7 @@ import { AuthContext } from "../context/AuthContext";
 import { resizeIframeToFiContent } from "../utils/iframeFit";
 import AutoResizeIframe from "../components/AutoResizeIframe";
 import { loadingAnimation, typePlaceholder } from "../utils/animation";
-import SaveModal from "../components/modals/NewSaveModal";
+import SaveModal from "../components/modals/SaveModal";
 
 export const Home = () => {
   const [prompt, setPrompt] = React.useState<string>("");
@@ -59,13 +59,10 @@ export const Home = () => {
         const savedPages = JSON.parse(localStorage.getItem("pages"));
         savedPages.push(pageNameInput);
         localStorage.setItem("pages", JSON.stringify(savedPages));
-        window.alert("✔️Page saved successfully!");
       } catch (error) {
         console.log(error);
       }
     }
-
-    closeModal();
   };
 
   const downloadPage = () => {
