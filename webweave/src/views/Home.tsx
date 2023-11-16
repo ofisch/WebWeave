@@ -229,6 +229,8 @@ export const Home = () => {
     // lähetetään prompt openai-API:lle ja asetetaan vastaus responseen-stateen
     const settingPrompt = makePrompt();
     const apiResponse = await makeApiRequest(prompt);
+    //const apiResponse = await makeApiRequest(settingPrompt);
+
     setResponse(apiResponse);
     localStorage.setItem("htmlResponse", apiResponse);
     localStorage.setItem("userPrompt", prompt);
