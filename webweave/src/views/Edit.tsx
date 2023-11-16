@@ -11,7 +11,8 @@ import { Heading } from "../components/Heading";
 import AutoResizeIframe from "../components/AutoResizeIframe";
 import { loadingAnimation, typePlaceholder } from "../utils/animation";
 import { makeApiRequest } from "../utils/openai";
-import CustomModal from "../components/modals/SaveModal";
+import SaveModal from "../components/modals/SaveModal";
+import SaveChangesModal from "../components/modals/SaveChangesModal";
 
 export const Edit = () => {
   const user = useContext(AuthContext);
@@ -25,6 +26,7 @@ export const Edit = () => {
   const promptAreaRef = React.useRef<HTMLTextAreaElement>(null);
 
   const [response, setResponse] = useState<string>("");
+  const [requestTime, setRequestTime] = useState<string>("");
 
   const [loading, setLoading] = useState(false);
 
@@ -93,7 +95,7 @@ export const Edit = () => {
           content: htmlEdit,
         });
 
-        alert("✅ Tallennus onnistui!");
+        setChangeModalOpen(true);
       } else {
         console.log("Dokumenttia ei löydy sivulle:", currentPage);
       }
@@ -104,6 +106,7 @@ export const Edit = () => {
 
   //uuden version tallennus firestoreen
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isChangeModalOpen, setChangeModalOpen] = useState(false);
   const [content, setContent] = useState("");
 
   const savePage = async (content: string) => {
@@ -113,6 +116,7 @@ export const Edit = () => {
 
   const closeModal = () => {
     setIsModalOpen(false);
+    setChangeModalOpen(false);
   };
 
   const handleModalSubmit = async (pageNameInput: string) => {
@@ -139,6 +143,7 @@ export const Edit = () => {
 
   // ai-editori
   const handleApiRequest = async () => {
+    const startTime = performance.now();
     const editPrompt = `edit this code: "${htmlEdit}" ${prompt} do not do any other changes.`;
     console.log("editPrompt", editPrompt);
     setLoading(true);
@@ -149,6 +154,46 @@ export const Edit = () => {
     setLoading(false);
     localStorage.setItem("html", apiResponse);
     localStorage.setItem("editPrompt", prompt);
+
+    // lasketaan API-pyynnön kesto ja asetetaan se requestTime-stateen
+    const endTime = performance.now();
+    const elapsedTime = (endTime - startTime) / 1000;
+
+    // jos API-pyynnön kesto on yli minuutin, tulostetaan se minuutteina ja sekunteina
+    const formattedTime =
+      elapsedTime >= 60
+        ? `${Math.floor(elapsedTime / 60)}:${Math.floor(elapsedTime % 60)} min`
+        : `${Math.floor(elapsedTime)} sec`;
+
+    setRequestTime(formattedTime);
+
+    // lisätään API-pyynnön kesto log.json-tiedostoon
+    const existingData = localStorage.getItem("log.json");
+    console.log(existingData);
+
+    // jos log.json-tiedosto on olemassa, lisätään siihen API-pyynnön kesto
+    if (existingData) {
+      try {
+        const dataArray = JSON.parse(existingData);
+
+        // haetaan log.json tiedostosta viimeinen objekti ja lisätään siihen requestTime
+        if (Array.isArray(dataArray) && dataArray.length > 0) {
+          const lastObject = dataArray[dataArray.length - 1];
+          lastObject.requestTime = formattedTime;
+
+          const updatedData = JSON.stringify(dataArray);
+          console.log("updated json: " + updatedData);
+
+          localStorage.setItem("log.json", updatedData);
+        } else {
+          console.error("Existing data is not a valid array or is empty.");
+        }
+      } catch (error) {
+        console.error("Error parsing or updating existing data:", error);
+      }
+    } else {
+      console.error("No existing data found in localStorage");
+    }
   };
 
   useEffect(() => {
@@ -196,12 +241,16 @@ export const Edit = () => {
   return (
     <>
       <div className={style.pageContainer}>
-        <CustomModal
+        <SaveModal
           isOpen={isModalOpen}
           onClose={closeModal}
           onSubmit={handleModalSubmit}
           content={content}
         />
+      </div>
+
+      <div className={style.pageContainer}>
+        <SaveChangesModal isOpen={isChangeModalOpen} onClose={closeModal} />
       </div>
 
       <div className={style.container}>

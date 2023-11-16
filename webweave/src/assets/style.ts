@@ -58,6 +58,7 @@ const style = {
   modalH1: "text-white text-2xl text-center m-2 mb-4",
   modalInput: "border p-2 mb-3 w-full rounded-md",
   modalButtons: "grid gap-4 mt-3 grid-cols-2",
+  modalSaveButton: "grid gap-4 mt-3 grid-cols-1",
   cancelButtonModal: "bg-secondary p-1 text-black rounded-lg w-full p-2",
   saveButtonModal: "bg-action p-1 text-black rounded-lg w-full p-2",
   deleteButtonModal: "bg-red-500 p-1 text-black rounded-lg w-full p-2",
@@ -85,6 +86,12 @@ const style = {
     "bg-primary h-32 fixed inset-x-0 bottom-0 grid grid-cols-3 gap-8 mt-8",
   editButton:
     "bg-red-500 w-32 h-fit m-auto self-center p-2 text-black rounded-lg col-start-2 col-span-1",
+
+  logsTop: "py-4 max-w-5xl grid gap-4 xs:grid-cols-2 mb-8",
+  logsH1: "text-white text-3xl text-center m-2 mb-4",
+  logData: "my-20",
+  logsH2: "text-white text-2xl text-center m-2 my-4",
+  logsUl: "grid gap-4 grid-cols-3",
 };
 
 export default style;
