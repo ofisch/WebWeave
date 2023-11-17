@@ -15,6 +15,7 @@ import SaveIcon from "@mui/icons-material/Save";
 import { useNavigate } from "react-router-dom";
 
 export const Home = () => {
+  const [settingsMode, setSettingsMode] = useState(false);
   const [color, setColor] = useState("#ffffff");
   const [currentColor, setCurrentColor] = useState(1);
   const [color1, setColor1] = useState("#ffffff");
@@ -104,7 +105,15 @@ export const Home = () => {
   ) => {
     setPrompt(event.target.value);
   };
-
+  const hideSettings = () => {
+    if (document.getElementById("settingsDiv")!.style.display === "none") {
+      document.getElementById("settingsDiv")!.style.display = "block";
+      setSettingsMode(true);
+    } else {
+      document.getElementById("settingsDiv")!.style.display = "none";
+      setSettingsMode(false);
+    }
+  }
   // asetetaan font stateen
   const handleFontSettingsChange = (
     event: React.ChangeEvent<HTMLSelectElement>
@@ -185,9 +194,6 @@ export const Home = () => {
     finalPrompt =
       prompt +
       " Use " +
-      color +
-      " as main color." +
-      frameworkPrompt +
       fontPrompt +
       " Use " +
       color1 +
@@ -197,8 +203,16 @@ export const Home = () => {
       " as accent color." +
       " Use " +
       color3 +
-      " as action color.";
-    return finalPrompt;
+      " as action color." +
+      "implement the colors using the 60 30 10 rule. Use every color in the ratio of 60 30 10.";
+    if (settingsMode === false) {
+      return prompt;
+    }
+    else if (settingsMode === true) {
+      return finalPrompt;
+    } else {
+      return prompt;
+    }
   };
   const handleColorChange = (newColor) => {
     setColor(newColor.hex);
@@ -228,7 +242,7 @@ export const Home = () => {
 
     // lähetetään prompt openai-API:lle ja asetetaan vastaus responseen-stateen
     const settingPrompt = makePrompt();
-    const apiResponse = await makeApiRequest(prompt);
+    const apiResponse = await makeApiRequest(settingPrompt);
     //const apiResponse = await makeApiRequest(settingPrompt);
 
     setResponse(apiResponse);
@@ -322,8 +336,8 @@ export const Home = () => {
               onChange={handlePromptChange}
             ></textarea>
           </div>
-
-          <div className={style.secondary}>
+          <button onClick={() => hideSettings()}>Advanced settings</button>
+          <div id="settingsDiv" className={style.secondary}>
             <h2 className={style.settingsHeader}>Settings</h2>
 
             <div className={style.picker}>
@@ -338,7 +352,7 @@ export const Home = () => {
                     className={style.colorDisplayBox}
                     style={{ backgroundColor: color1 }}
                   ></div>
-                  <p id="MainColorCode" style={{ color: color1 }}>
+                  <p id="MainColorCode" className={style.colorText} style={{ color: color1 }}>
                     #FFFFFF
                   </p>
                 </li>
@@ -353,7 +367,7 @@ export const Home = () => {
                     className={style.colorDisplayBox}
                     style={{ backgroundColor: color2 }}
                   ></div>
-                  <p id="AccentColorCode" style={{ color: color2 }}>
+                  <p id="AccentColorCode" className={style.colorText} style={{ color: color2 }}>
                     #FFFFFF
                   </p>
                 </li>
@@ -368,7 +382,7 @@ export const Home = () => {
                     className={style.colorDisplayBox}
                     style={{ backgroundColor: color3 }}
                   ></div>
-                  <p id="ActionColorCode" style={{ color: color3 }}>
+                  <p id="ActionColorCode" className={style.colorText} style={{ color: color3 }}>
                     #FFFFFF
                   </p>
                 </li>
