@@ -112,6 +112,7 @@ export const LogData = () => {
               </ul>
             </div>
           ))}
+          <div></div>
         </div>
       </div>
     </>
