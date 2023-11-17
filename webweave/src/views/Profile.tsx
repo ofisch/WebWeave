@@ -162,12 +162,7 @@ export const Profile = () => {
       <div className={style.container}>
         <div className={style.profileTop}>
           <header className={style.header}>
-            <div onClick={() => goTo("/")}>
-              <h1>&lt;Webweave/&gt;</h1>{" "}
-              <button className="transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70">
-                <HomeIcon />
-              </button>
-            </div>
+            <Heading />
           </header>
           <main className={style.profile}>
             <div className={style.userInfo}>

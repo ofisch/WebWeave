@@ -28,25 +28,54 @@ export const Heading = () => {
 
   return (
     <>
-      <div className="w-6"></div>
-      <div onClick={goToIndex}>
-        {location.pathname === "/" ? (
-          <h1>&lt;Webweave/&gt;</h1>
-        ) : (
-          <>
-            <h1>&lt;Webweave/&gt;</h1>{" "}
-            <button className="transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70">
+      {location.pathname === "/" ? (
+        <div className="flex justify-between">
+          <div className="w-6"></div>
+          <div onClick={goToIndex}>
+            <h1>&lt;Webweave/&gt;</h1>
+          </div>
+          <button
+            onClick={goToProfile}
+            className="transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70"
+          >
+            <AccountCircleIcon />
+          </button>
+        </div>
+      ) : location.pathname === "/profile" ? (
+        <div className="flex justify-between">
+          <div className="w-6"></div>
+          <div onClick={goToIndex}>
+            <h1>&lt;Webweave/&gt;</h1>
+          </div>
+          <button
+            onClick={goToIndex}
+            className="transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70"
+          >
+            <HomeIcon />
+          </button>
+        </div>
+      ) : (
+        <div className="flex justify-between">
+          <div className="w-12"></div>
+          <div onClick={goToIndex}>
+            <h1>&lt;Webweave/&gt;</h1>
+          </div>
+          <div className="flex gap-2">
+            <button
+              onClick={goToIndex}
+              className="transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70"
+            >
               <HomeIcon />
             </button>
-          </>
-        )}
-      </div>
-      <button
-        onClick={goToProfile}
-        className="transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70"
-      >
-        <AccountCircleIcon />
-      </button>
+            <button
+              onClick={goToProfile}
+              className="transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70"
+            >
+              <AccountCircleIcon />
+            </button>
+          </div>
+        </div>
+      )}
     </>
   );
 };
