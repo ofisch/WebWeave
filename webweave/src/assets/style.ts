@@ -18,6 +18,7 @@ const style = {
   main: "",
   select: "text-black",
   selectOption: "text-black",
+  colorText: "drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]",
   profile: "mx-auto xs:w-full",
   colorDisplayBox: "w-8 h-8 rounded-lg",
   colorListItem: "text-left",
