@@ -21,7 +21,8 @@ const style = {
   colorText: "drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]",
   profile: "mx-auto xs:w-full",
   colorDisplayBox: "w-8 h-8 rounded-lg",
-  colorListItem: "text-left",
+  colors: "grid grid-cols-1 gap-4",
+  colorListItem: "text-left rounded-lg",
   colorList: "flex gap-4",
   prompt: "h-32 bg-blue-500 w-full bg-secondary rounded-lg text-black",
   settings: "h-56 bg-blue-500 bg-secondary rounded-lg text-black",
@@ -79,7 +80,6 @@ const style = {
 
   settingsHeader: "font-sometype text-white text-2xl text-left",
   picker: "grid grid-cols-3 gap-4",
-  colors: "grid grid-cols-1 gap-4",
   drop: "grid grid-cols-1 gap-4",
 
   profileTop: "py-4 max-w-5xl grid gap-4 xs:grid-cols-2 mb-32",

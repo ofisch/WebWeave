@@ -195,12 +195,7 @@ export const Login = () => {
         <div className={style.container}>
           <div className={style.top}>
             <header className={style.header}>
-              <h1
-                onClick={() => goTo("/")}
-                className="transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70"
-              >
-                &lt;Webweave/&gt;
-              </h1>
+              <Heading />
             </header>
             <form className={style.form}>
               <h2 className={style.h2}>{formToggle ? "Login" : "Sign up"}</h2>

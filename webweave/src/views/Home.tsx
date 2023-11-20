@@ -20,11 +20,11 @@ import NotSignedInModal from "../components/modals/NotSignedInModal";
 
 export const Home = () => {
   const [settingsMode, setSettingsMode] = useState(false);
-  const [color, setColor] = useState("#ffffff");
+  const [color, setColor] = useState("#2C3E50");
   const [currentColor, setCurrentColor] = useState(1);
-  const [color1, setColor1] = useState("#ffffff");
-  const [color2, setColor2] = useState("#ffffff");
-  const [color3, setColor3] = useState("#ffffff");
+  const [color1, setColor1] = useState("#2C3E50");
+  const [color2, setColor2] = useState("#CCCCCC");
+  const [color3, setColor3] = useState("#00BFFF");
   const [framework, setFrameworkSettings] = React.useState<string>("");
   const [font, setFontSettings] = React.useState<string>("");
   const [prompt, setPrompt] = React.useState<string>("");
@@ -153,23 +153,29 @@ export const Home = () => {
     if (id === "Main") {
       setCurrentColor(1);
       setColor(color1);
-      document.getElementById("Main")!.style.backgroundColor = "#486584";
-      document.getElementById("Accent")!.style.backgroundColor = "#96ADC5";
-      document.getElementById("Action")!.style.backgroundColor = "#96ADC5";
+      document.getElementById("MainColor")!.style.border = "2px solid #486584";
+      document.getElementById("AccentColor")!.style.border =
+        "2px solid #96ADC5";
+      document.getElementById("ActionColor")!.style.border =
+        "2px solid #96ADC5";
     }
     if (id === "Accent") {
       setCurrentColor(2);
       setColor(color2);
-      document.getElementById("Main")!.style.backgroundColor = "#96ADC5";
-      document.getElementById("Accent")!.style.backgroundColor = "#486584";
-      document.getElementById("Action")!.style.backgroundColor = "#96ADC5";
+      document.getElementById("MainColor")!.style.border = "2px solid #96ADC5";
+      document.getElementById("AccentColor")!.style.border =
+        "2px solid #486584";
+      document.getElementById("ActionColor")!.style.border =
+        "2px solid #96ADC5";
     }
     if (id === "Action") {
       setCurrentColor(3);
       setColor(color3);
-      document.getElementById("Main")!.style.backgroundColor = "#96ADC5";
-      document.getElementById("Accent")!.style.backgroundColor = "#96ADC5";
-      document.getElementById("Action")!.style.backgroundColor = "#486584";
+      document.getElementById("MainColor")!.style.border = "2px solid #96ADC5";
+      document.getElementById("AccentColor")!.style.border =
+        "2px solid #96ADC5";
+      document.getElementById("ActionColor")!.style.border =
+        "2px solid #486584";
     }
   };
 
@@ -190,20 +196,17 @@ export const Home = () => {
     } else {
       fontPrompt = " Use " + font + " font.";
     }
-    colorPrompt = " Use " +
-    color1 +
-    " as main color." +
-    " Use " +
-    color2 +
-    " as accent color." +
-    " Use " +
-    color3 +
-    " as action color. implement the colors using the 60 30 10 rule. Use every color in the ratio of 60 30 10.";
-    finalPrompt =
-      prompt +
-      fontPrompt +
-      frameworkPrompt +
-      colorPrompt;
+    colorPrompt =
+      " Use " +
+      color1 +
+      " as main color." +
+      " Use " +
+      color2 +
+      " as accent color." +
+      " Use " +
+      color3 +
+      " as action color. implement the colors using the 60 30 10 rule. Use every color in the ratio of 60 30 10.";
+    finalPrompt = prompt + fontPrompt + frameworkPrompt + colorPrompt;
     if (settingsMode === false) {
       return prompt;
     } else if (settingsMode === true) {
@@ -379,6 +382,7 @@ export const Home = () => {
                 >
                   <p>Main</p>
                   <div
+                    id="MainColor"
                     className={style.colorDisplayBox}
                     style={{ backgroundColor: color1 }}
                   ></div>
@@ -387,7 +391,7 @@ export const Home = () => {
                     className={style.colorText}
                     style={{ color: color1 }}
                   >
-                    #FFFFFF
+                    #2C3E50
                   </p>
                 </li>
 
@@ -398,6 +402,7 @@ export const Home = () => {
                 >
                   <p>Accent</p>
                   <div
+                    id="AccentColor"
                     className={style.colorDisplayBox}
                     style={{ backgroundColor: color2 }}
                   ></div>
@@ -406,7 +411,7 @@ export const Home = () => {
                     className={style.colorText}
                     style={{ color: color2 }}
                   >
-                    #FFFFFF
+                    #CCCCCC
                   </p>
                 </li>
 
@@ -417,6 +422,7 @@ export const Home = () => {
                 >
                   <p>Action</p>
                   <div
+                    id="ActionColor"
                     className={style.colorDisplayBox}
                     style={{ backgroundColor: color3 }}
                   ></div>
@@ -425,7 +431,7 @@ export const Home = () => {
                     className={style.colorText}
                     style={{ color: color3 }}
                   >
-                    #FFFFFF
+                    #00BFFF
                   </p>
                 </li>
               </ul>

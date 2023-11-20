@@ -53,6 +53,19 @@ export const Heading = () => {
             <HomeIcon />
           </button>
         </div>
+      ) : location.pathname === "/login" ? (
+        <div className="flex justify-between">
+          <div className="w-6"></div>
+          <div onClick={goToIndex}>
+            <h1>&lt;Webweave/&gt;</h1>
+          </div>
+          <button
+            onClick={goToIndex}
+            className="transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70"
+          >
+            <HomeIcon />
+          </button>
+        </div>
       ) : (
         <div className="flex justify-between">
           <div className="w-12"></div>
