@@ -12,6 +12,8 @@ import SaveModal from "../components/modals/SaveModal";
 import SendIcon from "@mui/icons-material/Send";
 import DownloadIcon from "@mui/icons-material/Download";
 import SaveIcon from "@mui/icons-material/Save";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import { useNavigate } from "react-router-dom";
 
 export const Home = () => {
@@ -39,11 +41,6 @@ export const Home = () => {
   const promptAreaRef = React.useRef<HTMLTextAreaElement>(null);
 
   const navigate = useNavigate();
-
-  //const iFrame = document.querySelector("iframe");
-
-  // tyhjennetään localstorage
-  //localStorage.setItem("htmlResponse", "");
 
   // tallennetaan sivu firestoreen
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -105,6 +102,7 @@ export const Home = () => {
   ) => {
     setPrompt(event.target.value);
   };
+
   const hideSettings = () => {
     if (document.getElementById("settingsDiv")!.style.display === "none") {
       document.getElementById("settingsDiv")!.style.display = "block";
@@ -113,7 +111,8 @@ export const Home = () => {
       document.getElementById("settingsDiv")!.style.display = "none";
       setSettingsMode(false);
     }
-  }
+  };
+
   // asetetaan font stateen
   const handleFontSettingsChange = (
     event: React.ChangeEvent<HTMLSelectElement>
@@ -207,8 +206,7 @@ export const Home = () => {
       "implement the colors using the 60 30 10 rule. Use every color in the ratio of 60 30 10.";
     if (settingsMode === false) {
       return prompt;
-    }
-    else if (settingsMode === true) {
+    } else if (settingsMode === true) {
       return finalPrompt;
     } else {
       return prompt;
@@ -336,8 +334,21 @@ export const Home = () => {
               onChange={handlePromptChange}
             ></textarea>
           </div>
-          <button onClick={() => hideSettings()}>Advanced settings</button>
-          <div id="settingsDiv" className={style.secondary}>
+          {settingsMode ? (
+            <button className={"text-action"} onClick={() => hideSettings()}>
+              Advanced settings <ArrowDropUpIcon />
+            </button>
+          ) : (
+            <button className={"text-action"} onClick={() => hideSettings()}>
+              Advanced settings <ArrowDropDownIcon />
+            </button>
+          )}
+
+          <div
+            id="settingsDiv"
+            style={{ display: "none" }}
+            className={style.secondary}
+          >
             <h2 className={style.settingsHeader}>Settings</h2>
 
             <div className={style.picker}>
@@ -352,7 +363,11 @@ export const Home = () => {
                     className={style.colorDisplayBox}
                     style={{ backgroundColor: color1 }}
                   ></div>
-                  <p id="MainColorCode" className={style.colorText} style={{ color: color1 }}>
+                  <p
+                    id="MainColorCode"
+                    className={style.colorText}
+                    style={{ color: color1 }}
+                  >
                     #FFFFFF
                   </p>
                 </li>
@@ -367,7 +382,11 @@ export const Home = () => {
                     className={style.colorDisplayBox}
                     style={{ backgroundColor: color2 }}
                   ></div>
-                  <p id="AccentColorCode" className={style.colorText} style={{ color: color2 }}>
+                  <p
+                    id="AccentColorCode"
+                    className={style.colorText}
+                    style={{ color: color2 }}
+                  >
                     #FFFFFF
                   </p>
                 </li>
@@ -382,7 +401,11 @@ export const Home = () => {
                     className={style.colorDisplayBox}
                     style={{ backgroundColor: color3 }}
                   ></div>
-                  <p id="ActionColorCode" className={style.colorText} style={{ color: color3 }}>
+                  <p
+                    id="ActionColorCode"
+                    className={style.colorText}
+                    style={{ color: color3 }}
+                  >
                     #FFFFFF
                   </p>
                 </li>
