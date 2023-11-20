@@ -1,13 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import style from "../assets/style";
-import HomeIcon from "@mui/icons-material/Home";
-import { useNavigate } from "react-router";
-import { makeApiRequest, exportToJSONFile } from "../utils/openai";
+import { exportToJSONFile } from "../utils/openai";
 import Chart from "chart.js/auto";
+import { Heading } from "../components/Heading";
 
 export const LogData = () => {
-  const navigate = useNavigate();
-
   const [jsonData, setJsonData] = useState<any>(null);
   const [modelData, setModelData] = useState<any[]>([]);
 
@@ -189,21 +186,12 @@ export const LogData = () => {
     }
   }, [modelData]);
 
-  const goTo = (endpoint: string) => {
-    navigate(endpoint);
-  };
-
   return (
     <>
       <div className={style.container}>
         <div className={style.logsTop}>
-          <header className={style.header}>
-            <div onClick={() => goTo("/")}>
-              <h1>&lt;Webweave/&gt;</h1>
-              <button className="transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70">
-                <HomeIcon />
-              </button>
-            </div>
+          <header className={style.headerNav}>
+            <Heading></Heading>
           </header>
         </div>
         <div>
