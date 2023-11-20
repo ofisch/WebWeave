@@ -92,6 +92,11 @@ const style = {
   logData: "my-20",
   logsH2: "text-white text-2xl text-center m-2 my-4",
   logsUl: "grid gap-4 grid-cols-3",
+  logsCharts: "grid gap-20 grid-cols-1 mb-32",
+  downloadSection:
+    "bg-primary h-32 fixed inset-x-0 bottom-0 grid grid-cols-3 gap-8 mt-8",
+  logsButton:
+    "bg-action w-40 h-fit m-auto self-center p-2 text-black rounded-lg col-start-2 col-span-1",
 };
 
 export default style;

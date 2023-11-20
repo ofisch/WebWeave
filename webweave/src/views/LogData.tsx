@@ -1,7 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import style from "../assets/style";
 import HomeIcon from "@mui/icons-material/Home";
 import { useNavigate } from "react-router";
+import { makeApiRequest, exportToJSONFile } from "../utils/openai";
+import Chart from "chart.js/auto";
 
 export const LogData = () => {
   const navigate = useNavigate();
@@ -72,6 +74,121 @@ export const LogData = () => {
     }
   }, [jsonData]);
 
+  const avgRequestTimeChartRef = useRef<HTMLCanvasElement | null>(null);
+  const avgTokensUsedChartRef = useRef<HTMLCanvasElement | null>(null);
+
+  useEffect(() => {
+    if (modelData.length > 0) {
+      if (avgRequestTimeChartRef.current) {
+        const ctx1 = avgRequestTimeChartRef.current.getContext("2d");
+        if (ctx1) {
+          const labels = modelData.map((model) => model.model);
+          const avgRequestTimes = modelData.map((model) =>
+            model.avgRequestTime.toFixed(2)
+          );
+
+          new Chart(ctx1, {
+            type: "bar",
+            data: {
+              labels: labels,
+              datasets: [
+                {
+                  label: "Avg. Request Time",
+                  data: avgRequestTimes,
+                  backgroundColor: "rgba(0,191,255, 0.8)",
+                  borderColor: "rgba(0,191,255, 1)",
+                  borderWidth: 1,
+                },
+              ],
+            },
+            options: {
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  ticks: {
+                    color: "white",
+                  },
+                  grid: {
+                    color: "rgba(255, 255, 255, 0.1)",
+                  },
+                },
+                x: {
+                  ticks: {
+                    color: "white",
+                  },
+                  grid: {
+                    color: "rgba(255, 255, 255, 0.1)",
+                  },
+                },
+              },
+              plugins: {
+                legend: {
+                  labels: {
+                    color: "white",
+                  },
+                },
+              },
+            },
+          });
+        }
+      }
+
+      if (avgTokensUsedChartRef.current) {
+        const ctx2 = avgTokensUsedChartRef.current.getContext("2d");
+        if (ctx2) {
+          const labels = modelData.map((model) => model.model);
+          const avgTokensUsed = modelData.map((model) =>
+            model.avgTokensUsed.toFixed(2)
+          );
+
+          new Chart(ctx2, {
+            type: "bar",
+            data: {
+              labels: labels,
+              datasets: [
+                {
+                  label: "Avg. Tokens Used",
+                  data: avgTokensUsed,
+                  backgroundColor: "rgba(150,173,197, 0.8)",
+                  borderColor: "rgba(150,173,197, 1)",
+                  borderWidth: 1,
+                },
+              ],
+            },
+            options: {
+              scales: {
+                y: {
+                  beginAtZero: true,
+                  ticks: {
+                    color: "white",
+                  },
+                  grid: {
+                    color: "rgba(255, 255, 255, 0.1)",
+                  },
+                },
+                x: {
+                  ticks: {
+                    color: "white",
+                  },
+                  grid: {
+                    color: "rgba(255, 255, 255, 0.1)",
+                  },
+                },
+              },
+              plugins: {
+                legend: {
+                  labels: {
+                    color: "white",
+                  },
+                },
+              },
+            },
+          });
+        }
+      }
+    }
+  }, [modelData]);
+
   const goTo = (endpoint: string) => {
     navigate(endpoint);
   };
@@ -103,7 +220,7 @@ export const LogData = () => {
                 </li>
                 <li>
                   <p>Avg. Request time</p>
-                  <p>{model.avgRequestTime.toFixed(2)}</p>
+                  <p>{model.avgRequestTime.toFixed(2) + " sec"}</p>
                 </li>
                 <li>
                   <p>Avg. Tokens used</p>
@@ -112,7 +229,15 @@ export const LogData = () => {
               </ul>
             </div>
           ))}
-          <div></div>
+          <div className={style.logsCharts}>
+            <canvas ref={avgRequestTimeChartRef} width={400} height={200} />
+            <canvas ref={avgTokensUsedChartRef} width={400} height={200} />
+          </div>
+          <div className={style.downloadSection}>
+            <button className={style.logsButton} onClick={exportToJSONFile}>
+              Download logs
+            </button>
+          </div>
         </div>
       </div>
     </>

@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import style from "../assets/style";
 import { Heading } from "../components/Heading";
-import { makeApiRequest, exportToJSONFile } from "../utils/openai";
 import { firestore } from "../utils/firebase";
 import { AuthContext } from "../context/AuthContext";
 import { SketchPicker } from "react-color";
@@ -13,6 +12,9 @@ import SendIcon from "@mui/icons-material/Send";
 import DownloadIcon from "@mui/icons-material/Download";
 import SaveIcon from "@mui/icons-material/Save";
 import { useNavigate } from "react-router-dom";
+import DownloadModal from "../components/modals/DownloadModal";
+import { makeApiRequest } from "../utils/openai";
+import NotSignedInModal from "../components/modals/NotSignedInModal";
 
 export const Home = () => {
   const [settingsMode, setSettingsMode] = useState(false);
@@ -46,21 +48,24 @@ export const Home = () => {
   //localStorage.setItem("htmlResponse", "");
 
   // tallennetaan sivu firestoreen
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
+  const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
+  const [isNotSignedInModalOpen, setIsNotSignedInModalOpen] = useState(false);
   const [content, setContent] = useState("");
 
   const savePage = async (content: string) => {
     if (user === null) {
-      window.alert("⚠️Kirjaudu sisään tallentaaksesi sivun!");
-      navigate("/login");
+      setIsNotSignedInModalOpen(true);
     } else {
       setContent(content);
-      setIsModalOpen(true);
+      setIsSaveModalOpen(true);
     }
   };
 
   const closeModal = () => {
-    setIsModalOpen(false);
+    setIsSaveModalOpen(false);
+    setIsDownloadModalOpen(false);
+    setIsNotSignedInModalOpen(false);
   };
 
   const handleModalSubmit = async (pageNameInput: string) => {
@@ -85,20 +90,6 @@ export const Home = () => {
     }
   };
 
-  const downloadPage = () => {
-    const fileNameInput = window.prompt("Nimeä tiedosto");
-
-    if (fileNameInput !== null && fileNameInput !== "") {
-      const html = localStorage.getItem("htmlResponse") || "";
-      const blob = new Blob([html], { type: "text/html" });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.download = `${fileNameInput}.html`;
-      link.href = url;
-      link.click();
-    }
-  };
-
   // asetetaan prompt stateen
   const handlePromptChange = (
     event: React.ChangeEvent<HTMLTextAreaElement>
@@ -113,7 +104,7 @@ export const Home = () => {
       document.getElementById("settingsDiv")!.style.display = "none";
       setSettingsMode(false);
     }
-  }
+  };
   // asetetaan font stateen
   const handleFontSettingsChange = (
     event: React.ChangeEvent<HTMLSelectElement>
@@ -174,6 +165,7 @@ export const Home = () => {
       setColor(color3);
     }
   };
+
   const makePrompt = () => {
     let finalPrompt = "";
     let frameworkPrompt = framework;
@@ -207,8 +199,7 @@ export const Home = () => {
       "implement the colors using the 60 30 10 rule. Use every color in the ratio of 60 30 10.";
     if (settingsMode === false) {
       return prompt;
-    }
-    else if (settingsMode === true) {
+    } else if (settingsMode === true) {
       return finalPrompt;
     } else {
       return prompt;
@@ -308,14 +299,33 @@ export const Home = () => {
     }
   }, [formToggle, requestTime]);
 
+  const goTo = (endpoint: string) => {
+    navigate(endpoint);
+  };
+
   return (
     <>
       <div className={style.pageContainer}>
         <SaveModal
-          isOpen={isModalOpen}
+          isOpen={isSaveModalOpen}
           onClose={closeModal}
           onSubmit={handleModalSubmit}
           content={content}
+        />
+      </div>
+
+      <div className={style.pageContainer}>
+        <DownloadModal
+          isOpen={isDownloadModalOpen}
+          onClose={closeModal}
+          onSubmit={handleModalSubmit}
+        />
+      </div>
+
+      <div className={style.pageContainer}>
+        <NotSignedInModal
+          isOpen={isNotSignedInModalOpen}
+          onClose={closeModal}
         />
       </div>
 
@@ -352,7 +362,11 @@ export const Home = () => {
                     className={style.colorDisplayBox}
                     style={{ backgroundColor: color1 }}
                   ></div>
-                  <p id="MainColorCode" className={style.colorText} style={{ color: color1 }}>
+                  <p
+                    id="MainColorCode"
+                    className={style.colorText}
+                    style={{ color: color1 }}
+                  >
                     #FFFFFF
                   </p>
                 </li>
@@ -367,7 +381,11 @@ export const Home = () => {
                     className={style.colorDisplayBox}
                     style={{ backgroundColor: color2 }}
                   ></div>
-                  <p id="AccentColorCode" className={style.colorText} style={{ color: color2 }}>
+                  <p
+                    id="AccentColorCode"
+                    className={style.colorText}
+                    style={{ color: color2 }}
+                  >
                     #FFFFFF
                   </p>
                 </li>
@@ -382,7 +400,11 @@ export const Home = () => {
                     className={style.colorDisplayBox}
                     style={{ backgroundColor: color3 }}
                   ></div>
-                  <p id="ActionColorCode" className={style.colorText} style={{ color: color3 }}>
+                  <p
+                    id="ActionColorCode"
+                    className={style.colorText}
+                    style={{ color: color3 }}
+                  >
                     #FFFFFF
                   </p>
                 </li>
@@ -438,8 +460,8 @@ export const Home = () => {
             <button className={style.buttonClear} onClick={clearPrompt}>
               tyhjennä
             </button>
-            <button className={style.buttonLog} onClick={exportToJSONFile}>
-              testi log
+            <button className={style.buttonLog} onClick={() => goTo("/logs")}>
+              Log data
             </button>
             <button
               className={`${
@@ -480,7 +502,10 @@ export const Home = () => {
               ></AutoResizeIframe>
             </div>
             <div className={style.navHomePrompt}>
-              <button className={style.buttonDownload} onClick={downloadPage}>
+              <button
+                className={style.buttonDownload}
+                onClick={() => setIsDownloadModalOpen(true)}
+              >
                 <p className="flex-auto">
                   lataa sivu <DownloadIcon />
                 </p>
