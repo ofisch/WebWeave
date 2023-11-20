@@ -13,6 +13,16 @@ export default {
       fontFamily: {
         sometype: ["sometype"],
         sourcecode: ["sourcecode"],
+        arial: ["arial"],
+        verdana: ["verdana"],
+        tahoma: ["tahoma"],
+        trebuchet: ["trebuchet MS"],
+        times: ["Times New Roman"],
+        courier: ["Courier New"],
+        georgia: ["Georgia"],
+        garamond: ["Book Antiqua"],
+        comic: ["Comic Sans MS"],
+        brush: ["Brush Script MT"],
       },
       backgroundSize: {
         "size-200": "200% 200%",

@@ -16,13 +16,25 @@ const style = {
   secondary:
     "p-4 max-w-5xl grid gap-4 xs:grid-cols-2 bg-primarylight rounded-lg",
   main: "",
-  select: "text-black",
-  selectOption: "text-black",
+  select: "text-black p-2 rounded-md w-40",
+
+  selectOption: "text-black font-sometype",
+  selectOptionArial: "text-black font-arial",
+  selectOptionVerdana: "text-black font-verdana",
+  selectOptionTahoma: "text-black font-tahoma",
+  selectOptionTrebuchet: "text-black font-trebuchet",
+  selectOptionTimes: "text-black font-times",
+  selectOptionGeorgia: "text-black font-georgia",
+  selectOptionGaramond: "text-black font-garamond",
+  selectOptionCourier: "text-black font-courier",
+  selectOptionBrush: "text-black font-brush",
+  selectOptionComic: "text-black font-comic",
+
   colorText: "drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]",
   profile: "mx-auto xs:w-full",
-  colorDisplayBox: "w-8 h-8 rounded-lg",
+  colorDisplayBox: "w-8 h-8 rounded-lg mx-auto",
   colors: "grid grid-cols-1 gap-4",
-  colorListItem: "text-left rounded-lg",
+  colorListItem: "rounded-lg",
   colorList: "flex gap-4",
   prompt: "h-32 bg-blue-500 w-full bg-secondary rounded-lg text-black",
   settings: "h-56 bg-blue-500 bg-secondary rounded-lg text-black",
@@ -78,9 +90,10 @@ const style = {
   sitesIcon: "scale-150 text-red-500",
   sitesEditIcon: "scale-150 text-action",
 
-  settingsHeader: "font-sometype text-white text-2xl text-left",
+  settingsHeader: "font-sometype text-white text-2xl text-left mb-4",
   picker: "grid grid-cols-3 gap-4",
   drop: "grid grid-cols-1 gap-4",
+  sketchPicker: "mx-auto",
 
   profileTop: "py-4 max-w-5xl grid gap-4 xs:grid-cols-2 mb-32",
   editSection:

@@ -437,6 +437,7 @@ export const Home = () => {
               </ul>
               <SketchPicker
                 color={color}
+                className={style.sketchPicker}
                 onChangeComplete={(newColor) => handleColorChange(newColor)}
               />
               <div className={style.drop}>
@@ -464,18 +465,31 @@ export const Home = () => {
                     <option className={style.selectOption}>
                       none selected
                     </option>
-                    <option className={style.selectOption}>Arial</option>
-                    <option className={style.selectOption}>Verdana</option>
-                    <option className={style.selectOption}>Tahoma</option>
-                    <option className={style.selectOption}>Trebuchet MS</option>
-                    <option className={style.selectOption}>
+                    <option className={style.selectOptionArial}>Arial</option>
+                    <option className={style.selectOptionVerdana}>
+                      Verdana
+                    </option>
+                    <option className={style.selectOptionTahoma}>Tahoma</option>
+                    <option className={style.selectOptionTrebuchet}>
+                      Trebuchet MS
+                    </option>
+                    <option className={style.selectOptionTimes}>
                       Times New Roman
                     </option>
-                    <option className={style.selectOption}>Georgia</option>
-                    <option className={style.selectOption}>Garamond</option>
-                    <option className={style.selectOption}>Courier New</option>
-                    <option className={style.selectOption}>
+                    <option className={style.selectOptionGeorgia}>
+                      Georgia
+                    </option>
+                    <option className={style.selectOptionGaramond}>
+                      Garamond
+                    </option>
+                    <option className={style.selectOptionCourier}>
+                      Courier New
+                    </option>
+                    <option className={style.selectOptionBrush}>
                       Brush Script MT
+                    </option>
+                    <option className={style.selectOptionComic}>
+                      Comic Sans MS
                     </option>
                   </select>
                 </div>
