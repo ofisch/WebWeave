@@ -1,4 +1,3 @@
-import { getSettings } from './../views/Home';
 import { API_KEY } from "./secret.ts";
 import axios from "axios";
 const apiKey = API_KEY;
