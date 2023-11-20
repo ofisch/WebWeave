@@ -18,9 +18,7 @@ const NotSignedInModal: React.FC<NotSignedInModalProps> = ({
     <Modal open={isOpen} onClose={onClose}>
       <div className={style.modalContainer}>
         <div className={style.modalContent}>
-          <h1 className={style.modalH1}>
-            Kirjaudu sisään tallentaaksesi sivun!
-          </h1>
+          <h1 className={style.modalH1}>Log in to save the page!</h1>
           <div className={style.modalButtons}>
             <button onClick={onClose} className={style.cancelButtonModal}>
               Close

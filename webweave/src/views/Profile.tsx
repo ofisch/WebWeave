@@ -229,12 +229,12 @@ export const Profile = () => {
               {user !== null ? (
                 <h2 className={style.username}>{username}</h2>
               ) : (
-                <h2 className={style.username}>käyttäjänimi</h2>
+                <h2 className={style.username}>username</h2>
               )}
               <AccountCircleIcon className={style.icon}></AccountCircleIcon>
 
               {/*tarkistetaan, onko käyttäjää olemassa, jos on, tulostetaan sähköposti*/}
-              {user !== null ? <h3>{user.email}</h3> : <h3>sähköposti</h3>}
+              {user !== null ? <h3>{user.email}</h3> : <h3>email</h3>}
               {user && (
                 <button className={style.button} onClick={signOut}>
                   Sign Out
@@ -242,7 +242,7 @@ export const Profile = () => {
               )}
             </div>
             <div className={style.sitesEdit}>
-              <h2 className={style.editH2}>tallennetut sivut</h2>
+              <h2 className={style.editH2}>My websites</h2>
             </div>
             <ul className={style.list}>{listPages}</ul>
           </main>

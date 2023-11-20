@@ -199,10 +199,7 @@ export const Edit = () => {
 
   useEffect(() => {
     if (promptAreaRef.current) {
-      typePlaceholder(
-        promptAreaRef.current,
-        "ehdota muutoksia sivuun tähän..."
-      );
+      typePlaceholder(promptAreaRef.current, "suggest changes to the site...");
     }
   }, []);
 
@@ -262,8 +259,7 @@ export const Edit = () => {
           <h2 className={style.editTitle}>{currentPage}</h2>
           <nav className={style.navEdit}>
             <button className={style.button} onClick={goToProfile}>
-              <ArrowBackIcon />
-              omat sivut
+              <ArrowBackIcon /> My sites
             </button>
           </nav>
           <div className={style.editorPreview}>
@@ -280,8 +276,8 @@ export const Edit = () => {
           {loading ? (
             <p id="loading" className={style.p}></p>
           ) : (
-            <button className={style.buttonPage} onClick={handleApiRequest}>
-              generoi muutokset
+            <button className={style.buttonGenerate} onClick={handleApiRequest}>
+              Generate changes
             </button>
           )}
 
@@ -297,10 +293,10 @@ export const Edit = () => {
               className={style.buttonLog}
               onClick={() => savePage(htmlEdit)}
             >
-              tallenna uusi versio
+              Save as new
             </button>
             <button className={style.buttonSave} onClick={handlePageSave}>
-              tallenna muutokset
+              Save changes
             </button>
           </div>
         </div>

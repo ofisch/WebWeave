@@ -131,7 +131,7 @@ export const Home = () => {
 
   useEffect(() => {
     if (promptAreaRef.current) {
-      typePlaceholder(promptAreaRef.current, "kuvaile sivua tähän...");
+      typePlaceholder(promptAreaRef.current, "describe the page here...");
     }
   }, []);
 
@@ -345,7 +345,7 @@ export const Home = () => {
             <Heading></Heading>
           </header>
           <div className={style.promptBlock}>
-            <h2 className={style.promptHeader}>prompt</h2>
+            <h2 className={style.promptHeader}>Prompt</h2>
             <textarea
               id="promptArea"
               placeholder=""
@@ -442,7 +442,7 @@ export const Home = () => {
               />
               <div className={style.drop}>
                 <div>
-                  <h1>css framework:</h1>
+                  <h1>Css framework:</h1>
                   <select
                     name="cssframeworkSelect"
                     className={style.select}
@@ -456,7 +456,7 @@ export const Home = () => {
                   </select>
                 </div>
                 <div>
-                  <h1>font style:</h1>
+                  <h1>Font style:</h1>
                   <select
                     name="fontSelect"
                     className={style.select}
@@ -498,7 +498,7 @@ export const Home = () => {
           </div>
           <div className={style.navHomePrompt}>
             <button className={style.buttonClear} onClick={clearPrompt}>
-              tyhjennä
+              Clear
             </button>
             <button className={style.buttonLog} onClick={() => goTo("/logs")}>
               Log data
@@ -512,7 +512,7 @@ export const Home = () => {
               onClick={handleApiRequest}
             >
               <p className={loading ? style.textGenerate : "flex-auto"}>
-                generoi <SendIcon />
+                Generate <SendIcon />
               </p>
             </button>
           </div>
@@ -522,7 +522,7 @@ export const Home = () => {
           </div>
 
           <div className={style.editBlock}>
-            <h2 className={style.editHeader}>muokkaa</h2>
+            <h2 className={style.editHeader}>Edit</h2>
             <textarea
               spellCheck="false"
               readOnly
@@ -535,7 +535,7 @@ export const Home = () => {
 
         <div className={style.secondary}>
           <div className={style.previewBlock}>
-            <h2 className={style.previewHeader}>esikatselu</h2>
+            <h2 className={style.previewHeader}>Preview</h2>
             <div className={style.editorPreview}>
               <AutoResizeIframe
                 contentSrc={localStorage.getItem("htmlResponse")}
@@ -547,7 +547,7 @@ export const Home = () => {
                 onClick={() => setIsDownloadModalOpen(true)}
               >
                 <p className="flex-auto">
-                  lataa sivu <DownloadIcon />
+                  Download page <DownloadIcon />
                 </p>
               </button>
               <button
@@ -555,7 +555,7 @@ export const Home = () => {
                 onClick={() => savePage(response)}
               >
                 <p className="flex-auto">
-                  tallenna sivu profiiliin <SaveIcon />
+                  Save page to profile <SaveIcon />
                 </p>
               </button>
             </div>
