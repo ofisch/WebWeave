@@ -24,7 +24,6 @@ export const Heading = () => {
   };
 
   const location = useLocation();
-  console.log("location:", location);
 
   return (
     <>

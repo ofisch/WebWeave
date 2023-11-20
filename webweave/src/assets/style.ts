@@ -75,6 +75,7 @@ const style = {
   sitesIconButton:
     "justify-self-start transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",
   sitesIcon: "scale-150 text-red-500",
+  sitesEditIcon: "scale-150 text-action",
 
   settingsHeader: "font-sometype text-white text-2xl text-left",
   picker: "grid grid-cols-3 gap-4",

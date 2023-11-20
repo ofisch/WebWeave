@@ -11,6 +11,8 @@ import SaveModal from "../components/modals/SaveModal";
 import SendIcon from "@mui/icons-material/Send";
 import DownloadIcon from "@mui/icons-material/Download";
 import SaveIcon from "@mui/icons-material/Save";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import { useNavigate } from "react-router-dom";
 import DownloadModal from "../components/modals/DownloadModal";
 import { makeApiRequest } from "../utils/openai";
@@ -41,11 +43,6 @@ export const Home = () => {
   const promptAreaRef = React.useRef<HTMLTextAreaElement>(null);
 
   const navigate = useNavigate();
-
-  //const iFrame = document.querySelector("iframe");
-
-  // tyhjennetään localstorage
-  //localStorage.setItem("htmlResponse", "");
 
   // tallennetaan sivu firestoreen
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
@@ -96,6 +93,7 @@ export const Home = () => {
   ) => {
     setPrompt(event.target.value);
   };
+
   const hideSettings = () => {
     if (document.getElementById("settingsDiv")!.style.display === "none") {
       document.getElementById("settingsDiv")!.style.display = "block";
@@ -346,8 +344,21 @@ export const Home = () => {
               onChange={handlePromptChange}
             ></textarea>
           </div>
-          <button onClick={() => hideSettings()}>Advanced settings</button>
-          <div id="settingsDiv" className={style.secondary}>
+          {settingsMode ? (
+            <button className={"text-action"} onClick={() => hideSettings()}>
+              Advanced settings <ArrowDropUpIcon />
+            </button>
+          ) : (
+            <button className={"text-action"} onClick={() => hideSettings()}>
+              Advanced settings <ArrowDropDownIcon />
+            </button>
+          )}
+
+          <div
+            id="settingsDiv"
+            style={{ display: "none" }}
+            className={style.secondary}
+          >
             <h2 className={style.settingsHeader}>Settings</h2>
 
             <div className={style.picker}>
