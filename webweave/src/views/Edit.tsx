@@ -2,8 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import style from "../assets/style";
 import { firestore } from "../utils/firebase";
 import { AuthContext } from "../context/AuthContext";
-import { Profile } from "./Profile";
-import { pageToEdit, setPageToEdit } from "../context/PageEditContext";
+import { pageToEdit } from "../context/PageEditContext";
 import { useNavigate } from "react-router-dom";
 
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
@@ -25,7 +24,9 @@ export const Edit = () => {
   const [prompt, setPrompt] = React.useState<string>("");
   const promptAreaRef = React.useRef<HTMLTextAreaElement>(null);
 
+  // @ts-ignore
   const [response, setResponse] = useState<string>("");
+  // @ts-ignore
   const [requestTime, setRequestTime] = useState<string>("");
 
   const [loading, setLoading] = useState(false);

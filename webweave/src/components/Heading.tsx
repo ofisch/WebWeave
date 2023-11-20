@@ -1,10 +1,9 @@
-import React, { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import HomeIcon from "@mui/icons-material/Home";
 import { AuthContext } from "../context/AuthContext";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 export const Heading = () => {
   const user = useContext(AuthContext);

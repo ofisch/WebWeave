@@ -10,12 +10,7 @@ interface SaveModalProps {
   content: string;
 }
 
-const SaveModal: React.FC<SaveModalProps> = ({
-  isOpen,
-  onClose,
-  onSubmit,
-  content,
-}) => {
+const SaveModal: React.FC<SaveModalProps> = ({ isOpen, onClose, onSubmit }) => {
   const [inputValue, setInputValue] = useState("");
   const [showAlert, setShowAlert] = useState(false);
 

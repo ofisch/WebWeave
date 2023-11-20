@@ -1,5 +1,3 @@
-import style from "../assets/style";
-
 // typewriter
 export function typePlaceholder(textArea: HTMLTextAreaElement, text: string) {
   const placeholderText = text;
