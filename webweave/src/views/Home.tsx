@@ -164,14 +164,23 @@ export const Home = () => {
     if (id === "Main") {
       setCurrentColor(1);
       setColor(color1);
+      document.getElementById("Main")!.style.backgroundColor = "#486584";
+      document.getElementById("Accent")!.style.backgroundColor = "#96ADC5";
+      document.getElementById("Action")!.style.backgroundColor = "#96ADC5";
     }
     if (id === "Accent") {
       setCurrentColor(2);
       setColor(color2);
+      document.getElementById("Main")!.style.backgroundColor = "#96ADC5";
+      document.getElementById("Accent")!.style.backgroundColor = "#486584";
+      document.getElementById("Action")!.style.backgroundColor = "#96ADC5";
     }
     if (id === "Action") {
       setCurrentColor(3);
       setColor(color3);
+      document.getElementById("Main")!.style.backgroundColor = "#96ADC5";
+      document.getElementById("Accent")!.style.backgroundColor = "#96ADC5";
+      document.getElementById("Action")!.style.backgroundColor = "#486584";
     }
   };
   const makePrompt = () => {
@@ -191,20 +200,20 @@ export const Home = () => {
     } else {
       fontPrompt = " Use " + font + " font.";
     }
+    colorPrompt = " Use " +
+    color1 +
+    " as main color." +
+    " Use " +
+    color2 +
+    " as accent color." +
+    " Use " +
+    color3 +
+    " as action color. implement the colors using the 60 30 10 rule. Use every color in the ratio of 60 30 10.";
     finalPrompt =
       prompt +
-      " Use " +
       fontPrompt +
-      " Use " +
-      color1 +
-      " as main color." +
-      " Use " +
-      color2 +
-      " as accent color." +
-      " Use " +
-      color3 +
-      " as action color." +
-      "implement the colors using the 60 30 10 rule. Use every color in the ratio of 60 30 10.";
+      frameworkPrompt +
+      colorPrompt;
     if (settingsMode === false) {
       return prompt;
     }
