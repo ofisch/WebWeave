@@ -133,6 +133,13 @@ export const Home = () => {
     if (promptAreaRef.current) {
       typePlaceholder(promptAreaRef.current, "describe the page here...");
     }
+    const interval = setInterval(() => {
+      if (promptAreaRef.current) {
+        typePlaceholder(promptAreaRef.current, "describe the page here...");
+      }
+    }, 3500);
+
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {

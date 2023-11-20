@@ -201,6 +201,16 @@ export const Edit = () => {
     if (promptAreaRef.current) {
       typePlaceholder(promptAreaRef.current, "suggest changes to the site...");
     }
+    const interval = setInterval(() => {
+      if (promptAreaRef.current) {
+        typePlaceholder(
+          promptAreaRef.current,
+          "suggest changes to the site..."
+        );
+      }
+    }, 3500);
+
+    return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
