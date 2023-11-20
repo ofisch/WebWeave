@@ -9,12 +9,14 @@ import { IconButton } from "@mui/material";
 import HomeIcon from "@mui/icons-material/Home";
 import BadgeIcon from "@mui/icons-material/Badge";
 import EmailIcon from "@mui/icons-material/Email";
+import EditIcon from "@mui/icons-material/Edit";
 
 import { auth, firestore } from "../utils/firebase";
 import { useNavigate } from "react-router";
 import { pageToEdit, setPageToEdit } from "../context/PageEditContext";
 import { Heading } from "../components/Heading";
 import DeleteModal from "../components/modals/DeleteModal";
+import EditModal from "../components/modals/EditModal";
 
 export const Profile = () => {
   const user = useContext(AuthContext);
@@ -113,6 +115,49 @@ export const Profile = () => {
     setDeleteModalOpen(false);
   };
 
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [pageNameToEdit, setPageNameToEdit] = useState("");
+
+  const handleEdit = (pageName: string) => {
+    setPageNameToEdit(pageName);
+    console.log("pageNameToEdit:", pageNameToEdit);
+    setEditModalOpen(true);
+  };
+
+  const handleConfirmEdit = async (newName: string) => {
+    setEditModalOpen(false);
+
+    try {
+      // haetaan sivun dokumentti
+      const docRef = await pagesSubCollectionRef
+        .where("pageName", "==", pageNameToEdit)
+        .get();
+
+      if (!docRef.empty) {
+        // päivitetään dokumentti
+        const docSnapshot = docRef.docs[0];
+        await pagesSubCollectionRef.doc(docSnapshot.id).update({
+          pageName: newName,
+        });
+
+        // päivitetään state vain, jos firestore-päivitys onnistuu
+        const updatedPages = pages.map((page) =>
+          page === pageNameToEdit ? newName : page
+        );
+        setPages(updatedPages);
+        localStorage.setItem("pages", JSON.stringify(updatedPages));
+      } else {
+        console.log("Dokumenttia ei löytynyt sivulle: ", pageNameToEdit);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleCancelEdit = () => {
+    setEditModalOpen(false);
+  };
+
   pages.sort();
 
   // tulostetaan sivut listaksi
@@ -123,12 +168,20 @@ export const Profile = () => {
       </button>
 
       {isEditMode && (
-        <button
-          className={style.sitesIconButton}
-          onClick={() => handleDelete(item)}
-        >
-          <DeleteIcon className={style.sitesIcon} />
-        </button>
+        <div className="flex gap-4 justify-self-start self-center">
+          <button
+            className={style.sitesIconButton}
+            onClick={() => handleEdit(item)}
+          >
+            <EditIcon className={style.sitesEditIcon} />
+          </button>
+          <button
+            className={style.sitesIconButton}
+            onClick={() => handleDelete(item)}
+          >
+            <DeleteIcon className={style.sitesIcon} />
+          </button>
+        </div>
       )}
     </li>
   ));
@@ -156,6 +209,12 @@ export const Profile = () => {
           onClose={handleCancelDelete}
           onConfirm={handleConfirmDelete}
           pageName={pageToDelete}
+        />
+        <EditModal
+          isOpen={editModalOpen}
+          onCancel={handleCancelEdit}
+          onSave={handleConfirmEdit}
+          initialName={pageNameToEdit}
         />
       </div>
 
