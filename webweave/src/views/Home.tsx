@@ -4,7 +4,6 @@ import { Heading } from "../components/Heading";
 import { firestore } from "../utils/firebase";
 import { AuthContext } from "../context/AuthContext";
 import { SketchPicker } from "react-color";
-import { resizeIframeToFiContent } from "../utils/iframeFit";
 import AutoResizeIframe from "../components/AutoResizeIframe";
 import { loadingAnimation, typePlaceholder } from "../utils/animation";
 import SaveModal from "../components/modals/SaveModal";
@@ -78,9 +77,12 @@ export const Home = () => {
     ) {
       try {
         await pagesSubCollection.add(page);
-        const savedPages = JSON.parse(localStorage.getItem("pages"));
-        savedPages.push(pageNameInput);
-        localStorage.setItem("pages", JSON.stringify(savedPages));
+        const savedPagesItem = localStorage.getItem("pages");
+        if (savedPagesItem !== null) {
+          const savedPages = JSON.parse(savedPagesItem);
+          savedPages.push(pageNameInput);
+          localStorage.setItem("pages", JSON.stringify(savedPages));
+        }
       } catch (error) {
         console.log(error);
       }
@@ -222,22 +224,30 @@ export const Home = () => {
       return prompt;
     }
   };
-  const handleColorChange = (newColor) => {
+  const handleColorChange = (newColor: { hex: string }) => {
+    console.log("color: ", newColor);
+    console.log("colorHex: ", newColor.hex);
     setColor(newColor.hex);
     const main = document.getElementById("MainColorCode");
     const accent = document.getElementById("AccentColorCode");
     const action = document.getElementById("ActionColorCode");
     if (currentColor === 1) {
       setColor1(newColor.hex);
-      main.innerHTML = newColor.hex;
+      if (main !== null) {
+        main.innerHTML = newColor.hex;
+      }
     }
     if (currentColor === 2) {
       setColor2(newColor.hex);
-      accent.innerHTML = newColor.hex;
+      if (accent !== null) {
+        accent.innerHTML = newColor.hex;
+      }
     }
     if (currentColor === 3) {
       setColor3(newColor.hex);
-      action.innerHTML = newColor.hex;
+      if (action !== null) {
+        action.innerHTML = newColor.hex;
+      }
     }
   };
   // lähetetään prompt openai-API:lle ja asetetaan vastaus responseen-stateen
@@ -544,9 +554,13 @@ export const Home = () => {
           <div className={style.previewBlock}>
             <h2 className={style.previewHeader}>Preview</h2>
             <div className={style.editorPreview}>
-              <AutoResizeIframe
-                contentSrc={localStorage.getItem("htmlResponse")}
-              ></AutoResizeIframe>
+              {localStorage.getItem("htmlResponse") !== null ? (
+                <AutoResizeIframe
+                  contentSrc={localStorage.getItem("htmlResponse") || ""}
+                ></AutoResizeIframe>
+              ) : (
+                <p className={style.p}>No preview available</p>
+              )}
             </div>
             <div className={style.navHomePrompt}>
               <button

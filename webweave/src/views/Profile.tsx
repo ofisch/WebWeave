@@ -1,19 +1,15 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
 // tyylikirjasto
 import style from "../assets/style";
 // ikonit
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { IconButton } from "@mui/material";
-import HomeIcon from "@mui/icons-material/Home";
-import BadgeIcon from "@mui/icons-material/Badge";
-import EmailIcon from "@mui/icons-material/Email";
 import EditIcon from "@mui/icons-material/Edit";
 
 import { auth, firestore } from "../utils/firebase";
 import { useNavigate } from "react-router";
-import { pageToEdit, setPageToEdit } from "../context/PageEditContext";
+import { setPageToEdit } from "../context/PageEditContext";
 import { Heading } from "../components/Heading";
 import DeleteModal from "../components/modals/DeleteModal";
 import EditModal from "../components/modals/EditModal";
@@ -50,7 +46,7 @@ export const Profile = () => {
       }
     };
     const storedPagesJson = localStorage.getItem("pages");
-    const localPages: string | null = storedPagesJson
+    const localPages: string[] | null = storedPagesJson
       ? JSON.parse(storedPagesJson)
       : null;
     if (!localPages || localPages.length === 0) {
@@ -190,10 +186,6 @@ export const Profile = () => {
     localStorage.removeItem("pages");
     await auth.signOut();
     navigate("/login");
-  };
-
-  const goTo = (endpoint: string) => {
-    navigate(endpoint);
   };
 
   const goEdit = (page: string) => {

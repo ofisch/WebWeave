@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import style from "../assets/style";
 import { AuthContext } from "../context/AuthContext";
 import { auth } from "../utils/firebase";
@@ -92,7 +92,7 @@ export const Login = () => {
       });
     } catch (error) {
       if (error instanceof Error) {
-        const errorCode: string = error.code;
+        const errorCode: string = error.message;
 
         if (errorCode == "auth/email-already-in-use") {
           errors.push("Email already in use");
@@ -163,17 +163,15 @@ export const Login = () => {
     }
   };
 
-  const signOut = async () => {
-    await auth.signOut();
-    setErrorMessage("");
-  };
-
   useEffect(() => {
     if (user) {
       const userRef = firestore.collection("users").doc(user.uid);
       userRef.get().then((doc) => {
         if (doc.exists) {
-          setUsername(doc.data().username);
+          const data = doc.data();
+          if (data !== undefined) {
+            setUsername(data.username);
+          }
         }
       });
     }

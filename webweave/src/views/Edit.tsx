@@ -24,26 +24,21 @@ export const Edit = () => {
   const [prompt, setPrompt] = React.useState<string>("");
   const promptAreaRef = React.useRef<HTMLTextAreaElement>(null);
 
-  // @ts-ignore
-  const [response, setResponse] = useState<string>("");
-  // @ts-ignore
-  const [requestTime, setRequestTime] = useState<string>("");
-
   const [loading, setLoading] = useState(false);
 
   const usersCollection = firestore.collection("users");
   const userDocRef = usersCollection.doc(user?.uid);
   const pagesSubcollectionRef = userDocRef.collection("pages");
 
-  let currentPage: string;
+  let currentPage: string = "";
 
   //tyhjennetään localStorage, jotta käyttäjä ei näe vilausta edellisestä muokatusta sivusta
   //debugia varten kommentoitu
   //localStorage.setItem("html", "");
 
   const checkPageName = () => {
-    if (pageToEdit === undefined) {
-      currentPage = localStorage.getItem("pageToEdit");
+    if (pageToEdit === undefined || pageToEdit === null) {
+      currentPage = ""; // Provide a default value when pageToEdit is undefined or null
     } else {
       currentPage = pageToEdit;
 
@@ -67,9 +62,6 @@ export const Edit = () => {
 
         localStorage.setItem("html", content);
         setHtmlEdit(localStorage.getItem("html")!);
-
-        // Set the content of the iframe
-        document.querySelector("iframe").srcdoc = localStorage.getItem("html")!;
       } else {
         // Handle the case when the document is not found
         console.log("Document not found for pageName:", currentPage);
@@ -133,9 +125,12 @@ export const Edit = () => {
     ) {
       try {
         await pagesSubcollectionRef.add(page);
-        const savedPages = JSON.parse(localStorage.getItem("pages"));
-        savedPages.push(pageNameInput);
-        localStorage.setItem("pages", JSON.stringify(savedPages));
+        const savedPagesItem = localStorage.getItem("pages");
+        if (savedPagesItem !== null) {
+          const savedPages = JSON.parse(savedPagesItem);
+          savedPages.push(pageNameInput);
+          localStorage.setItem("pages", JSON.stringify(savedPages));
+        }
       } catch (error) {
         console.log(error);
       }
@@ -150,7 +145,6 @@ export const Edit = () => {
     setLoading(true);
     const apiResponse = await makeApiRequest(editPrompt);
     console.log("apiResponse", apiResponse);
-    setResponse(apiResponse);
     setHtmlEdit(apiResponse);
     setLoading(false);
     localStorage.setItem("html", apiResponse);
@@ -165,8 +159,6 @@ export const Edit = () => {
       elapsedTime >= 60
         ? `${Math.floor(elapsedTime / 60)}:${Math.floor(elapsedTime % 60)} min`
         : `${Math.floor(elapsedTime)} sec`;
-
-    setRequestTime(formattedTime);
 
     // lisätään API-pyynnön kesto log.json-tiedostoon
     const existingData = localStorage.getItem("log.json");
