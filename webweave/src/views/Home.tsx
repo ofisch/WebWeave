@@ -117,14 +117,6 @@ export const Home = () => {
   ) => {
     setFrameworkSettings(event.target.value);
   };
-  // asetetaan vastaus responseen-stateen
-  const handleResponseChange = (
-    event: React.ChangeEvent<HTMLTextAreaElement>
-  ) => {
-    setResponse(event.target.value);
-    // skaalataan iframe sen sisällä olevan sivun kokoiseksi, kun api palauttaa uuden sivun
-    //resizeIframeToFiContent(iFrame);
-  };
 
   // skaalataan iframe sen sisällä olevan sivun kokoiseksi, kun sivu ladataan
   window.onload = () => {
@@ -537,51 +529,42 @@ export const Home = () => {
             <p className={style.p}>{requestStatus}</p>
             {loading ? <p id="loading" className={style.p}></p> : null}
           </div>
-
-          <div className={style.editBlock}>
-            <h2 className={style.editHeader}>Edit</h2>
-            <textarea
-              spellCheck="false"
-              readOnly
-              className={style.settings}
-              value={response}
-              onChange={handleResponseChange}
-            ></textarea>
-          </div>
         </div>
 
-        <div className={style.secondary}>
-          <div className={style.previewBlock}>
-            <h2 className={style.previewHeader}>Preview</h2>
-            <div className={style.editorPreview}>
-              {localStorage.getItem("htmlResponse") !== null ? (
-                <AutoResizeIframe
-                  contentSrc={localStorage.getItem("htmlResponse") || ""}
-                ></AutoResizeIframe>
-              ) : (
-                <p className={style.p}>No preview available</p>
-              )}
-            </div>
-            <div className={style.navHomePrompt}>
-              <button
-                className={style.buttonDownload}
-                onClick={() => setIsDownloadModalOpen(true)}
-              >
-                <p className="flex-auto">
-                  Download page <DownloadIcon />
-                </p>
-              </button>
-              <button
-                className={style.buttonSave}
-                onClick={() => savePage(response)}
-              >
-                <p className="flex-auto">
-                  Save page to profile <SaveIcon />
-                </p>
-              </button>
+        {response !== "" ? (
+          <div className={style.secondary}>
+            <div className={style.previewBlock}>
+              <h2 className={style.previewHeader}>Preview</h2>
+              <div className={style.editorPreview}>
+                {localStorage.getItem("htmlResponse") !== null ? (
+                  <AutoResizeIframe
+                    contentSrc={localStorage.getItem("htmlResponse") || ""}
+                  ></AutoResizeIframe>
+                ) : (
+                  <p className={style.p}>No preview available</p>
+                )}
+              </div>
+              <div className={style.navHomePrompt}>
+                <button
+                  className={style.buttonDownload}
+                  onClick={() => setIsDownloadModalOpen(true)}
+                >
+                  <p className="flex-auto">
+                    Download page <DownloadIcon />
+                  </p>
+                </button>
+                <button
+                  className={style.buttonSave}
+                  onClick={() => savePage(response)}
+                >
+                  <p className="flex-auto">
+                    Save page to profile <SaveIcon />
+                  </p>
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        ) : null}
       </div>
     </>
   );
