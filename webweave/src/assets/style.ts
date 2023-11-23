@@ -93,7 +93,7 @@ const style = {
   sitesEditIcon: "scale-150 text-action",
   editInfoIcon: "relative text-action",
   editTooltip:
-    "absolute right-1/3 top-1/2 w-32 bg-primary rounded-lg shadow-lg p-2 text-white z-10",
+    "absolute right-1/3 top-1/2 w-32 bg-primary rounded-lg shadow-lg p-2 text-white border-2 border-primarylight z-10",
 
   settingsHeader: "font-sometype text-white text-2xl text-left mb-4",
   picker: "grid grid-cols-3 gap-4",
