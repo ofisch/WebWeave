@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import style from "../assets/style";
+import { textEdit } from "../utils/textEdit";
 import { firestore } from "../utils/firebase";
 import { AuthContext } from "../context/AuthContext";
 import { pageToEdit } from "../context/PageEditContext";
@@ -60,7 +61,11 @@ export const Edit = () => {
         console.log("docData", docData);
         const content = docData.content;
 
-        localStorage.setItem("html", content);
+        // lisätään sivun sisältöön textEdit.script, jotta sivun tekstielementtejä voidaan muokata
+        const textEditScript = textEdit.script;
+        const contentWithScript = content + textEditScript;
+
+        localStorage.setItem("html", contentWithScript);
         setHtmlEdit(localStorage.getItem("html")!);
       } else {
         // Handle the case when the document is not found
