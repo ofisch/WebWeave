@@ -302,10 +302,13 @@ export const Home = () => {
   };
 
   const clearPrompt = () => {
-    localStorage.removeItem("userPrompt");
-    localStorage.removeItem("htmlResponse");
-    setPrompt("");
-    setResponse("");
+    if (window.confirm("Are you sure you want to clear the prompt?")) {
+      localStorage.removeItem("userPrompt");
+      localStorage.removeItem("htmlResponse");
+      setPrompt("");
+      setResponse("");
+      setRequestStatus("");
+    }
   };
 
   // päivitetään requestStatusiin API-pyynnön kesto
@@ -506,9 +509,14 @@ export const Home = () => {
             </div>
           </div>
           <div className={style.navHomePrompt}>
-            <button className={style.buttonClear} onClick={clearPrompt}>
-              Clear
-            </button>
+            {response !== "" ? (
+              <button className={style.buttonClear} onClick={clearPrompt}>
+                Clear
+              </button>
+            ) : (
+              <button className={style.buttonClearDisabled}>Clear</button>
+            )}
+
             <button className={style.buttonLog} onClick={() => goTo("/logs")}>
               Log data
             </button>

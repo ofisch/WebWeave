@@ -7,6 +7,8 @@ import { pageToEdit } from "../context/PageEditContext";
 import { useNavigate } from "react-router-dom";
 
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import InfoIcon from "@mui/icons-material/Info";
+import AdsClickIcon from "@mui/icons-material/AdsClick";
 import { Heading } from "../components/Heading";
 import AutoResizeIframe from "../components/AutoResizeIframe";
 import { loadingAnimation, typePlaceholder } from "../utils/animation";
@@ -39,7 +41,7 @@ export const Edit = () => {
 
   const checkPageName = () => {
     if (pageToEdit === undefined || pageToEdit === null) {
-      currentPage = ""; // Provide a default value when pageToEdit is undefined or null
+      currentPage = ""; // annetaan oletusarvo, jotta sivu ei ole null tai undefined
     } else {
       currentPage = pageToEdit;
 
@@ -68,7 +70,7 @@ export const Edit = () => {
         localStorage.setItem("html", contentWithScript);
         setHtmlEdit(localStorage.getItem("html")!);
       } else {
-        // Handle the case when the document is not found
+        // jos sivun dokumenttia ei löydy, tulostetaan virheilmoitus
         console.log("Document not found for pageName:", currentPage);
       }
     } catch (error) {
@@ -243,6 +245,16 @@ export const Edit = () => {
     getPageContent();
   }, []);
 
+  const [isTooltipVisible, setTooltipVisible] = useState(false);
+
+  const handleMouseEnter = () => {
+    setTooltipVisible(true);
+  };
+
+  const handleMouseLeave = () => {
+    setTooltipVisible(false);
+  };
+
   return (
     <>
       <div className={style.pageContainer}>
@@ -268,7 +280,21 @@ export const Edit = () => {
             <button className={style.button} onClick={goToProfile}>
               <ArrowBackIcon /> My sites
             </button>
+            <button
+              className={style.editInfoIcon}
+              onMouseEnter={handleMouseEnter}
+              onMouseLeave={handleMouseLeave}
+            >
+              <InfoIcon />
+              {isTooltipVisible && (
+                <div className={style.editTooltip}>
+                  Edit text elements by <AdsClickIcon className="text-action" />{" "}
+                  double clicking!
+                </div>
+              )}
+            </button>
           </nav>
+
           <div className={style.editorPreview}>
             <AutoResizeIframe contentSrc={htmlEdit}></AutoResizeIframe>
           </div>

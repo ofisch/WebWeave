@@ -3,12 +3,14 @@ const style = {
   header: "text-4xl text-action xs:col-span-2 xs:w-1/2 font-sourcecode",
   headerNav: "text-4xl text-action xs:col-span-2 xs:w-1/2  font-sourcecode",
   nav: "flex gap-4 justify-center",
-  navEdit: "flex gap-4 flex-col justify-center items-start",
+  navEdit: "flex gap-4 flex-row justify-between items-start",
   navHomePrompt: "flex gap-4 justify-center",
   buttonGenerate:
     "p-1 text-black rounded-lg w-full h-14 font-semibold  transition-all duration-500 bg-gradient-to-tl from-emerald-500 via-cyan-300 to-action bg-size-200 bg-pos-0 hover:bg-pos-100",
   textGenerate: "flex-auto animate-pulse",
   buttonClear: "bg-action p-1 text-black rounded-lg w-1/4",
+  buttonClearDisabled:
+    "bg-primarylight p-1 text-black rounded-lg w-1/4 pointer-events-none opacity-60",
   buttonLog: "bg-action p-1 text-black rounded-lg w-1/4",
   buttonSave: "p-1 bg-action text-black rounded-lg w-3/4 h-12",
   buttonDownload: "p-1 bg-action text-black rounded-lg w-1/4 h-12",
@@ -89,6 +91,9 @@ const style = {
     "justify-self-start transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",
   sitesIcon: "scale-150 text-red-500",
   sitesEditIcon: "scale-150 text-action",
+  editInfoIcon: "relative text-action",
+  editTooltip:
+    "absolute right-1/3 top-1/2 w-32 bg-primary rounded-lg shadow-lg p-2 text-white z-10",
 
   settingsHeader: "font-sometype text-white text-2xl text-left mb-4",
   picker: "grid grid-cols-3 gap-4",

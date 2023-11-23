@@ -15,7 +15,7 @@ const textEdit = {
     }
 
     // Add click event listeners to all text elements
-    const textElements = document.querySelectorAll('h1, h2, h3, p, span');
+    const textElements = document.querySelectorAll('h1, h2, h3, p, li, span');
     textElements.forEach(function (element) {
       element.addEventListener('dblclick', handleTextClick);
       element.style.cursor = 'pointer'; // Optional: Change cursor to indicate clickability
