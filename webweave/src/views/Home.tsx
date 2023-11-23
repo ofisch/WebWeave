@@ -17,6 +17,7 @@ import { makeApiRequest } from "../utils/openai";
 import NotSignedInModal from "../components/modals/NotSignedInModal";
 
 export const Home = () => {
+  const [promptExplanation, setPromptExplanation] = useState<string>("");
   const [settingsMode, setSettingsMode] = useState(false);
   const [color, setColor] = useState("#2C3E50");
   const [currentColor, setCurrentColor] = useState(1);
@@ -255,7 +256,28 @@ export const Home = () => {
     //const apiResponse = await makeApiRequest(settingPrompt);
 
     setResponse(apiResponse);
-    localStorage.setItem("htmlResponse", apiResponse);
+    console.log(apiResponse);
+    
+    // Find the indices of <!DOCTYPE html> and </html>
+    const doctypeStartIndex = apiResponse.indexOf("<!DOCTYPE html>");
+    const htmlEndIndex = apiResponse.indexOf("</html>") + "</html>".length;
+
+    // Extract the HTML content
+    const htmlContent = apiResponse.substring(doctypeStartIndex, htmlEndIndex).trim();
+
+    // Extract the rest of the content
+    let nonHtmlContent = apiResponse.substring(0, doctypeStartIndex) + apiResponse.substring(htmlEndIndex).trim();
+    // Remove "```html ```"
+    nonHtmlContent = nonHtmlContent.replace("```html", " ");
+    nonHtmlContent = nonHtmlContent.replace("```", " ");
+    // Replace ":" with "."
+    nonHtmlContent = nonHtmlContent.replace(/:/g, ".");
+
+    // Print the results (you can use these variables as needed in your project)
+    console.log("HTML Content:", htmlContent);
+    console.log("\nNon-HTML Content:", nonHtmlContent);
+    setPromptExplanation(nonHtmlContent);
+    localStorage.setItem("htmlResponse", htmlContent);
     localStorage.setItem("userPrompt", prompt);
 
     // lasketaan API-pyynnön kesto ja asetetaan se requestTime-stateen
@@ -585,6 +607,10 @@ export const Home = () => {
           <div className={style.secondary}>
             <div className={style.previewBlock}>
               <h2 className={style.previewHeader}>Preview</h2>
+              <h2 className={style.previewHeader}>Explanation</h2>
+              <div>
+                <p className={style.p}>{promptExplanation}</p>
+              </div>
               <div className={style.editorPreview}>
                 {localStorage.getItem("htmlResponse") !== null ? (
                   <AutoResizeIframe
