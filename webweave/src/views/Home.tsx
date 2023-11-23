@@ -13,7 +13,7 @@ import SaveIcon from "@mui/icons-material/Save";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import DownloadModal from "../components/modals/DownloadModal";
-import { makeApiRequest } from "../utils/openai";
+import { makeApiRequest, roles } from "../utils/openai";
 import NotSignedInModal from "../components/modals/NotSignedInModal";
 
 export const Home = () => {
@@ -257,16 +257,20 @@ export const Home = () => {
 
     setResponse(apiResponse);
     console.log(apiResponse);
-    
+
     // Find the indices of <!DOCTYPE html> and </html>
     const doctypeStartIndex = apiResponse.indexOf("<!DOCTYPE html>");
     const htmlEndIndex = apiResponse.indexOf("</html>") + "</html>".length;
 
     // Extract the HTML content
-    const htmlContent = apiResponse.substring(doctypeStartIndex, htmlEndIndex).trim();
+    const htmlContent = apiResponse
+      .substring(doctypeStartIndex, htmlEndIndex)
+      .trim();
 
     // Extract the rest of the content
-    let nonHtmlContent = apiResponse.substring(0, doctypeStartIndex) + apiResponse.substring(htmlEndIndex).trim();
+    let nonHtmlContent =
+      apiResponse.substring(0, doctypeStartIndex) +
+      apiResponse.substring(htmlEndIndex).trim();
     // Remove "```html ```"
     nonHtmlContent = nonHtmlContent.replace("```html", " ");
     nonHtmlContent = nonHtmlContent.replace("```", " ");
@@ -337,28 +341,18 @@ export const Home = () => {
   };
 
   const handleGenerate = async () => {
-    await setRoleContent(
-      `You are an AI tool that creates HTML pages from the user's prompt. You don't add any explanations or additional text, only the HTML code. Don't add any markdown. Add modern styling to the page. Add CSS and JavaScript to the same file. Link to CDN libraries if needed.`
-    );
+    await setRoleContent(roles.webdev);
   };
 
   const handleOptimize = async () => {
-    await setRoleContent(
-      `As an expert writer skilled in crafting concise and clear text, your task is to expand the given website specification, emphasizing the most important points and removing any unnecessary information. Be as verbose as you want. Please do not change the meaning of the text. You can add or remove words, but do not change the meaning of the text. HTML must be valid and respect the HTML5 specification. Design must be responsive. Use simple words and short sentences. Focus on the most important points. The input is from a novice and non-technical person, so you must explain everything in detail and fill in any missing information. Do not create HTML code, just the specification.`
-    );
+    await setRoleContent(roles.optimizer);
   };
 
   useEffect(() => {
     const handleEffect = async () => {
-      if (
-        roleContent ===
-        `You are an AI tool that creates HTML pages from the user's prompt. You don't add any explanations or additional text, only the HTML code. Don't add any markdown. Add modern styling to the page. Add CSS and JavaScript to the same file. Link to CDN libraries if needed.`
-      ) {
+      if (roleContent === roles.webdev) {
         await handleApiRequest();
-      } else if (
-        roleContent ===
-        `As an expert writer skilled in crafting concise and clear text, your task is to expand the given website specification, emphasizing the most important points and removing any unnecessary information. Be as verbose as you want. Please do not change the meaning of the text. You can add or remove words, but do not change the meaning of the text. HTML must be valid and respect the HTML5 specification. Design must be responsive. Use simple words and short sentences. Focus on the most important points. The input is from a novice and non-technical person, so you must explain everything in detail and fill in any missing information. Do not create HTML code, just the specification.`
-      ) {
+      } else if (roleContent === roles.optimizer) {
         await handleOptimizeApiRequest();
       }
     };

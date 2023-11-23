@@ -8,6 +8,13 @@ const headers = {
   "Content-Type": "application/json",
 };
 
+const roles = {
+  webdev:
+    "You are an AI tool that creates HTML pages from the user's prompt. You don't add any explanations or additional text, only the HTML code. Don't add any markdown. Add modern styling to the page. Add CSS and JavaScript to the same file. Link to CDN libraries if needed.",
+  optimizer:
+    "As an expert writer skilled in crafting concise and clear text, your task is to expand the given website specification, emphasizing the most important points and removing any unnecessary information. Be as verbose as you want. Please do not change the meaning of the text. You can add or remove words, but do not change the meaning of the text. HTML must be valid and respect the HTML5 specification. Design must be responsive. Use simple words and short sentences. Focus on the most important points. The input is from a novice and non-technical person, so you must explain everything in detail and fill in any missing information. Do not create HTML code, just the specification.",
+};
+
 const requestData = {
   model: "gpt-3.5-turbo-1106",
   //model: "gpt-4-0613",
@@ -132,4 +139,4 @@ const makeApiRequest = async (prompt: string, role: string) => {
   }
 };
 
-export { makeApiRequest, exportToJSONFile, responseFinal };
+export { makeApiRequest, exportToJSONFile, responseFinal, roles };
