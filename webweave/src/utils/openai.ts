@@ -15,12 +15,11 @@ const requestData = {
   messages: [
     {
       role: "user",
-      content: "käyttäjän prompt",
+      content: " ",
     },
     {
       role: "system",
-      content:
-        "you are an ai tool that creates html pages from the user's prompt. you don't add any explanations or additional text, only the html code. don't add any markdown. add modern styling to the page. do not add href to links. add css and javascript to the same file. link to cdn libraries if needed.",
+      content: " ",
     },
   ],
 };
@@ -100,8 +99,9 @@ const exportToJSONFile = () => {
 
 let responseFinal: string;
 
-const makeApiRequest = async (prompt: string) => {
+const makeApiRequest = async (prompt: string, role: string) => {
   try {
+    requestData.messages[1].content = role;
     requestData.messages[0].content = prompt;
     const response = await axios.post(endpoint, requestData, { headers });
     const responseModel = response.data.model;
@@ -111,6 +111,8 @@ const makeApiRequest = async (prompt: string) => {
     const responseRole = response.data.choices[0].message.role;
     const responseText = response.data.choices[0].message.content;
     const promptText = requestData.messages[0].content;
+    console.log("Role:", role);
+
     //console.log("Prompt:", promptText);
     //console.log("Response:", responseText);
     //console.log(response);

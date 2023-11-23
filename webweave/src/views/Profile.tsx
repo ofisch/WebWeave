@@ -193,6 +193,10 @@ export const Profile = () => {
     navigate("/edit");
   };
 
+  const goTo = (endpoint: string) => {
+    navigate(endpoint);
+  };
+
   return (
     <>
       <div className={style.pageContainer}>
@@ -228,9 +232,17 @@ export const Profile = () => {
               {/*tarkistetaan, onko käyttäjää olemassa, jos on, tulostetaan sähköposti*/}
               {user !== null ? <h3>{user.email}</h3> : <h3>email</h3>}
               {user && (
-                <button className={style.button} onClick={signOut}>
-                  Sign Out
-                </button>
+                <>
+                  <button className={style.button} onClick={signOut}>
+                    Sign Out
+                  </button>
+                  <button
+                    className={style.buttonLog}
+                    onClick={() => goTo("/logs")}
+                  >
+                    Log data
+                  </button>
+                </>
               )}
             </div>
             <div className={style.sitesEdit}>

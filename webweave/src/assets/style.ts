@@ -18,7 +18,7 @@ const style = {
   secondary:
     "p-4 max-w-5xl grid gap-4 xs:grid-cols-2 bg-primarylight rounded-lg",
   main: "",
-  select: "text-black p-2 rounded-md w-40",
+  select: "text-black p-2 rounded-md w-44",
 
   selectOption: "text-black font-sometype",
   selectOptionArial: "text-black font-arial",
@@ -116,6 +116,8 @@ const style = {
     "bg-primary h-32 fixed inset-x-0 bottom-0 grid grid-cols-3 gap-8 mt-8",
   logsButton:
     "bg-action w-40 h-fit m-auto self-center p-2 text-black rounded-lg col-start-2 col-span-1",
+
+  buttonSanitize: "p-4 bg-action text-black rounded-lg w-44",
 };
 
 export default style;
