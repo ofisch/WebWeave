@@ -30,6 +30,8 @@ export const Edit = () => {
   const userDocRef = usersCollection.doc(user?.uid);
   const pagesSubcollectionRef = userDocRef.collection("pages");
 
+  const [roleContent, setRoleContent] = useState<string>("");
+
   let currentPage: string = "";
 
   //tyhjennetään localStorage, jotta käyttäjä ei näe vilausta edellisestä muokatusta sivusta
@@ -137,13 +139,31 @@ export const Edit = () => {
     }
   };
 
+  const handleGenerate = async () => {
+    await setRoleContent(
+      `You are an AI tool that creates HTML pages from the user's prompt. You don't add any explanations or additional text, only the HTML code. Don't add any markdown. Add modern styling to the page. Add CSS and JavaScript to the same file. Link to CDN libraries if needed.`
+    );
+  };
+
+  /*   const handleSanitize = async () => {
+    await setRoleContent(
+      `As an expert writer skilled in crafting concise and clear text, your task is to expand the given website specification, emphasizing the most important points and removing any unnecessary information. Be as verbose as you want. Please do not change the meaning of the text. You can add or remove words, but do not change the meaning of the text. HTML must be valid and respect the HTML5 specification. Design must be responsive. Use simple words and short sentences. Focus on the most important points. The input is from a novice and non-technical person, so you must explain everything in detail and fill in any missing information. Do not create HTML code, just the specification.`
+    );
+  }; */
+
+  useEffect(() => {
+    if (roleContent !== "") {
+      handleApiRequest();
+    }
+  }, [roleContent]);
+
   // ai-editori
   const handleApiRequest = async () => {
     const startTime = performance.now();
     const editPrompt = `edit this code: "${htmlEdit}" ${prompt} do not do any other changes.`;
     console.log("editPrompt", editPrompt);
     setLoading(true);
-    const apiResponse = await makeApiRequest(editPrompt);
+    const apiResponse = await makeApiRequest(editPrompt, roleContent);
     console.log("apiResponse", apiResponse);
     setHtmlEdit(apiResponse);
     setLoading(false);
@@ -278,7 +298,10 @@ export const Edit = () => {
           {loading ? (
             <p id="loading" className={style.p}></p>
           ) : (
-            <button className={style.buttonGenerate} onClick={handleApiRequest}>
+            <button
+              className={style.buttonGenerate}
+              onClick={() => handleGenerate()}
+            >
               Generate changes
             </button>
           )}

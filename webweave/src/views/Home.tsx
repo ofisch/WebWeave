@@ -12,7 +12,6 @@ import DownloadIcon from "@mui/icons-material/Download";
 import SaveIcon from "@mui/icons-material/Save";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
-import { useNavigate } from "react-router-dom";
 import DownloadModal from "../components/modals/DownloadModal";
 import { makeApiRequest } from "../utils/openai";
 import NotSignedInModal from "../components/modals/NotSignedInModal";
@@ -32,6 +31,7 @@ export const Home = () => {
   const [requestStatus, setRequestStatus] = useState<string>("");
   const [formToggle, setFormToggle] = useState(true);
   const [loading, setLoading] = useState(false);
+  const [roleContent, setRoleContent] = useState<string>("");
 
   const user = useContext(AuthContext);
 
@@ -40,8 +40,6 @@ export const Home = () => {
   const pagesSubCollection = usersDocRef.collection("pages");
 
   const promptAreaRef = React.useRef<HTMLTextAreaElement>(null);
-
-  const navigate = useNavigate();
 
   // tallennetaan sivu firestoreen
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
@@ -242,6 +240,33 @@ export const Home = () => {
       }
     }
   };
+
+  const handleGenerate = async () => {
+    await setRoleContent(
+      `You are an AI tool that creates HTML pages from the user's prompt. You don't add any explanations or additional text, only the HTML code. Don't add any markdown. Add modern styling to the page. Add CSS and JavaScript to the same file. Link to CDN libraries if needed.`
+    );
+  };
+
+  const handleSanitize = async () => {
+    await setRoleContent(
+      `As an expert writer skilled in crafting concise and clear text, your task is to expand the given website specification, emphasizing the most important points and removing any unnecessary information. Be as verbose as you want. Please do not change the meaning of the text. You can add or remove words, but do not change the meaning of the text. HTML must be valid and respect the HTML5 specification. Design must be responsive. Use simple words and short sentences. Focus on the most important points. The input is from a novice and non-technical person, so you must explain everything in detail and fill in any missing information. Do not create HTML code, just the specification.`
+    );
+  };
+
+  useEffect(() => {
+    if (
+      roleContent ==
+      `You are an AI tool that creates HTML pages from the user's prompt. You don't add any explanations or additional text, only the HTML code. Don't add any markdown. Add modern styling to the page. Add CSS and JavaScript to the same file. Link to CDN libraries if needed.`
+    ) {
+      handleApiRequest();
+    } else if (
+      roleContent ==
+      `As an expert writer skilled in crafting concise and clear text, your task is to expand the given website specification, emphasizing the most important points and removing any unnecessary information. Be as verbose as you want. Please do not change the meaning of the text. You can add or remove words, but do not change the meaning of the text. HTML must be valid and respect the HTML5 specification. Design must be responsive. Use simple words and short sentences. Focus on the most important points. The input is from a novice and non-technical person, so you must explain everything in detail and fill in any missing information. Do not create HTML code, just the specification.`
+    ) {
+      handleOptimizeApiRequest();
+    }
+  }, [roleContent]);
+
   // lähetetään prompt openai-API:lle ja asetetaan vastaus responseen-stateen
   const handleApiRequest = async () => {
     // ajastetaan API-pyynnön kesto ja tulostetaan se requestStatusiin
@@ -252,7 +277,7 @@ export const Home = () => {
 
     // lähetetään prompt openai-API:lle ja asetetaan vastaus responseen-stateen
     const settingPrompt = makePrompt();
-    const apiResponse = await makeApiRequest(settingPrompt);
+    const apiResponse = await makeApiRequest(settingPrompt, roleContent);
     //const apiResponse = await makeApiRequest(settingPrompt);
 
     setResponse(apiResponse);
@@ -301,6 +326,16 @@ export const Home = () => {
     }
   };
 
+  const handleOptimizeApiRequest = async () => {
+    // lähetetään prompt openai-API:lle ja asetetaan vastaus responseen-stateen
+    const settingPrompt = makePrompt();
+    const apiResponse = await makeApiRequest(settingPrompt, roleContent);
+    //const apiResponse = await makeApiRequest(settingPrompt);
+
+    setPrompt(apiResponse);
+    localStorage.setItem("userPrompt", prompt);
+  };
+
   const clearPrompt = () => {
     localStorage.removeItem("userPrompt");
     localStorage.removeItem("htmlResponse");
@@ -317,10 +352,6 @@ export const Home = () => {
       setRequestStatus("API request in progress");
     }
   }, [formToggle, requestTime]);
-
-  const goTo = (endpoint: string) => {
-    navigate(endpoint);
-  };
 
   return (
     <>
@@ -509,8 +540,11 @@ export const Home = () => {
             <button className={style.buttonClear} onClick={clearPrompt}>
               Clear
             </button>
-            <button className={style.buttonLog} onClick={() => goTo("/logs")}>
-              Log data
+            <button
+              className={style.buttonLog}
+              onClick={() => handleSanitize()}
+            >
+              Optimize prompt
             </button>
             <button
               className={`${
@@ -518,7 +552,7 @@ export const Home = () => {
                   ? `${style.buttonGenerate} pointer-events-none disabled`
                   : style.buttonGenerate
               }`}
-              onClick={handleApiRequest}
+              onClick={() => handleGenerate()}
             >
               <p className={loading ? style.textGenerate : "flex-auto"}>
                 Generate <SendIcon />
