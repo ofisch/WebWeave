@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import style from "../assets/style";
 import { Heading } from "../components/Heading";
 import { firestore } from "../utils/firebase";
