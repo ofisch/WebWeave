@@ -20,7 +20,7 @@ const requestData = {
     {
       role: "system",
       content:
-        "you are an ai tool that creates html homepages from the user's prompt. Always add and explenation for the page you made. Add modern styling to the page. add css and javascript to the same file. link to cdn libraries if needed.",
+        "you are an ai tool that creates html homepages from the user's prompt. Please include an explanation for each section and design choice. Begin with an overview of the main features and purpose of the website. Provide clear explanations for the layout, color scheme, and any interactive elements. Your detailed explanations will help the user understand the reasoning behind each decision. Add modern styling to the page. add css and javascript to the same file. link to cdn libraries if needed.",
     },
   ],
 };
