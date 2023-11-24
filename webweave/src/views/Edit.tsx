@@ -347,18 +347,33 @@ export const Edit = () => {
             <p id="loading" className={style.p}></p>
           ) : (
             <>
-              <button
-                className={style.buttonLog}
-                onClick={() => handleOptimize()}
-              >
-                Optimize prompt
-              </button>
-              <button
-                className={style.buttonGenerate}
-                onClick={() => handleGenerate()}
-              >
-                Generate changes
-              </button>
+              <div className={style.navHomePrompt}>
+                <button
+                  className={style.buttonUndo}
+                  onClick={() => handleOptimize()}
+                >
+                  Revert changes
+                </button>
+
+                {prompt !== "" ? (
+                  <button
+                    className={style.buttonLog}
+                    onClick={() => handleOptimize()}
+                  >
+                    Optimize prompt
+                  </button>
+                ) : (
+                  <button className={style.buttonClearDisabled}>
+                    Optimize prompt
+                  </button>
+                )}
+                <button
+                  className={style.buttonGenerate}
+                  onClick={() => handleGenerate()}
+                >
+                  Generate changes
+                </button>
+              </div>
             </>
           )}
 

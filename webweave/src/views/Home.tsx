@@ -572,12 +572,18 @@ export const Home = () => {
               <button className={style.buttonClearDisabled}>Clear</button>
             )}
 
-            <button
-              className={style.buttonLog}
-              onClick={() => handleOptimize()}
-            >
-              Optimize prompt
-            </button>
+            {prompt !== "" ? (
+              <button
+                className={style.buttonLog}
+                onClick={() => handleOptimize()}
+              >
+                Optimize prompt
+              </button>
+            ) : (
+              <button className={style.buttonClearDisabled}>
+                Optimize prompt
+              </button>
+            )}
             <button
               className={`${
                 loading

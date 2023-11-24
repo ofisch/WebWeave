@@ -233,15 +233,17 @@ export const Profile = () => {
               {user !== null ? <h3>{user.email}</h3> : <h3>email</h3>}
               {user && (
                 <>
-                  <button className={style.button} onClick={signOut}>
-                    Sign Out
-                  </button>
-                  <button
-                    className={style.buttonLog}
-                    onClick={() => goTo("/logs")}
-                  >
-                    Log data
-                  </button>
+                  <div className={style.profileLogout}>
+                    <button className={style.buttonProfile} onClick={signOut}>
+                      Sign Out
+                    </button>
+                    <button
+                      className={style.buttonProfile}
+                      onClick={() => goTo("/logs")}
+                    >
+                      Log data
+                    </button>
+                  </div>
                 </>
               )}
             </div>
