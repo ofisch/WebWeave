@@ -119,6 +119,9 @@ const style = {
     "bg-action w-40 h-fit m-auto self-center p-2 text-black rounded-lg col-start-2 col-span-1",
 
   buttonSanitize: "p-4 bg-action text-black rounded-lg w-44",
+  buttonUndo: "bg-action p-1 text-black rounded-lg w-1/4",
+  profileLogout: "grid gap-8 grid-cols-2",
+  buttonProfile: "bg-action p-2 text-black rounded-lg",
 };
 
 export default style;
