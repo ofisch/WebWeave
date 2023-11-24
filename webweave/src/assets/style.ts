@@ -32,6 +32,7 @@ const style = {
   selectOptionBrush: "text-black font-brush",
   selectOptionComic: "text-black font-comic",
 
+  bubble: "absolute top-0 left-1/2 transform -translate-x-1/2 bg-white p-4 shadow-lg rounded-lg text-black",
   colorText: "drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]",
   profile: "mx-auto xs:w-full",
   colorDisplayBox: "w-8 h-8 rounded-lg mx-auto",

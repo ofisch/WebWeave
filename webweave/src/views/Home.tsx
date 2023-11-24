@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, ChangeEvent } from "react";
 import style from "../assets/style";
 import { Heading } from "../components/Heading";
 import { firestore } from "../utils/firebase";
@@ -10,6 +10,8 @@ import SaveModal from "../components/modals/SaveModal";
 import SendIcon from "@mui/icons-material/Send";
 import DownloadIcon from "@mui/icons-material/Download";
 import SaveIcon from "@mui/icons-material/Save";
+import InfoIcon from "@mui/icons-material/Info";
+import CloseIcon from "@mui/icons-material/Close";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import DownloadModal from "../components/modals/DownloadModal";
@@ -18,6 +20,7 @@ import NotSignedInModal from "../components/modals/NotSignedInModal";
 import ClearModal from "../components/modals/ClearModal";
 
 export const Home = () => {
+  const [showBubble, setShowBubble] = useState(false);
   const [promptExplanation, setPromptExplanation] = useState<string>("");
   const [settingsMode, setSettingsMode] = useState(false);
   const [color, setColor] = useState("#2C3E50");
@@ -96,6 +99,13 @@ export const Home = () => {
     setPrompt(event.target.value);
   };
 
+  const handleClick = () => {
+    console.log(promptExplanation);
+    if (promptExplanation === "") {
+      setPromptExplanation("no explanation available");
+    }
+    setShowBubble(!showBubble);
+  };
   const hideSettings = () => {
     if (document.getElementById("settingsDiv")!.style.display === "none") {
       document.getElementById("settingsDiv")!.style.display = "block";
@@ -185,6 +195,9 @@ export const Home = () => {
     let frameworkPrompt = framework;
     let fontPrompt = font;
     let colorPrompt = "";
+    let mainColorPrompt = "";
+    let accentColorPrompt = "";
+    let actionColorPrompt = "";
     if (framework === "none selected") {
       frameworkPrompt = "";
     } else {
@@ -197,16 +210,20 @@ export const Home = () => {
     } else {
       fontPrompt = " Use " + font + " font.";
     }
+    if (document.getElementById("Main")!.style.display === "block") {
+      mainColorPrompt = " Use " + color1 + " as main color.";
+    }
+    if (document.getElementById("Accent")!.style.display === "block") {
+      accentColorPrompt = " Use " + color2 + " as accent color.";
+    }
+    if (document.getElementById("Action")!.style.display === "block") {
+      actionColorPrompt = " Use " + color3 + " as action color.";
+    }
     colorPrompt =
-      " Use " +
-      color1 +
-      " as main color." +
-      " Use " +
-      color2 +
-      " as accent color." +
-      " Use " +
-      color3 +
-      " as action color. implement the colors using the 60 30 10 rule. Use every color in the ratio of 60 30 10.";
+      mainColorPrompt +
+      accentColorPrompt +
+      actionColorPrompt +
+      " implement the colors using the 60 30 10 rule. Use every color in the ratio of 60 30 10. Main being 60. Accent being 30. Action being 10.";
     finalPrompt = prompt + fontPrompt + frameworkPrompt + colorPrompt;
     if (settingsMode === false) {
       return prompt;
@@ -243,6 +260,30 @@ export const Home = () => {
     }
   };
 
+  const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
+    const selectedValue = event.target.value;
+    if (selectedValue === "Main") {
+      document.getElementById("Main")!.style.display = "block";
+    }
+    if (selectedValue === "Accent") {
+      document.getElementById("Accent")!.style.display = "block";
+    }
+    if (selectedValue === "Action") {
+      document.getElementById("Action")!.style.display = "block";
+    }
+    event.target.value = "Add new color";
+  };
+  const closeColor = (id: string) => {
+    if (id === "Main") {
+      document.getElementById("Main")!.style.display = "none";
+    }
+    if (id === "Accent") {
+      document.getElementById("Accent")!.style.display = "none";
+    }
+    if (id === "Action") {
+      document.getElementById("Action")!.style.display = "none";
+    }
+  };
   // lähetetään prompt openai-API:lle ja asetetaan vastaus responseen-stateen
   const handleApiRequest = async () => {
     // ajastetaan API-pyynnön kesto ja tulostetaan se requestStatusiin
@@ -457,6 +498,16 @@ export const Home = () => {
             className={style.secondary}
           >
             <h2 className={style.settingsHeader}>Settings</h2>
+            <select
+              name="colorpicker"
+              className={style.select}
+              onChange={handleSelectChange}
+            >
+              <option className={style.selectOption}>Add new color</option>
+              <option className={style.selectOption}>Main</option>
+              <option className={style.selectOption}>Accent</option>
+              <option className={style.selectOption}>Action</option>
+            </select>
 
             <div className={style.picker}>
               <ul className={style.colors}>
@@ -464,6 +515,7 @@ export const Home = () => {
                   id="Main"
                   className={style.colorListItem}
                   onClick={() => colorSwitch("Main")}
+                  style={{ display: "none" }}
                 >
                   <p>Main</p>
                   <div
@@ -478,12 +530,14 @@ export const Home = () => {
                   >
                     #2C3E50
                   </p>
+                  <CloseIcon onClick={() => closeColor("Main")} />
                 </li>
 
                 <li
                   id="Accent"
                   className={style.colorListItem}
                   onClick={() => colorSwitch("Accent")}
+                  style={{ display: "none" }}
                 >
                   <p>Accent</p>
                   <div
@@ -498,12 +552,14 @@ export const Home = () => {
                   >
                     #CCCCCC
                   </p>
+                  <CloseIcon onClick={() => closeColor("Accent")} />
                 </li>
 
                 <li
                   id="Action"
                   className={style.colorListItem}
                   onClick={() => colorSwitch("Action")}
+                  style={{ display: "none" }}
                 >
                   <p>Action</p>
                   <div
@@ -518,6 +574,7 @@ export const Home = () => {
                   >
                     #00BFFF
                   </p>
+                  <CloseIcon onClick={() => closeColor("Action")} />
                 </li>
               </ul>
               <SketchPicker
@@ -620,9 +677,12 @@ export const Home = () => {
             <div className={style.previewBlock}>
               <h2 className={style.previewHeader}>Preview</h2>
               <h2 className={style.previewHeader}>Explanation</h2>
-              <div>
-                <p className={style.p}>{promptExplanation}</p>
-              </div>
+              <InfoIcon onClick={handleClick} />
+              {showBubble && (
+                <div className={style.bubble}>
+                  <p>{promptExplanation}</p>
+                </div>
+              )}
               <div className={style.editorPreview}>
                 {localStorage.getItem("htmlResponse") !== null ? (
                   <AutoResizeIframe
