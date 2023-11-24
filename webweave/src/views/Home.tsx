@@ -682,7 +682,6 @@ export const Home = () => {
           <div className={style.secondary}>
             <div className={style.previewBlock}>
               <h2 className={style.previewHeader}>Preview</h2>
-              <h2 className={style.previewHeader}>Explanation</h2>
               <InfoIcon onClick={handleClick} />
               {showBubble && (
                 <div className={style.bubble}>
