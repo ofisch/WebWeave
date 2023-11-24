@@ -1,3 +1,55 @@
+// huikee tekstielementtien muokkaus
+
+ <script>
+  // don't touch this!
+  // this is the script that allows you to edit text on the page
+
+  document.addEventListener('DOMContentLoaded', function () {
+  // Function to handle double-click events on text elements
+  function handleTextDoubleClick(event) {
+    const targetElement = event.target;
+
+    // Create an input element
+    const inputElement = document.createElement('input');
+    inputElement.type = 'text';
+    inputElement.value = targetElement.innerText;
+    inputElement.classList.add('input');
+
+    // Replace the text element content with the input element
+    targetElement.innerHTML = '';
+    targetElement.appendChild(inputElement);
+
+    // Focus on the input element
+    inputElement.focus();
+
+    // Handle the blur event to save changes when the input loses focus
+    inputElement.addEventListener('blur', function () {
+      handleTextEdit(targetElement, inputElement.value);
+    });
+
+    // Handle the "Enter" key press to save changes
+    inputElement.addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') {
+        handleTextEdit(targetElement, inputElement.value);
+      }
+    });
+  }
+
+  // Function to handle text editing
+  function handleTextEdit(targetElement, newText) {
+    // Apply the user input to the text content
+    targetElement.innerHTML = newText;
+  }
+
+  // Add double-click event listeners to all text elements
+  const textElements = document.querySelectorAll('h1, h2, h3, p, li, span');
+  textElements.forEach(function (element) {
+    element.addEventListener('dblclick', handleTextDoubleClick);
+    element.style.cursor = 'pointer'; // Optional: Change cursor to indicate clickability
+  });
+});
+
+
 // tekstielementtien muokkaus (tuplaklikillä)
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -16,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function () {
       }
 
       // Add click event listeners to all text elements
-      const textElements = document.querySelectorAll('h1, h2, h3, p, span');
+      const textElements = document.querySelectorAll('h1, h2, h3, p, li, span');
       textElements.forEach(function (element) {
         element.addEventListener('dblclick', handleTextClick);
         element.style.cursor = 'pointer'; // Optional: Change cursor to indicate clickability

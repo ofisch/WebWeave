@@ -15,6 +15,7 @@ import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 import DownloadModal from "../components/modals/DownloadModal";
 import { makeApiRequest, roles } from "../utils/openai";
 import NotSignedInModal from "../components/modals/NotSignedInModal";
+import ClearModal from "../components/modals/ClearModal";
 
 export const Home = () => {
   const [promptExplanation, setPromptExplanation] = useState<string>("");
@@ -360,14 +361,23 @@ export const Home = () => {
     handleEffect();
   }, [roleContent]);
 
+  const [clearModalIsOpen, setClearModalIsOpen] = useState(false);
+
+  const closeClearModal = () => {
+    setClearModalIsOpen(false);
+  };
+
   const clearPrompt = () => {
-    if (window.confirm("Are you sure you want to clear the prompt?")) {
-      localStorage.removeItem("userPrompt");
-      localStorage.removeItem("htmlResponse");
-      setPrompt("");
-      setResponse("");
-      setRequestStatus("");
-    }
+    setClearModalIsOpen(true);
+  };
+
+  const handleClearModalSubmit = async () => {
+    setClearModalIsOpen(false);
+    localStorage.removeItem("userPrompt");
+    localStorage.removeItem("htmlResponse");
+    setPrompt("");
+    setResponse("");
+    setRequestStatus("");
   };
 
   // päivitetään requestStatusiin API-pyynnön kesto
@@ -403,6 +413,14 @@ export const Home = () => {
         <NotSignedInModal
           isOpen={isNotSignedInModalOpen}
           onClose={closeModal}
+        />
+      </div>
+
+      <div className={style.pageContainer}>
+        <ClearModal
+          isOpen={clearModalIsOpen}
+          onClose={closeClearModal}
+          onConfirm={handleClearModalSubmit}
         />
       </div>
 
