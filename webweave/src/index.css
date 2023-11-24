@@ -8,6 +8,7 @@ body {
 
 textarea {
   padding: 15px;
+  resize: vertical;
 }
 
 /* typewriter-animaatio */

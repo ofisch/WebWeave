@@ -9,7 +9,7 @@ const textEdit = {
     padding: 15px;
     border-radius: 10px;
     background-color: #2C3E50;
-    font-size: small;
+    font-size: 1rem;
     font-weight: bold;
     text-align: center;
     color: #e8e8e8;

@@ -16,6 +16,7 @@ const AutoResizeIframe: React.FC<AutoResizeIframeProps> = ({ contentSrc }) => {
         if (iframe.contentWindow && iframe.contentWindow.document) {
           iframe.style.height = `${iframe.contentWindow.document.body.scrollHeight}px`;
           iframe.style.width = "100%"; // Optionally, adjust the width as needed
+          iframe.style.resize = "vertical";
         }
       };
 
