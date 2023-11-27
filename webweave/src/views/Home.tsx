@@ -20,8 +20,6 @@ import NotSignedInModal from "../components/modals/NotSignedInModal";
 import ClearModal from "../components/modals/ClearModal";
 
 export const Home = () => {
-  const [showBubble, setShowBubble] = useState(false);
-  const [promptExplanation, setPromptExplanation] = useState<string>("");
   const [settingsMode, setSettingsMode] = useState(false);
   const [color, setColor] = useState("#2C3E50");
   const [currentColor, setCurrentColor] = useState(1);
@@ -99,13 +97,6 @@ export const Home = () => {
     setPrompt(event.target.value);
   };
 
-  const handleClick = () => {
-    console.log(promptExplanation);
-    if (promptExplanation === "") {
-      setPromptExplanation("no explanation available");
-    }
-    setShowBubble(!showBubble);
-  };
   const hideSettings = () => {
     if (document.getElementById("settingsDiv")!.style.display === "none") {
       document.getElementById("settingsDiv")!.style.display = "block";
@@ -297,9 +288,6 @@ export const Home = () => {
     const apiResponse = await makeApiRequest(settingPrompt, roleContent);
     //const apiResponse = await makeApiRequest(settingPrompt);
 
-    setResponse(apiResponse);
-    console.log(apiResponse);
-
     // Find the indices of <!DOCTYPE html> and </html>
     const doctypeStartIndex = apiResponse.indexOf("<!DOCTYPE html>");
     const htmlEndIndex = apiResponse.indexOf("</html>") + "</html>".length;
@@ -318,13 +306,16 @@ export const Home = () => {
     nonHtmlContent = nonHtmlContent.replace("```", " ");
     // Replace ":" with "."
     nonHtmlContent = nonHtmlContent.replace(/:/g, ".");
+    localStorage.setItem("explanation", nonHtmlContent);
 
     // Print the results (you can use these variables as needed in your project)
-    console.log("HTML Content:", htmlContent);
-    console.log("\nNon-HTML Content:", nonHtmlContent);
-    setPromptExplanation(nonHtmlContent);
+    // console.log("HTML Content:", htmlContent);
+    // console.log("\nNon-HTML Content:", nonHtmlContent);
     localStorage.setItem("htmlResponse", htmlContent);
     localStorage.setItem("userPrompt", prompt);
+
+    setResponse(localStorage.getItem("htmlResponse") || "");
+    // console.log(apiResponse);
 
     // lasketaan API-pyynnön kesto ja asetetaan se requestTime-stateen
     const endTime = performance.now();
@@ -354,7 +345,7 @@ export const Home = () => {
           lastObject.requestTime = formattedTime;
 
           const updatedData = JSON.stringify(dataArray);
-          console.log("updated json: " + updatedData);
+          // console.log("updated json: " + updatedData);
 
           localStorage.setItem("log.json", updatedData);
         } else {
@@ -424,12 +415,22 @@ export const Home = () => {
   // päivitetään requestStatusiin API-pyynnön kesto
   useEffect(() => {
     if (formToggle) {
-      setRequestStatus(requestTime ? "API Request Time: " + requestTime : "");
+      setRequestStatus(requestTime ? "Request Time: " + requestTime : "");
       setLoading(false);
     } else {
-      setRequestStatus("API request in progress");
+      setRequestStatus("Request in progress");
     }
   }, [formToggle, requestTime]);
+
+  const [isTooltipVisible, setTooltipVisible] = useState(false);
+
+  const handleMouseEnter = () => {
+    setTooltipVisible(true);
+  };
+
+  const handleMouseLeave = () => {
+    setTooltipVisible(false);
+  };
 
   return (
     <>
@@ -683,13 +684,23 @@ export const Home = () => {
             <div className={style.previewBlock}>
               <div className={style.previewContent}>
                 <h2 className={style.previewHeader}>Preview</h2>
-                <InfoIcon className={style.previewInfo} onClick={handleClick} />
+                <button
+                  className={style.previewInfo}
+                  onMouseEnter={handleMouseEnter}
+                  onMouseLeave={handleMouseLeave}
+                >
+                  <InfoIcon />
+                  {isTooltipVisible && (
+                    <div className={style.infoTooltip}>
+                      {localStorage.getItem("explanation") === "" ? (
+                        <p>No explanation available</p>
+                      ) : (
+                        localStorage.getItem("explanation") || ""
+                      )}
+                    </div>
+                  )}
+                </button>
               </div>
-              {showBubble && (
-                <div className={style.bubble}>
-                  <p>{promptExplanation}</p>
-                </div>
-              )}
               <div className={style.editorPreview}>
                 {localStorage.getItem("htmlResponse") !== null ? (
                   <AutoResizeIframe

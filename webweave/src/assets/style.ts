@@ -84,7 +84,7 @@ const style = {
   previewContent: "grid grid-cols-2 gap-4",
   previewBlock: "flex flex-col gap-4",
   previewHeader: "font-sometype text-white text-2xl text-left self-start",
-  previewInfo: "self-right justify-self-end",
+  previewInfo: "relative self-right justify-self-end",
 
   pageContainer: "flex items-center justify-center h-screen hidden",
   modal: "flex align-center justify-center",
@@ -117,6 +117,8 @@ const style = {
   sitesEditIcon: "scale-150 text-action",
   editTooltip:
     "absolute right-1/3 top-1/2 w-32 bg-primary rounded-lg shadow-lg p-2 text-white border-2 border-primarylight z-10",
+  infoTooltip:
+    "absolute right-1 w-96 bg-primary rounded-lg shadow-lg p-2 text-white border-2 border-primarylight z-10",
 
   settingsHeader: "font-sometype text-white text-2xl text-left mb-4",
   picker: "grid grid-cols-3 gap-4",
