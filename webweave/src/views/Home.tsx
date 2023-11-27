@@ -681,8 +681,10 @@ export const Home = () => {
         {response !== "" ? (
           <div className={style.secondary}>
             <div className={style.previewBlock}>
-              <h2 className={style.previewHeader}>Preview</h2>
-              <InfoIcon onClick={handleClick} />
+              <div className={style.previewContent}>
+                <h2 className={style.previewHeader}>Preview</h2>
+                <InfoIcon className={style.previewInfo} onClick={handleClick} />
+              </div>
               {showBubble && (
                 <div className={style.bubble}>
                   <p>{promptExplanation}</p>

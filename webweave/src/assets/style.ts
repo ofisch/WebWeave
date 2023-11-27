@@ -77,11 +77,14 @@ const style = {
   icon: "scale-175 text-action",
 
   promptBlock: "flex flex-col gap-4",
-  promptHeader: "font-sometype text-white text-2xl  self-start",
+  promptHeader: "font-sometype text-white text-2xl self-start",
   editBlock: "flex flex-col gap-4 mb-8",
-  editHeader: "font-sometype text-white text-2xl  self-start",
+  editHeader: "font-sometype text-white text-2xl self-start",
+
+  previewContent: "grid grid-cols-2 gap-4",
   previewBlock: "flex flex-col gap-4",
-  previewHeader: "font-sometype text-white text-2xl self-start",
+  previewHeader: "font-sometype text-white text-2xl text-left self-start",
+  previewInfo: "self-right justify-self-end",
 
   pageContainer: "flex items-center justify-center h-screen hidden",
   modal: "flex align-center justify-center",
