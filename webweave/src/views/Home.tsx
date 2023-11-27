@@ -279,7 +279,7 @@ export const Home = () => {
   const handleApiRequest = async () => {
     // ajastetaan API-pyynnön kesto ja tulostetaan se requestStatusiin
     const startTime = performance.now();
-    setRequestStatus("API request in progress");
+    setRequestStatus("Request in progress");
     setFormToggle(false);
     setLoading(true);
 
@@ -362,6 +362,12 @@ export const Home = () => {
   };
 
   const handleOptimizeApiRequest = async () => {
+    // ajastetaan API-pyynnön kesto ja tulostetaan se requestStatusiin
+    const startTime = performance.now();
+    setRequestStatus("Request in progress");
+    setFormToggle(false);
+    setLoading(true);
+
     // lähetetään prompt openai-API:lle ja asetetaan vastaus responseen-stateen
     const settingPrompt = makePrompt();
     const apiResponse = await makeApiRequest(settingPrompt, roleContent);
@@ -369,6 +375,19 @@ export const Home = () => {
 
     setPrompt(apiResponse);
     localStorage.setItem("userPrompt", prompt);
+
+    // lasketaan API-pyynnön kesto ja asetetaan se requestTime-stateen
+    const endTime = performance.now();
+    const elapsedTime = (endTime - startTime) / 1000;
+
+    // jos API-pyynnön kesto on yli minuutin, tulostetaan se minuutteina ja sekunteina
+    const formattedTime =
+      elapsedTime >= 60
+        ? `${Math.floor(elapsedTime / 60)}:${Math.floor(elapsedTime % 60)} min`
+        : `${Math.floor(elapsedTime)} sec`;
+
+    setRequestTime(formattedTime);
+    setFormToggle(true);
 
     setRoleContent("");
   };

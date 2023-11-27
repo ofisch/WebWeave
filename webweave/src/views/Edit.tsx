@@ -31,6 +31,9 @@ export const Edit = () => {
   const promptAreaRef = React.useRef<HTMLTextAreaElement>(null);
 
   const [loading, setLoading] = useState(false);
+  const [requestStatus, setRequestStatus] = useState<string>("");
+  const [formToggle, setFormToggle] = useState(true);
+  const [requestTime, setRequestTime] = useState<string>("");
 
   const usersCollection = firestore.collection("users");
   const userDocRef = usersCollection.doc(user?.uid);
@@ -152,9 +155,13 @@ export const Edit = () => {
   // ai-editori
   const handleApiRequest = async () => {
     const startTime = performance.now();
+    setRequestStatus("Request in progress");
+    setFormToggle(false);
+
     const editPrompt = `edit this code: "${htmlEdit}" ${prompt} do not do any other changes.`;
     console.log("editPrompt", editPrompt);
     setLoading(true);
+
     const apiResponse = await makeApiRequest(editPrompt, roleContent);
     console.log("apiResponse", apiResponse);
     setHtmlEdit(apiResponse);
@@ -176,6 +183,9 @@ export const Edit = () => {
       elapsedTime >= 60
         ? `${Math.floor(elapsedTime / 60)}:${Math.floor(elapsedTime % 60)} min`
         : `${Math.floor(elapsedTime)} sec`;
+
+    setRequestTime(formattedTime);
+    setFormToggle(true);
 
     // lisätään API-pyynnön kesto log.json-tiedostoon
     const existingData = localStorage.getItem("log.json");
@@ -209,19 +219,38 @@ export const Edit = () => {
   };
 
   const handleOptimizeApiRequest = async () => {
+    // ajastetaan API-pyynnön kesto ja tulostetaan se requestStatusiin
+    const startTime = performance.now();
+    setRequestStatus("Request in progress");
+    setFormToggle(false);
+    setLoading(true);
+
     // lähetetään prompt openai-API:lle ja asetetaan vastaus responseen-stateen
     const settingPrompt = prompt;
     const apiResponse = await makeApiRequest(settingPrompt, roleContent);
     //const apiResponse = await makeApiRequest(settingPrompt);
 
     setPrompt(apiResponse);
-    localStorage.setItem("editPrompt", prompt);
+    localStorage.setItem("userPrompt", prompt);
+
+    // lasketaan API-pyynnön kesto ja asetetaan se requestTime-stateen
+    const endTime = performance.now();
+    const elapsedTime = (endTime - startTime) / 1000;
+
+    // jos API-pyynnön kesto on yli minuutin, tulostetaan se minuutteina ja sekunteina
+    const formattedTime =
+      elapsedTime >= 60
+        ? `${Math.floor(elapsedTime / 60)}:${Math.floor(elapsedTime % 60)} min`
+        : `${Math.floor(elapsedTime)} sec`;
+
+    setRequestTime(formattedTime);
+    setFormToggle(true);
 
     setRoleContent("");
   };
 
   const handleGenerate = async () => {
-    await setRoleContent(roles.webdev);
+    await setRoleContent(roles.editor);
   };
 
   const handleOptimize = async () => {
@@ -230,10 +259,12 @@ export const Edit = () => {
 
   useEffect(() => {
     const handleEffect = async () => {
-      if (roleContent === roles.webdev) {
+      if (roleContent === roles.editor) {
         await handleApiRequest();
+        console.log("roleContent", roleContent);
       } else if (roleContent === roles.optimizer) {
         await handleOptimizeApiRequest();
+        console.log("roleContent", roleContent);
       }
     };
 
@@ -255,6 +286,15 @@ export const Edit = () => {
 
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    if (formToggle) {
+      setRequestStatus(requestTime ? "Request Time: " + requestTime : "");
+      setLoading(false);
+    } else {
+      setRequestStatus("Request in progress");
+    }
+  }, [formToggle, requestTime]);
 
   useEffect(() => {
     if (loading) {
@@ -408,32 +448,36 @@ export const Edit = () => {
             value={prompt}
             onChange={handlePromptChange}
           ></textarea>
-          {loading ? (
-            <p id="loading" className={style.p}></p>
-          ) : (
-            <>
-              <div className={style.navHomePrompt}>
-                {prompt !== "" ? (
-                  <button
-                    className={style.buttonLog}
-                    onClick={() => handleOptimize()}
-                  >
-                    Optimize prompt
-                  </button>
-                ) : (
-                  <button className={style.buttonClearDisabled}>
-                    Optimize prompt
-                  </button>
-                )}
-                <button
-                  className={style.buttonGenerate}
-                  onClick={() => handleGenerate()}
-                >
-                  Generate changes
-                </button>
-              </div>
-            </>
-          )}
+          <div className={style.navHomePrompt}>
+            {prompt !== "" ? (
+              <button
+                className={style.buttonLog}
+                onClick={() => handleOptimize()}
+              >
+                Optimize prompt
+              </button>
+            ) : (
+              <button className={style.buttonClearDisabled}>
+                Optimize prompt
+              </button>
+            )}
+            <button
+              className={`${
+                loading
+                  ? `${style.buttonGenerate} pointer-events-none disabled`
+                  : style.buttonGenerate
+              }`}
+              onClick={() => handleGenerate()}
+            >
+              <p className={loading ? style.textGenerate : "flex-auto"}>
+                Generate changes
+              </p>
+            </button>
+          </div>
+          <div>
+            <p className={style.p}>{requestStatus}</p>
+            {loading ? <p id="loading" className={style.p}></p> : null}
+          </div>
 
           <textarea
             className={style.settings}
