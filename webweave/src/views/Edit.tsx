@@ -9,6 +9,9 @@ import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import InfoIcon from "@mui/icons-material/Info";
 import AdsClickIcon from "@mui/icons-material/AdsClick";
+import UndoIcon from "@mui/icons-material/Undo";
+import RedoIcon from "@mui/icons-material/Redo";
+
 import { Heading } from "../components/Heading";
 import AutoResizeIframe from "../components/AutoResizeIframe";
 import { loadingAnimation, typePlaceholder } from "../utils/animation";
@@ -156,6 +159,11 @@ export const Edit = () => {
     console.log("apiResponse", apiResponse);
     setHtmlEdit(apiResponse);
     setLoading(false);
+
+    const currentHtml = localStorage.getItem("html") || "";
+    localStorage.setItem("undo", currentHtml);
+    localStorage.setItem("redo", "");
+
     localStorage.setItem("html", apiResponse);
     localStorage.setItem("editPrompt", prompt);
 
@@ -184,7 +192,7 @@ export const Edit = () => {
           lastObject.requestTime = formattedTime;
 
           const updatedData = JSON.stringify(dataArray);
-          console.log("updated json: " + updatedData);
+          // console.log("updated json: " + updatedData);
 
           localStorage.setItem("log.json", updatedData);
         } else {
@@ -200,7 +208,6 @@ export const Edit = () => {
     setRoleContent("");
   };
 
-  //
   const handleOptimizeApiRequest = async () => {
     // lähetetään prompt openai-API:lle ja asetetaan vastaus responseen-stateen
     const settingPrompt = prompt;
@@ -261,12 +268,35 @@ export const Edit = () => {
     setPrompt(event.target.value);
   };
 
-  // todo: tallenna muokattu sivu firestoreen (tallenna-nappi)
+  const handleUndo = () => {
+    const currentHtml = localStorage.getItem("html") || "";
+    localStorage.setItem("redo", currentHtml);
+
+    const undoContent = localStorage.getItem("undo");
+    if (undoContent) {
+      setHtmlEdit(undoContent);
+      localStorage.setItem("html", undoContent);
+      localStorage.setItem("undo", "");
+    }
+  };
+
+  const handleRedo = () => {
+    const currentHtml = localStorage.getItem("html") || "";
+    localStorage.setItem("undo", currentHtml);
+
+    const redoContent = localStorage.getItem("redo");
+    if (redoContent) {
+      setHtmlEdit(redoContent);
+      localStorage.setItem("html", redoContent);
+      localStorage.setItem("redo", "");
+    }
+  };
 
   const handleHtmlEditChange = (
     event: React.ChangeEvent<HTMLTextAreaElement>
   ) => {
     const newHtml = event.target.value;
+
     localStorage.setItem("html", newHtml);
     setHtmlEdit(newHtml);
   };
@@ -280,6 +310,8 @@ export const Edit = () => {
 
   useEffect(() => {
     getPageContent();
+    localStorage.setItem("undo", "");
+    localStorage.setItem("redo", "");
   }, []);
 
   const [isTooltipVisible, setTooltipVisible] = useState(false);
@@ -314,9 +346,42 @@ export const Edit = () => {
           </header>
           <h2 className={style.editTitle}>{currentPage}</h2>
           <nav className={style.navEdit}>
-            <button className={style.button} onClick={goToProfile}>
+            <button className={style.buttonMySites} onClick={goToProfile}>
               <ArrowBackIcon /> My sites
             </button>
+            <div>
+              {localStorage.getItem("undo") !== "" ? (
+                <button
+                  className={style.buttonUndo}
+                  onClick={() => handleUndo()}
+                >
+                  <UndoIcon />
+                </button>
+              ) : (
+                <button
+                  className={style.buttonUndoDisabled}
+                  onClick={() => handleUndo()}
+                >
+                  <UndoIcon />
+                </button>
+              )}
+
+              {localStorage.getItem("redo") !== "" ? (
+                <button
+                  className={style.buttonUndo}
+                  onClick={() => handleRedo()}
+                >
+                  <RedoIcon />
+                </button>
+              ) : (
+                <button
+                  className={style.buttonUndoDisabled}
+                  onClick={() => handleRedo()}
+                >
+                  <RedoIcon />
+                </button>
+              )}
+            </div>
             <button
               className={style.editInfoIcon}
               onMouseEnter={handleMouseEnter}
@@ -348,13 +413,6 @@ export const Edit = () => {
           ) : (
             <>
               <div className={style.navHomePrompt}>
-                <button
-                  className={style.buttonUndo}
-                  onClick={() => handleOptimize()}
-                >
-                  Revert changes
-                </button>
-
                 {prompt !== "" ? (
                   <button
                     className={style.buttonLog}
