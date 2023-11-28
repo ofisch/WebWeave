@@ -11,6 +11,8 @@ import InfoIcon from "@mui/icons-material/Info";
 import AdsClickIcon from "@mui/icons-material/AdsClick";
 import UndoIcon from "@mui/icons-material/Undo";
 import RedoIcon from "@mui/icons-material/Redo";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
 
 import { Heading } from "../components/Heading";
 import AutoResizeIframe from "../components/AutoResizeIframe";
@@ -34,6 +36,8 @@ export const Edit = () => {
   const [requestStatus, setRequestStatus] = useState<string>("");
   const [formToggle, setFormToggle] = useState(true);
   const [requestTime, setRequestTime] = useState<string>("");
+
+  const [toggleAdvEditor, setToggleAdvEditor] = useState<boolean>(false);
 
   const usersCollection = firestore.collection("users");
   const userDocRef = usersCollection.doc(user?.uid);
@@ -364,6 +368,10 @@ export const Edit = () => {
     setTooltipVisible(false);
   };
 
+  const handleAdvEditorToggle = () => {
+    setToggleAdvEditor(!toggleAdvEditor);
+  };
+
   return (
     <>
       <div className={style.pageContainer}>
@@ -440,6 +448,17 @@ export const Edit = () => {
           <div className={style.editorPreview}>
             <AutoResizeIframe contentSrc={htmlEdit}></AutoResizeIframe>
           </div>
+          <div className={style.navHomePrompt}>
+            <button
+              className={style.buttonLog}
+              onClick={() => savePage(htmlEdit)}
+            >
+              Save as new
+            </button>
+            <button className={style.buttonSave} onClick={handlePageSave}>
+              Save changes
+            </button>
+          </div>
           <textarea
             placeholder="ehdota muutoksia sivuun tähän..."
             spellCheck="false"
@@ -448,6 +467,7 @@ export const Edit = () => {
             value={prompt}
             onChange={handlePromptChange}
           ></textarea>
+
           <div className={style.navHomePrompt}>
             {prompt !== "" ? (
               <button
@@ -479,24 +499,31 @@ export const Edit = () => {
             {loading ? <p id="loading" className={style.p}></p> : null}
           </div>
 
-          <textarea
-            className={style.settings}
-            placeholder="html-editori (?) sivun muokkaukseen"
-            spellCheck="false"
-            value={htmlEdit}
-            onChange={handleHtmlEditChange}
-          ></textarea>
-          <div className={style.navHomePrompt}>
+          {toggleAdvEditor ? (
             <button
-              className={style.buttonLog}
-              onClick={() => savePage(htmlEdit)}
+              className={"text-action"}
+              onClick={() => handleAdvEditorToggle()}
             >
-              Save as new
+              Advanced editor <ArrowDropUpIcon />
             </button>
-            <button className={style.buttonSave} onClick={handlePageSave}>
-              Save changes
+          ) : (
+            <button
+              className={"text-action"}
+              onClick={() => handleAdvEditorToggle()}
+            >
+              Advanced editor <ArrowDropDownIcon />
             </button>
-          </div>
+          )}
+
+          {toggleAdvEditor ? (
+            <textarea
+              className={style.settings}
+              placeholder="html-editori (?) sivun muokkaukseen"
+              spellCheck="false"
+              value={htmlEdit}
+              onChange={handleHtmlEditChange}
+            ></textarea>
+          ) : null}
         </div>
       </div>
     </>

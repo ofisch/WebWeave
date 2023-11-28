@@ -67,7 +67,7 @@ export const Heading = () => {
         </div>
       ) : (
         <div className="flex justify-between">
-          <div className="w-12"></div>
+          <div className="w-14"></div>
           <div onClick={goToIndex}>
             <h1>&lt;Webweave/&gt;</h1>
           </div>

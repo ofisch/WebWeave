@@ -669,10 +669,16 @@ export const Home = () => {
 
             {prompt !== "" ? (
               <button
-                className={style.buttonLog}
+                className={`${
+                  loading
+                    ? `${style.buttonLog} pointer-events-none disabled`
+                    : style.buttonLog
+                }`}
                 onClick={() => handleOptimize()}
               >
-                Optimize prompt
+                <p className={loading ? style.textGenerate : ""}>
+                  Optimize prompt
+                </p>
               </button>
             ) : (
               <button className={style.buttonClearDisabled}>

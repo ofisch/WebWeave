@@ -20,6 +20,9 @@ const textEdit = {
     background-color: #2C3E50;
     box-shadow: 5px 5px #96ADC5;
   }
+
+  
+
 </style>
   
   <script>
@@ -90,7 +93,12 @@ const textEdit = {
   });
   
 
+  const links = document.querySelectorAll('a');
   
+  links.forEach(function (link) {
+    link.removeAttribute('href');
+  });
+
   
 </script>`,
 };
