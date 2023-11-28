@@ -1,4 +1,4 @@
-# WebWeave
+# Webweave
 
 [🤖AI powered webpage generation🤖]([https://www.google.com](https://docs.google.com/presentation/d/1ImwwU0nt-wSZQWNDo0mwVKFpj4UfBiiZv6vGNsmTa50/edit?usp=sharing))
 
