@@ -13,12 +13,14 @@ import UndoIcon from "@mui/icons-material/Undo";
 import RedoIcon from "@mui/icons-material/Redo";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import DownloadIcon from "@mui/icons-material/Download";
 
 import { Heading } from "../components/Heading";
 import AutoResizeIframe from "../components/AutoResizeIframe";
 import { loadingAnimation, typePlaceholder } from "../utils/animation";
 import { makeApiRequest, roles } from "../utils/openai";
 import SaveModal from "../components/modals/SaveModal";
+import DownloadModal from "../components/modals/DownloadModal";
 import SaveChangesModal from "../components/modals/SaveChangesModal";
 
 export const Edit = () => {
@@ -38,6 +40,8 @@ export const Edit = () => {
   const [requestTime, setRequestTime] = useState<string>("");
 
   const [toggleAdvEditor, setToggleAdvEditor] = useState<boolean>(false);
+
+  const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
 
   const usersCollection = firestore.collection("users");
   const userDocRef = usersCollection.doc(user?.uid);
@@ -129,6 +133,7 @@ export const Edit = () => {
   const closeModal = () => {
     setIsModalOpen(false);
     setChangeModalOpen(false);
+    setIsDownloadModalOpen(false);
   };
 
   const handleModalSubmit = async (pageNameInput: string) => {
@@ -360,6 +365,10 @@ export const Edit = () => {
 
   const [isTooltipVisible, setTooltipVisible] = useState(false);
 
+  const handleDownloadModalSubmit = async () => {
+    closeModal();
+  };
+
   const handleMouseEnter = () => {
     setTooltipVisible(true);
   };
@@ -380,6 +389,14 @@ export const Edit = () => {
           onClose={closeModal}
           onSubmit={handleModalSubmit}
           content={content}
+        />
+      </div>
+
+      <div className={style.pageContainer}>
+        <DownloadModal
+          isOpen={isDownloadModalOpen}
+          onClose={closeModal}
+          onSubmit={handleDownloadModalSubmit}
         />
       </div>
 
@@ -448,7 +465,16 @@ export const Edit = () => {
           <div className={style.editorPreview}>
             <AutoResizeIframe contentSrc={htmlEdit}></AutoResizeIframe>
           </div>
+
           <div className={style.navHomePrompt}>
+            <button
+              className={style.buttonDownloadEdit}
+              onClick={() => setIsDownloadModalOpen(true)}
+            >
+              <p className="flex-auto">
+                Download page <DownloadIcon />
+              </p>
+            </button>
             <button
               className={style.buttonLog}
               onClick={() => savePage(htmlEdit)}
