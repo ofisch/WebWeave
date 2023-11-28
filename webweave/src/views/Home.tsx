@@ -90,6 +90,10 @@ export const Home = () => {
     }
   };
 
+  const handleDownloadModalSubmit = async () => {
+    closeModal();
+  };
+
   // asetetaan prompt stateen
   const handlePromptChange = (
     event: React.ChangeEvent<HTMLTextAreaElement>
@@ -466,7 +470,7 @@ export const Home = () => {
         <DownloadModal
           isOpen={isDownloadModalOpen}
           onClose={closeModal}
-          onSubmit={handleModalSubmit}
+          onSubmit={handleDownloadModalSubmit}
         />
       </div>
 
