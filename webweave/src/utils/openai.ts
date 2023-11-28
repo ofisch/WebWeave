@@ -81,8 +81,8 @@ const writeToLog = (
 
   localStorage.setItem("log.json", JSON.stringify(log, null, 2));
 
-  console.log("Log entry written to localStorage");
-  console.log("Log entry: ", logEntry);
+  // console.log("Log entry written to localStorage");
+  // console.log("Log entry: ", logEntry);
 };
 
 const exportToJSONFile = () => {
@@ -122,7 +122,7 @@ const makeApiRequest = async (prompt: string, role: string) => {
     const responseRole = response.data.choices[0].message.role;
     const responseText = response.data.choices[0].message.content;
     const promptText = requestData.messages[0].content;
-    console.log("Role:", role);
+    // console.log("Role:", role);
 
     //console.log("Prompt:", promptText);
     //console.log("Response:", responseText);

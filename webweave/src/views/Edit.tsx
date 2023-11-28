@@ -72,7 +72,7 @@ export const Edit = () => {
 
       if (!docSnapshot.empty) {
         const docData = docSnapshot.docs[0].data();
-        console.log("docData", docData);
+        // console.log("docData", docData);
         const content = docData.content;
 
         // lisätään sivun sisältöön textEdit.script, jotta sivun tekstielementtejä voidaan muokata
@@ -83,7 +83,7 @@ export const Edit = () => {
         setHtmlEdit(localStorage.getItem("html")!);
       } else {
         // jos sivun dokumenttia ei löydy, tulostetaan virheilmoitus
-        console.log("Document not found for pageName:", currentPage);
+        // console.log("Document not found for pageName:", currentPage);
       }
     } catch (error) {
       console.error("Error fetching document:", error);
@@ -109,7 +109,7 @@ export const Edit = () => {
 
         setChangeModalOpen(true);
       } else {
-        console.log("Dokumenttia ei löydy sivulle:", currentPage);
+        // console.log("Dokumenttia ei löydy sivulle:", currentPage);
       }
     } catch (error) {
       console.error("Tallennus epäonnistui", error);
@@ -151,7 +151,7 @@ export const Edit = () => {
           localStorage.setItem("pages", JSON.stringify(savedPages));
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       }
     }
   };
@@ -163,11 +163,11 @@ export const Edit = () => {
     setFormToggle(false);
 
     const editPrompt = `edit this code: "${htmlEdit}" ${prompt} do not do any other changes.`;
-    console.log("editPrompt", editPrompt);
+    // console.log("editPrompt", editPrompt);
     setLoading(true);
 
     const apiResponse = await makeApiRequest(editPrompt, roleContent);
-    console.log("apiResponse", apiResponse);
+    // console.log("apiResponse", apiResponse);
     setHtmlEdit(apiResponse);
     setLoading(false);
 
@@ -193,7 +193,7 @@ export const Edit = () => {
 
     // lisätään API-pyynnön kesto log.json-tiedostoon
     const existingData = localStorage.getItem("log.json");
-    console.log(existingData);
+    // console.log(existingData);
 
     // jos log.json-tiedosto on olemassa, lisätään siihen API-pyynnön kesto
     if (existingData) {
@@ -265,10 +265,10 @@ export const Edit = () => {
     const handleEffect = async () => {
       if (roleContent === roles.editor) {
         await handleApiRequest();
-        console.log("roleContent", roleContent);
+        // console.log("roleContent", roleContent);
       } else if (roleContent === roles.optimizer) {
         await handleOptimizeApiRequest();
-        console.log("roleContent", roleContent);
+        // console.log("roleContent", roleContent);
       }
     };
 
@@ -312,6 +312,76 @@ export const Edit = () => {
     setPrompt(event.target.value);
   };
 
+  /*  const [undoStack, setUndoStack] = useState<string[]>([]);
+  const [redoStack, setRedoStack] = useState<string[]>([]);
+
+   const handleHtmlEditChange = (
+    event: React.ChangeEvent<HTMLTextAreaElement>
+  ) => {
+    const newHtml = event.target.value;
+
+    setUndoStack([...undoStack, htmlEdit]);
+    setRedoStack([]);
+
+    localStorage.setItem("html", newHtml);
+    setHtmlEdit(newHtml);
+
+    localStorage.setItem("undo", JSON.stringify([...undoStack, htmlEdit]));
+    localStorage.removeItem("redo");
+  };
+
+  const handleUndo = () => {
+    if (undoStack.length > 0) {
+      const previousContent = undoStack.pop();
+      if (previousContent) {
+        setRedoStack([...redoStack, htmlEdit]);
+        setHtmlEdit(previousContent);
+        localStorage.setItem("html", previousContent);
+      }
+    }
+
+    localStorage.setItem("undo", JSON.stringify(undoStack));
+    localStorage.setItem("redo", JSON.stringify(redoStack));
+  };
+
+  const handleRedo = () => {
+    if (redoStack.length > 0) {
+      const nextContent = redoStack.pop();
+      if (nextContent) {
+        setUndoStack([...undoStack, htmlEdit]);
+        setHtmlEdit(nextContent);
+        localStorage.setItem("html", nextContent);
+      }
+    }
+
+    localStorage.setItem("undo", JSON.stringify(undoStack));
+    localStorage.setItem("redo", JSON.stringify(redoStack));
+  };
+
+  useEffect(() => {
+    const storedUndo: string | null = localStorage.getItem("undo");
+    const storedRedo: string | null = localStorage.getItem("redo");
+
+    if (storedUndo) {
+      try {
+        const jsonUndo = JSON.parse(storedUndo);
+        setUndoStack(jsonUndo);
+      } catch (error) {
+        console.error("Error parsing storedUndo:", error);
+      }
+    }
+
+    if (storedRedo) {
+      try {
+        const jsonRedo = JSON.parse(storedRedo);
+        setRedoStack(jsonRedo);
+      } catch (error) {
+        console.error("Error parsing storedRedo:", error);
+        // Handle the error accordingly
+      }
+    }
+  }, []); */
+
   const handleUndo = () => {
     const currentHtml = localStorage.getItem("html") || "";
     localStorage.setItem("redo", currentHtml);
@@ -345,18 +415,20 @@ export const Edit = () => {
     setHtmlEdit(newHtml);
   };
 
+  useEffect(() => {
+    getPageContent();
+    localStorage.setItem("undo", "");
+    localStorage.setItem("redo", "");
+  }, []);
+
+  checkPageName();
+
   const goToProfile = () => {
     navigate("/profile");
     localStorage.setItem("html", "");
   };
 
   checkPageName();
-
-  useEffect(() => {
-    getPageContent();
-    localStorage.setItem("undo", "");
-    localStorage.setItem("redo", "");
-  }, []);
 
   const [isTooltipVisible, setTooltipVisible] = useState(false);
 
