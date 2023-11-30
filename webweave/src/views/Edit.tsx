@@ -652,8 +652,12 @@ export const Edit = () => {
                 <>
                   <div className={style.imagePreview}>
                     <h3 className={style.imagePreviewH3}>Selected Image:</h3>
-                    <div className={style.imagePreviewImg}>
-                      <img src={selectedImage} alt="Selected image" />
+                    <div className={style.imagePreviewImgContainer}>
+                      <img
+                        src={selectedImage}
+                        alt="Selected image"
+                        className={style.imagePreviewImg}
+                      />
                     </div>
                   </div>
                   <div className={style.buttonAddContainer}>
