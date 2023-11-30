@@ -726,7 +726,7 @@ export const Edit = () => {
               className={style.settings}
               placeholder="html-editori (?) sivun muokkaukseen"
               spellCheck="false"
-              value={htmlEdit}
+              value={localStorage.getItem("html") || ""}
               onChange={handleHtmlEditChange}
             ></textarea>
           ) : null}
