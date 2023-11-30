@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
 import style from "../../assets/style";
+import { useLocation } from "react-router-dom";
+import removeTextEdit from "../../utils/removeTextEdit";
 
 interface DownloadModalProps {
   isOpen: boolean;
@@ -19,15 +21,30 @@ const DownloadModal: React.FC<DownloadModalProps> = ({
     setInputValue(e.target.value);
   };
 
+  const location = useLocation();
+
   const downloadPage = () => {
     if (inputValue !== null && inputValue !== "") {
-      const html = localStorage.getItem("htmlResponse") || "";
-      const blob = new Blob([html], { type: "text/html" });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.download = `${inputValue}.html`;
-      link.href = url;
-      link.click();
+      let html;
+
+      if (location.pathname === "/edit") {
+        html = removeTextEdit(
+          "// don't touch this!",
+          localStorage.getItem("html") || ""
+        );
+      } else if (location.pathname === "/") {
+        html = localStorage.getItem("htmlResponse");
+      }
+
+      if (html) {
+        const blob = new Blob([html], { type: "text/html" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${inputValue}.html`;
+        a.click();
+        URL.revokeObjectURL(url);
+      }
     }
   };
 
