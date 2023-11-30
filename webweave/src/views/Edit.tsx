@@ -75,7 +75,7 @@ export const Edit = () => {
   const getPageContent = async () => {
     try {
       const docSnapshot = await pagesSubcollectionRef
-        .where("pageName", "==", currentPage)
+        .where("pageName", "==", localStorage.getItem("pageToEdit") || "")
         .get();
 
       if (!docSnapshot.empty) {
@@ -103,7 +103,7 @@ export const Edit = () => {
     try {
       // haetaan sivun dokumentti
       const docRef = await pagesSubcollectionRef
-        .where("pageName", "==", currentPage)
+        .where("pageName", "==", localStorage.getItem("pageToEdit") || "")
         .get();
 
       if (!docRef.empty) {
@@ -112,7 +112,7 @@ export const Edit = () => {
 
         // päivitetään dokumentti
         await pagesSubcollectionRef.doc(docId).update({
-          content: htmlEdit,
+          content: localStorage.getItem("html"),
         });
 
         setChangeModalOpen(true);
@@ -492,7 +492,9 @@ export const Edit = () => {
           <header className={style.headerNav}>
             <Heading></Heading>
           </header>
-          <h2 className={style.editTitle}>{currentPage}</h2>
+          <h2 className={style.editTitle}>
+            {localStorage.getItem("pageToEdit") || ""}
+          </h2>
           <nav className={style.navEdit}>
             <button className={style.buttonMySites} onClick={goToProfile}>
               <ArrowBackIcon /> My sites
