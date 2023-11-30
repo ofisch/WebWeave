@@ -108,7 +108,7 @@ export const Edit = () => {
 
         // päivitetään dokumentti
         await pagesSubcollectionRef.doc(docId).update({
-          content: htmlEdit,
+          content: localStorage.getItem("html"),
         });
 
         setChangeModalOpen(true);

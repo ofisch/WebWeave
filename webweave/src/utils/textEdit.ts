@@ -29,6 +29,25 @@ const textEdit = {
   // don't touch this!
   // this is the script that allows you to edit text on the page
 
+  // Function to get the HTML content
+  function getHtmlContent() {
+    // Get the entire HTML content
+    var htmlContent = document.documentElement.outerHTML;
+  
+    return htmlContent;
+  }
+  
+  // Function to save HTML content to localStorage
+  function saveHtmlToLocalStorage() {
+    // Get the HTML content
+    var htmlContent = getHtmlContent();
+
+    // Save to localStorage with key 'html'
+    localStorage.setItem('html', htmlContent);
+  
+    console.log("HTML content saved to localStorage.");
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
     // Function to handle double-click events on text elements
     function handleTextDoubleClick(event) {
@@ -48,12 +67,18 @@ const textEdit = {
       // Handle the blur event to save changes when the input loses focus
       editableElement.addEventListener('blur', function () {
         handleTextEdit(targetElement, editableElement.value);
+        // Call the function to save doctype to localStorage
+        saveHtmlToLocalStorage()
+      console.log("saved");
       });
   
       // Handle the "Enter" key press to save changes
       editableElement.addEventListener('keypress', function (e) {
         if (e.key === 'Enter') {
           handleTextEdit(targetElement, editableElement.value);
+          // Call the function to save doctype to localStorage
+          saveHtmlToLocalStorage()
+      console.log("saved");
         }
       });
     }
@@ -91,7 +116,7 @@ const textEdit = {
       element.style.cursor = 'pointer'; // Optional: Change cursor to indicate clickability
     });
   });
-  
+
 
   const links = document.querySelectorAll('a');
   
