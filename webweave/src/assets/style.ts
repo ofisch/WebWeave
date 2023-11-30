@@ -24,7 +24,7 @@ const style = {
   buttonClearDisabled:
     "bg-primarylight p-1 text-black rounded-lg pointer-events-none opacity-60",
   buttonLog:
-    "bg-action p-1 text-black rounded-lg w-1/4 transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",
+    "bg-action p-1 text-black rounded-lg transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",
   buttonSave:
     "p-1 bg-action text-black rounded-lg col-span-2 h-12 transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",
   buttonSaveHome:
