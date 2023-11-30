@@ -13,7 +13,8 @@ const style = {
     "bg-primarylight p-2 mx-1 text-black rounded-lg w-20 pointer-events-none opacity-60",
   editInfoIcon: "relative text-action self-right justify-self-end",
 
-  navHomePrompt: "flex gap-4 justify-center",
+  navHomePrompt: "grid gap-4 grid-cols-4",
+  navEditPrompt: "flex gap-4 justify-center",
   buttonGenerate:
     "p-1 text-black rounded-lg w-full h-14 font-semibold  transition-all duration-500 bg-gradient-to-tl from-emerald-500 via-cyan-300 to-action bg-size-200 bg-pos-0 hover:bg-pos-100",
   textGenerate: "flex-auto animate-pulse",
@@ -24,11 +25,13 @@ const style = {
   buttonLog:
     "bg-action p-1 text-black rounded-lg w-1/4 transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",
   buttonSave:
-    "p-1 bg-action text-black rounded-lg w-3/4 h-12 transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",
+    "p-1 bg-action text-black rounded-lg col-span-2 h-12 transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",
+  buttonSaveNew:
+    "p-1 bg-action text-black rounded-lg h-12 transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",
   buttonDownload:
     "p-1 bg-action text-black rounded-lg w-1/4 h-12 transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",
   buttonDownloadEdit:
-    "p-1 bg-action text-black rounded-lg w-2/4 h-12 transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",
+    "p-1 bg-action text-black rounded-lg h-12 transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",
   top: "py-4 max-w-5xl grid gap-4 xs:grid-cols-2",
   secondary:
     "p-4 max-w-5xl grid gap-4 xs:grid-cols-2 bg-primarylight rounded-lg",
@@ -149,6 +152,26 @@ const style = {
   profileLogout: "grid gap-8 grid-cols-2",
   buttonProfile:
     "bg-action p-2 text-black rounded-lg transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",
+
+  imageBank: "bg-primarylight p-4 rounded-lg grid gap-4 grid-cols-1",
+  imageBankHeding: "grid gap-4 grid-cols-2 mb-4",
+  imageBankHeader: "font-sometype text-white text-2xl text-left self-start",
+  previewImageInfo: "relative justify-self-end",
+  addImageSelect: "text-black p-2 rounded-md w-44 mx-auto",
+
+  imageBankaInputs: "grid gap-4 grid-cols-4",
+  imageNameInput: "p-2 rounded-md text-black",
+  imageAddInput: "p-2 rounded-md text-black col-span-2",
+  buttonAddImage:
+    "bg-action p-2 text-black rounded-lg h-12 transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",
+  imagePreview: "",
+  imagePreviewH3: "text-white text-center m-2 mb-4",
+  imagePreviewImg: "w-1/2 p-2 bg-white rounded-lg mx-auto",
+  buttonAddContainer: "grid gap-4 grid-cols-4",
+  buttonAddSelectedImage:
+    "bg-action p-2 text-black rounded-lg h-12 col-start-3 transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",
+  buttonRemoveSelectedImage:
+    "bg-red-500 p-2 text-black rounded-lg h-12 col-start-2 transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",
 };
 
 export default style;

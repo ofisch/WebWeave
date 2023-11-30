@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import InfoIcon from "@mui/icons-material/Info";
+import SaveIcon from "@mui/icons-material/Save";
 import AdsClickIcon from "@mui/icons-material/AdsClick";
 import UndoIcon from "@mui/icons-material/Undo";
 import RedoIcon from "@mui/icons-material/Redo";
@@ -22,6 +23,7 @@ import { makeApiRequest, roles } from "../utils/openai";
 import SaveModal from "../components/modals/SaveModal";
 import DownloadModal from "../components/modals/DownloadModal";
 import SaveChangesModal from "../components/modals/SaveChangesModal";
+import RemoveImageModal from "../components/modals/RemoveImageModal";
 
 export const Edit = () => {
   const user = useContext(AuthContext);
@@ -40,8 +42,10 @@ export const Edit = () => {
   const [requestTime, setRequestTime] = useState<string>("");
 
   const [toggleAdvEditor, setToggleAdvEditor] = useState<boolean>(false);
+  const [toggleImageBank, setToggleImageBank] = useState<boolean>(false);
 
   const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
+  const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false);
 
   const usersCollection = firestore.collection("users");
   const userDocRef = usersCollection.doc(user?.uid);
@@ -134,6 +138,7 @@ export const Edit = () => {
     setIsModalOpen(false);
     setChangeModalOpen(false);
     setIsDownloadModalOpen(false);
+    setIsRemoveModalOpen(false);
   };
 
   const handleModalSubmit = async (pageNameInput: string) => {
@@ -381,6 +386,79 @@ export const Edit = () => {
     setToggleAdvEditor(!toggleAdvEditor);
   };
 
+  const handleImageBankToggle = () => {
+    setToggleImageBank(!toggleImageBank);
+  };
+
+  const [imageName, setImageName] = useState("");
+  const [imageLink, setImageLink] = useState("");
+  const [imageList, setImageList] = useState<{ name: string; link: string }[]>(
+    []
+  );
+  const [selectedImageName, setSelectedImageName] = useState<string>("");
+  const [selectedImage, setSelectedImage] = useState<string>("");
+
+  useEffect(() => {
+    const storedImages = localStorage.getItem("imageList");
+    if (storedImages) {
+      setImageList(
+        JSON.parse(storedImages) as { name: string; link: string }[]
+      );
+    }
+  }, []);
+
+  const handleAddImage = () => {
+    const newImage = { name: imageName, link: imageLink };
+    const updatedList = [...imageList, newImage];
+    setImageList(updatedList);
+
+    const imagePrompt = `Add this image to the site: ${imageLink}`;
+
+    setPrompt((prevPrompt) => `${prevPrompt}\n\n${imagePrompt}`);
+
+    localStorage.setItem("imageList", JSON.stringify(updatedList));
+
+    setImageName("");
+    setImageLink("");
+  };
+
+  const handleAddSelectedImage = () => {
+    if (selectedImage) {
+      const imagePrompt = `Add this image to the site: ${selectedImage}`;
+      setPrompt((prevPrompt) => `${prevPrompt}\n\n${imagePrompt}`);
+    } else {
+      console.error("No image selected");
+    }
+  };
+
+  const handleRemoveSelectedImage = () => {
+    if (selectedImage) {
+      const updatedImageList = imageList.filter(
+        (image) => image.link !== selectedImage
+      );
+      setImageList(updatedImageList);
+
+      localStorage.setItem("imageList", JSON.stringify(updatedImageList));
+      setSelectedImage("");
+      setIsRemoveModalOpen(false);
+    } else {
+      console.error("No image selected");
+    }
+  };
+
+  const handleImageSelection = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedImageName = e.target.value;
+    setSelectedImageName(selectedImageName);
+    const selectedImage = imageList.find(
+      (image) => image.name === selectedImageName
+    );
+    if (selectedImage) {
+      setSelectedImage(selectedImage.link);
+    } else {
+      setSelectedImage("");
+    }
+  };
+
   return (
     <>
       <div className={style.pageContainer}>
@@ -390,9 +468,14 @@ export const Edit = () => {
           onSubmit={handleModalSubmit}
           content={content}
         />
-      </div>
 
-      <div className={style.pageContainer}>
+        <RemoveImageModal
+          open={isRemoveModalOpen}
+          onClose={closeModal}
+          onConfirm={handleRemoveSelectedImage}
+          imageName={selectedImageName}
+        />
+
         <DownloadModal
           isOpen={isDownloadModalOpen}
           onClose={closeModal}
@@ -476,15 +559,110 @@ export const Edit = () => {
               </p>
             </button>
             <button
-              className={style.buttonLog}
+              className={style.buttonSaveNew}
               onClick={() => savePage(htmlEdit)}
             >
-              Save as new
+              Save as new <SaveIcon />
             </button>
             <button className={style.buttonSave} onClick={handlePageSave}>
               Save changes
             </button>
           </div>
+          {toggleImageBank ? (
+            <button
+              className={"text-action"}
+              onClick={() => handleImageBankToggle()}
+            >
+              Image Bank <ArrowDropUpIcon />
+            </button>
+          ) : (
+            <button
+              className={"text-action"}
+              onClick={() => handleImageBankToggle()}
+            >
+              Image Bank <ArrowDropDownIcon />
+            </button>
+          )}
+          {toggleImageBank ? (
+            <div className={style.imageBank}>
+              <div className={style.imageBankHeding}>
+                <h2 className={style.imageBankHeader}>Image Bank</h2>
+                <button
+                  className={style.previewImageInfo}
+                  onMouseEnter={handleMouseEnter}
+                  onMouseLeave={handleMouseLeave}
+                >
+                  <InfoIcon />
+                  {isTooltipVisible && (
+                    <div className={style.infoTooltip}>
+                      Save images to the image bank by adding a name and a link.
+                      Use the select menu to add an image to the prompt.
+                    </div>
+                  )}
+                </button>
+              </div>
+
+              <div className={style.imageBankaInputs}>
+                <input
+                  type="text"
+                  placeholder="Name of the image..."
+                  className={style.imageNameInput}
+                  value={imageName}
+                  onChange={(e) => setImageName(e.target.value)}
+                />
+                <input
+                  type="text"
+                  placeholder="Add a new image link..."
+                  className={style.imageAddInput}
+                  value={imageLink}
+                  onChange={(e) => setImageLink(e.target.value)}
+                />
+                <button
+                  className={style.buttonAddImage}
+                  onClick={handleAddImage}
+                >
+                  Add new image
+                </button>
+              </div>
+              <select
+                name="images"
+                id="imageBank"
+                className={style.addImageSelect}
+                onChange={handleImageSelection}
+              >
+                <option className={style.selectOption}>Saved images</option>
+                {imageList.map((image, index) => (
+                  <option key={index} value={image.name}>
+                    {image.name}
+                  </option>
+                ))}
+              </select>
+              {selectedImage && (
+                <>
+                  <div className={style.imagePreview}>
+                    <h3 className={style.imagePreviewH3}>Selected Image:</h3>
+                    <div className={style.imagePreviewImg}>
+                      <img src={selectedImage} alt="Selected image" />
+                    </div>
+                  </div>
+                  <div className={style.buttonAddContainer}>
+                    <button
+                      className={style.buttonRemoveSelectedImage}
+                      onClick={() => setIsRemoveModalOpen(true)}
+                    >
+                      Remove image
+                    </button>
+                    <button
+                      className={style.buttonAddSelectedImage}
+                      onClick={handleAddSelectedImage}
+                    >
+                      Use image
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+          ) : null}
           <textarea
             placeholder="ehdota muutoksia sivuun tähän..."
             spellCheck="false"
@@ -494,7 +672,7 @@ export const Edit = () => {
             onChange={handlePromptChange}
           ></textarea>
 
-          <div className={style.navHomePrompt}>
+          <div className={style.navEditPrompt}>
             {prompt !== "" ? (
               <button
                 className={style.buttonLog}
