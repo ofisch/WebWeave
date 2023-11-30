@@ -749,7 +749,7 @@ export const Home = () => {
                   </p>
                 </button>
                 <button
-                  className={style.buttonSave}
+                  className={style.buttonSaveHome}
                   onClick={() => savePage(response)}
                 >
                   <p className="flex-auto">

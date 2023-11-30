@@ -14,22 +14,26 @@ const style = {
   editInfoIcon: "relative text-action self-right justify-self-end",
 
   navHomePrompt: "grid gap-4 grid-cols-4",
-  navEditPrompt: "flex gap-4 justify-center",
   buttonGenerate:
-    "p-1 text-black rounded-lg w-full h-14 font-semibold  transition-all duration-500 bg-gradient-to-tl from-emerald-500 via-cyan-300 to-action bg-size-200 bg-pos-0 hover:bg-pos-100",
+    "p-1 text-black rounded-lg col-span-2 h-14 font-semibold  transition-all duration-500 bg-gradient-to-tl from-emerald-500 via-cyan-300 to-action bg-size-200 bg-pos-0 hover:bg-pos-100",
+  buttonGenerateEdit:
+    "p-1 text-black rounded-lg col-span-3 h-14 font-semibold  transition-all duration-500 bg-gradient-to-tl from-emerald-500 via-cyan-300 to-action bg-size-200 bg-pos-0 hover:bg-pos-100",
   textGenerate: "flex-auto animate-pulse",
   buttonClear:
-    "bg-action p-1 text-black rounded-lg w-1/4 transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",
+    "bg-action p-1 text-black rounded-lg transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",
   buttonClearDisabled:
-    "bg-primarylight p-1 text-black rounded-lg w-1/4 pointer-events-none opacity-60",
+    "bg-primarylight p-1 text-black rounded-lg pointer-events-none opacity-60",
   buttonLog:
     "bg-action p-1 text-black rounded-lg w-1/4 transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",
   buttonSave:
     "p-1 bg-action text-black rounded-lg col-span-2 h-12 transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",
+  buttonSaveHome:
+    "p-1 bg-action text-black rounded-lg col-span-3 h-12 transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",
+
   buttonSaveNew:
     "p-1 bg-action text-black rounded-lg h-12 transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",
   buttonDownload:
-    "p-1 bg-action text-black rounded-lg w-1/4 h-12 transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",
+    "p-1 bg-action text-black rounded-lg h-12 transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",
   buttonDownloadEdit:
     "p-1 bg-action text-black rounded-lg h-12 transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",
   top: "py-4 max-w-5xl grid gap-4 xs:grid-cols-2",

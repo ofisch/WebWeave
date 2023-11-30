@@ -369,6 +369,7 @@ export const Edit = () => {
   }, []);
 
   const [isTooltipVisible, setTooltipVisible] = useState(false);
+  const [isTooltipImageVisible, setTooltipImageVisible] = useState(false);
 
   const handleDownloadModalSubmit = async () => {
     closeModal();
@@ -380,6 +381,14 @@ export const Edit = () => {
 
   const handleMouseLeave = () => {
     setTooltipVisible(false);
+  };
+
+  const handleMouseEnterImage = () => {
+    setTooltipImageVisible(true);
+  };
+
+  const handleMouseLeaveImage = () => {
+    setTooltipImageVisible(false);
   };
 
   const handleAdvEditorToggle = () => {
@@ -591,11 +600,11 @@ export const Edit = () => {
                 <h2 className={style.imageBankHeader}>Image Bank</h2>
                 <button
                   className={style.previewImageInfo}
-                  onMouseEnter={handleMouseEnter}
-                  onMouseLeave={handleMouseLeave}
+                  onMouseEnter={handleMouseEnterImage}
+                  onMouseLeave={handleMouseLeaveImage}
                 >
                   <InfoIcon />
-                  {isTooltipVisible && (
+                  {isTooltipImageVisible && (
                     <div className={style.infoTooltip}>
                       Save images to the image bank by adding a name and a link.
                       Use the select menu to add an image to the prompt.
@@ -674,7 +683,7 @@ export const Edit = () => {
             onChange={handlePromptChange}
           ></textarea>
 
-          <div className={style.navEditPrompt}>
+          <div className={style.navHomePrompt}>
             {prompt !== "" ? (
               <button
                 className={style.buttonLog}
@@ -690,8 +699,8 @@ export const Edit = () => {
             <button
               className={`${
                 loading
-                  ? `${style.buttonGenerate} pointer-events-none disabled`
-                  : style.buttonGenerate
+                  ? `${style.buttonGenerateEdit} pointer-events-none disabled`
+                  : style.buttonGenerateEdit
               }`}
               onClick={() => handleGenerate()}
             >
