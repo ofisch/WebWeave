@@ -29,7 +29,7 @@ const DownloadModal: React.FC<DownloadModalProps> = ({
 
       if (location.pathname === "/edit") {
         html = removeTextEdit(
-          "// don't touch this!",
+          "function getHtmlContent() {",
           localStorage.getItem("html") || ""
         );
       } else if (location.pathname === "/") {

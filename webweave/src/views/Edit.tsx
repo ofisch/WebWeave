@@ -173,11 +173,17 @@ export const Edit = () => {
     setFormToggle(false);
 
     const editPrompt = `edit this code: "${htmlEdit}" ${prompt} do not do any other changes.`;
-    console.log("editPrompt", editPrompt);
     setLoading(true);
 
     const apiResponse = await makeApiRequest(editPrompt, roleContent);
-    console.log("apiResponse", apiResponse);
+
+    // lisätään sivun sisältöön textEdit.script, jotta sivun tekstielementtejä voidaan muokata
+    const textEditScript = textEdit.script;
+    const contentWithScript = apiResponse + textEditScript;
+
+    console.log("apiResponse: ", apiResponse);
+    console.log("contentWithScript: ", contentWithScript);
+
     setHtmlEdit(apiResponse);
     setLoading(false);
 
@@ -203,7 +209,6 @@ export const Edit = () => {
 
     // lisätään API-pyynnön kesto log.json-tiedostoon
     const existingData = localStorage.getItem("log.json");
-    console.log(existingData);
 
     // jos log.json-tiedosto on olemassa, lisätään siihen API-pyynnön kesto
     if (existingData) {
