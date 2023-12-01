@@ -157,6 +157,7 @@ export const Home = () => {
   // luodaan prompt openai-API:lle
   const colorSwitch = (id: string) => {
     if (id === "Main") {
+      console.log("Maini läpi")
       setCurrentColor(1);
       setColor(color1);
       document.getElementById("MainColor")!.style.border = "2px solid #486584";
@@ -166,6 +167,7 @@ export const Home = () => {
         "2px solid #96ADC5";
     }
     if (id === "Accent") {
+      console.log("Accent läpi")
       setCurrentColor(2);
       setColor(color2);
       document.getElementById("MainColor")!.style.border = "2px solid #96ADC5";
@@ -175,6 +177,7 @@ export const Home = () => {
         "2px solid #96ADC5";
     }
     if (id === "Action") {
+      console.log("Action läpi")
       setCurrentColor(3);
       setColor(color3);
       document.getElementById("MainColor")!.style.border = "2px solid #96ADC5";
@@ -258,26 +261,47 @@ export const Home = () => {
   const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = event.target.value;
     if (selectedValue === "Main") {
-      document.getElementById("Main")!.style.display = "block";
+      document.getElementById("Main")!.style.display = "grid";
+      colorSwitch("Main");
     }
     if (selectedValue === "Accent") {
-      document.getElementById("Accent")!.style.display = "block";
+      document.getElementById("Accent")!.style.display = "grid";
+      colorSwitch("Accent");
     }
     if (selectedValue === "Action") {
-      document.getElementById("Action")!.style.display = "block";
+      document.getElementById("Action")!.style.display = "grid";
+      colorSwitch("Action");
     }
     event.target.value = "Add new color";
   };
+  const selectOpenColor = () => {
+     if (document.getElementById("Main")!.style.display === "grid") {
+      console.log("Main")
+      colorSwitch("Main")
+     }
+      else if (document.getElementById("Accent")!.style.display === "grid") {
+        console.log("Accent")
+        colorSwitch("Accent")
+      }
+      else if (document.getElementById("Action")!.style.display === "grid") {
+        console.log("Action")
+        colorSwitch("Action")
+      } 
+  };
+  interface Color {
+    hex: string;
+  }
   const closeColor = (id: string) => {
     if (id === "Main") {
       document.getElementById("Main")!.style.display = "none";
     }
-    if (id === "Accent") {
+    else if (id === "Accent") {
       document.getElementById("Accent")!.style.display = "none";
     }
-    if (id === "Action") {
+    else if (id === "Action") {
       document.getElementById("Action")!.style.display = "none";
     }
+    selectOpenColor();
   };
   // lähetetään prompt openai-API:lle ja asetetaan vastaus responseen-stateen
   const handleApiRequest = async () => {
@@ -515,38 +539,38 @@ export const Home = () => {
               Advanced settings <ArrowDropDownIcon />
             </button>
           )}
-
           <div
             id="settingsDiv"
             style={{ display: "none" }}
-            className={style.secondary}
+            className="p-4 max-w-5xl rounded-lg bg-primarylight"
           >
             <h2 className={style.settingsHeader}>Settings</h2>
-            <select
-              name="colorpicker"
-              className={style.select}
-              onChange={handleSelectChange}
-            >
-              <option className={style.selectOption}>Add new color</option>
-              <option className={style.selectOption}>Main</option>
-              <option className={style.selectOption}>Accent</option>
-              <option className={style.selectOption}>Action</option>
-            </select>
-
-            <div className={style.picker}>
+            <div className="grid gap-4 grid-cols-4 xs:grid-cols-1">
+            <div className="col-span-1">
+              <select
+                name="colorpicker"
+                className={style.colorSelect}
+                onChange={handleSelectChange}
+              >
+                <option className={style.selectOption}>Add new color</option>
+                <option className={style.selectOption}>Main</option>
+                <option className={style.selectOption}>Accent</option>
+                <option className={style.selectOption}>Action</option>
+              </select>
               <ul className={style.colors}>
                 <li
                   id="Main"
                   className={style.colorListItem}
-                  onClick={() => colorSwitch("Main")}
                   style={{ display: "none" }}
                 >
-                  <p>Main</p>
                   <div
                     id="MainColor"
                     className={style.colorDisplayBox}
                     style={{ backgroundColor: color1 }}
+                    onClick={() => colorSwitch("Main")}
                   ></div>
+                  <div className="text-left">
+                  <p>Main</p>
                   <p
                     id="MainColorCode"
                     className={style.colorText}
@@ -554,57 +578,61 @@ export const Home = () => {
                   >
                     #2C3E50
                   </p>
-                  <CloseIcon onClick={() => closeColor("Main")} />
+                  </div>
+                  <CloseIcon className="text-red-500 hover:text-red-800 scale-150" onClick={() => closeColor("Main")} />
                 </li>
-
                 <li
                   id="Accent"
                   className={style.colorListItem}
-                  onClick={() => colorSwitch("Accent")}
                   style={{ display: "none" }}
                 >
-                  <p>Accent</p>
                   <div
                     id="AccentColor"
                     className={style.colorDisplayBox}
                     style={{ backgroundColor: color2 }}
+                    onClick={() => colorSwitch("Accent")}
                   ></div>
+                  <div className="text-left">
+                  <p>Accent</p>
                   <p
                     id="AccentColorCode"
                     className={style.colorText}
                     style={{ color: color2 }}
                   >
-                    #CCCCCC
+                    #2C3E50
                   </p>
-                  <CloseIcon onClick={() => closeColor("Accent")} />
+                  </div>
+                  <CloseIcon className="text-red-500 hover:text-red-800 scale-150" onClick={() => closeColor("Accent")} />
                 </li>
-
                 <li
                   id="Action"
                   className={style.colorListItem}
-                  onClick={() => colorSwitch("Action")}
                   style={{ display: "none" }}
                 >
-                  <p>Action</p>
                   <div
                     id="ActionColor"
                     className={style.colorDisplayBox}
                     style={{ backgroundColor: color3 }}
+                    onClick={() => colorSwitch("Action")}
                   ></div>
+                  <div className="text-left">
+                  <p>Action</p>
                   <p
                     id="ActionColorCode"
                     className={style.colorText}
                     style={{ color: color3 }}
                   >
-                    #00BFFF
+                    #2C3E50
                   </p>
-                  <CloseIcon onClick={() => closeColor("Action")} />
+                  </div>
+                  <CloseIcon className="text-red-500 hover:text-red-800 scale-150" onClick={() => closeColor("Action")} />
                 </li>
               </ul>
+              </div>
               <SketchPicker
                 color={color}
                 className={style.sketchPicker}
-                onChangeComplete={(newColor) => handleColorChange(newColor)}
+                onChangeComplete={(newColor: Color) => handleColorChange(newColor)}
               />
               <div className={style.drop}>
                 <div>
@@ -620,7 +648,7 @@ export const Home = () => {
                     <option className={style.selectOption}>tailwindcss</option>
                     <option className={style.selectOption}>materialui</option>
                   </select>
-                </div>
+              </div>
                 <div>
                   <h1>Font style:</h1>
                   <select
@@ -659,8 +687,8 @@ export const Home = () => {
                     </option>
                   </select>
                 </div>
-              </div>
             </div>
+          </div>
           </div>
           <div className={style.navHomePrompt}>
             {response !== "" ? (
