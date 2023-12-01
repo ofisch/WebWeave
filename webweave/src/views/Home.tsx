@@ -18,6 +18,7 @@ import DownloadModal from "../components/modals/DownloadModal";
 import { makeApiRequest, roles } from "../utils/openai";
 import NotSignedInModal from "../components/modals/NotSignedInModal";
 import ClearModal from "../components/modals/ClearModal";
+import RemoveImageModal from "../components/modals/RemoveImageModal";
 
 export const Home = () => {
   const [settingsMode, setSettingsMode] = useState(false);
@@ -44,10 +45,14 @@ export const Home = () => {
 
   const promptAreaRef = React.useRef<HTMLTextAreaElement>(null);
 
+  const [toggleImageBank, setToggleImageBank] = useState<boolean>(false);
+
   // tallennetaan sivu firestoreen
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
   const [isNotSignedInModalOpen, setIsNotSignedInModalOpen] = useState(false);
+  const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false);
+
   const [content, setContent] = useState("");
 
   const savePage = async (content: string) => {
@@ -63,6 +68,7 @@ export const Home = () => {
     setIsSaveModalOpen(false);
     setIsDownloadModalOpen(false);
     setIsNotSignedInModalOpen(false);
+    setIsRemoveModalOpen(false);
   };
 
   const handleModalSubmit = async (pageNameInput: string) => {
@@ -157,7 +163,7 @@ export const Home = () => {
   // luodaan prompt openai-API:lle
   const colorSwitch = (id: string) => {
     if (id === "Main") {
-      console.log("Maini läpi")
+      console.log("Maini läpi");
       setCurrentColor(1);
       setColor(color1);
       document.getElementById("MainColor")!.style.border = "2px solid #486584";
@@ -167,7 +173,7 @@ export const Home = () => {
         "2px solid #96ADC5";
     }
     if (id === "Accent") {
-      console.log("Accent läpi")
+      console.log("Accent läpi");
       setCurrentColor(2);
       setColor(color2);
       document.getElementById("MainColor")!.style.border = "2px solid #96ADC5";
@@ -177,7 +183,7 @@ export const Home = () => {
         "2px solid #96ADC5";
     }
     if (id === "Action") {
-      console.log("Action läpi")
+      console.log("Action läpi");
       setCurrentColor(3);
       setColor(color3);
       document.getElementById("MainColor")!.style.border = "2px solid #96ADC5";
@@ -275,18 +281,16 @@ export const Home = () => {
     event.target.value = "Add new color";
   };
   const selectOpenColor = () => {
-     if (document.getElementById("Main")!.style.display === "grid") {
-      console.log("Main")
-      colorSwitch("Main")
-     }
-      else if (document.getElementById("Accent")!.style.display === "grid") {
-        console.log("Accent")
-        colorSwitch("Accent")
-      }
-      else if (document.getElementById("Action")!.style.display === "grid") {
-        console.log("Action")
-        colorSwitch("Action")
-      } 
+    if (document.getElementById("Main")!.style.display === "grid") {
+      console.log("Main");
+      colorSwitch("Main");
+    } else if (document.getElementById("Accent")!.style.display === "grid") {
+      console.log("Accent");
+      colorSwitch("Accent");
+    } else if (document.getElementById("Action")!.style.display === "grid") {
+      console.log("Action");
+      colorSwitch("Action");
+    }
   };
   interface Color {
     hex: string;
@@ -294,11 +298,9 @@ export const Home = () => {
   const closeColor = (id: string) => {
     if (id === "Main") {
       document.getElementById("Main")!.style.display = "none";
-    }
-    else if (id === "Accent") {
+    } else if (id === "Accent") {
       document.getElementById("Accent")!.style.display = "none";
-    }
-    else if (id === "Action") {
+    } else if (id === "Action") {
       document.getElementById("Action")!.style.display = "none";
     }
     selectOpenColor();
@@ -470,6 +472,7 @@ export const Home = () => {
   }, [formToggle, requestTime]);
 
   const [isTooltipVisible, setTooltipVisible] = useState(false);
+  const [isTooltipImageVisible, setTooltipImageVisible] = useState(false);
 
   const handleMouseEnter = () => {
     setTooltipVisible(true);
@@ -477,6 +480,87 @@ export const Home = () => {
 
   const handleMouseLeave = () => {
     setTooltipVisible(false);
+  };
+
+  const handleMouseEnterImage = () => {
+    setTooltipImageVisible(true);
+  };
+
+  const handleMouseLeaveImage = () => {
+    setTooltipImageVisible(false);
+  };
+
+  const handleImageBankToggle = () => {
+    setToggleImageBank(!toggleImageBank);
+  };
+
+  const [imageName, setImageName] = useState("");
+  const [imageLink, setImageLink] = useState("");
+  const [imageList, setImageList] = useState<{ name: string; link: string }[]>(
+    []
+  );
+  const [selectedImageName, setSelectedImageName] = useState<string>("");
+  const [selectedImage, setSelectedImage] = useState<string>("");
+
+  useEffect(() => {
+    const storedImages = localStorage.getItem("imageList");
+    if (storedImages) {
+      setImageList(
+        JSON.parse(storedImages) as { name: string; link: string }[]
+      );
+    }
+  }, []);
+
+  const handleAddImage = () => {
+    const newImage = { name: imageName, link: imageLink };
+    const updatedList = [...imageList, newImage];
+    setImageList(updatedList);
+
+    const imagePrompt = `Add this image to the site: ${imageLink}`;
+
+    setPrompt((prevPrompt) => `${prevPrompt}\n\n${imagePrompt}`);
+
+    localStorage.setItem("imageList", JSON.stringify(updatedList));
+
+    setImageName("");
+    setImageLink("");
+  };
+
+  const handleAddSelectedImage = () => {
+    if (selectedImage) {
+      const imagePrompt = `Add this image to the site: ${selectedImage}`;
+      setPrompt((prevPrompt) => `${prevPrompt}\n\n${imagePrompt}`);
+    } else {
+      console.error("No image selected");
+    }
+  };
+
+  const handleRemoveSelectedImage = () => {
+    if (selectedImage) {
+      const updatedImageList = imageList.filter(
+        (image) => image.link !== selectedImage
+      );
+      setImageList(updatedImageList);
+
+      localStorage.setItem("imageList", JSON.stringify(updatedImageList));
+      setSelectedImage("");
+      setIsRemoveModalOpen(false);
+    } else {
+      console.error("No image selected");
+    }
+  };
+
+  const handleImageSelection = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedImageName = e.target.value;
+    setSelectedImageName(selectedImageName);
+    const selectedImage = imageList.find(
+      (image) => image.name === selectedImageName
+    );
+    if (selectedImage) {
+      setSelectedImage(selectedImage.link);
+    } else {
+      setSelectedImage("");
+    }
   };
 
   return (
@@ -488,24 +572,25 @@ export const Home = () => {
           onSubmit={handleModalSubmit}
           content={content}
         />
-      </div>
 
-      <div className={style.pageContainer}>
         <DownloadModal
           isOpen={isDownloadModalOpen}
           onClose={closeModal}
           onSubmit={handleDownloadModalSubmit}
         />
-      </div>
 
-      <div className={style.pageContainer}>
+        <RemoveImageModal
+          open={isRemoveModalOpen}
+          onClose={closeModal}
+          onConfirm={handleRemoveSelectedImage}
+          imageName={selectedImageName}
+        />
+
         <NotSignedInModal
           isOpen={isNotSignedInModalOpen}
           onClose={closeModal}
         />
-      </div>
 
-      <div className={style.pageContainer}>
         <ClearModal
           isOpen={clearModalIsOpen}
           onClose={closeClearModal}
@@ -530,15 +615,45 @@ export const Home = () => {
               onChange={handlePromptChange}
             ></textarea>
           </div>
-          {settingsMode ? (
-            <button className={"text-action"} onClick={() => hideSettings()}>
-              Advanced settings <ArrowDropUpIcon />
-            </button>
-          ) : (
-            <button className={"text-action"} onClick={() => hideSettings()}>
-              Advanced settings <ArrowDropDownIcon />
-            </button>
-          )}
+
+          <div className={style.ternanryContainer}>
+            <div className={style.ternarySetting}>
+              {settingsMode ? (
+                <button
+                  className={"text-action"}
+                  onClick={() => hideSettings()}
+                >
+                  Advanced settings <ArrowDropUpIcon />
+                </button>
+              ) : (
+                <button
+                  className={"text-action"}
+                  onClick={() => hideSettings()}
+                >
+                  Advanced settings <ArrowDropDownIcon />
+                </button>
+              )}
+            </div>
+
+            <div className={style.ternaryImage}>
+              {toggleImageBank ? (
+                <button
+                  className={"text-action"}
+                  onClick={() => handleImageBankToggle()}
+                >
+                  Image Bank <ArrowDropUpIcon />
+                </button>
+              ) : (
+                <button
+                  className={"text-action"}
+                  onClick={() => handleImageBankToggle()}
+                >
+                  Image Bank <ArrowDropDownIcon />
+                </button>
+              )}
+            </div>
+          </div>
+
           <div
             id="settingsDiv"
             style={{ display: "none" }}
@@ -546,93 +661,104 @@ export const Home = () => {
           >
             <h2 className={style.settingsHeader}>Settings</h2>
             <div className="grid gap-4 grid-cols-4 xs:grid-cols-1">
-            <div className="col-span-1">
-              <select
-                name="colorpicker"
-                className={style.colorSelect}
-                onChange={handleSelectChange}
-              >
-                <option className={style.selectOption}>Add new color</option>
-                <option className={style.selectOption}>Main</option>
-                <option className={style.selectOption}>Accent</option>
-                <option className={style.selectOption}>Action</option>
-              </select>
-              <ul className={style.colors}>
-                <li
-                  id="Main"
-                  className={style.colorListItem}
-                  style={{ display: "none" }}
+              <div className="col-span-1">
+                <select
+                  name="colorpicker"
+                  className={style.colorSelect}
+                  onChange={handleSelectChange}
                 >
-                  <div
-                    id="MainColor"
-                    className={style.colorDisplayBox}
-                    style={{ backgroundColor: color1 }}
-                    onClick={() => colorSwitch("Main")}
-                  ></div>
-                  <div className="text-left">
-                  <p>Main</p>
-                  <p
-                    id="MainColorCode"
-                    className={style.colorText}
-                    style={{ color: color1 }}
+                  <option className={style.selectOption}>Add new color</option>
+                  <option className={style.selectOption}>Main</option>
+                  <option className={style.selectOption}>Accent</option>
+                  <option className={style.selectOption}>Action</option>
+                </select>
+                <ul className={style.colors}>
+                  <li
+                    id="Main"
+                    className={style.colorListItem}
+                    style={{ display: "none" }}
                   >
-                    #2C3E50
-                  </p>
-                  </div>
-                  <CloseIcon className="text-red-500 hover:text-red-800 scale-150" onClick={() => closeColor("Main")} />
-                </li>
-                <li
-                  id="Accent"
-                  className={style.colorListItem}
-                  style={{ display: "none" }}
-                >
-                  <div
-                    id="AccentColor"
-                    className={style.colorDisplayBox}
-                    style={{ backgroundColor: color2 }}
-                    onClick={() => colorSwitch("Accent")}
-                  ></div>
-                  <div className="text-left">
-                  <p>Accent</p>
-                  <p
-                    id="AccentColorCode"
-                    className={style.colorText}
-                    style={{ color: color2 }}
+                    <div
+                      id="MainColor"
+                      className={style.colorDisplayBox}
+                      style={{ backgroundColor: color1 }}
+                      onClick={() => colorSwitch("Main")}
+                    ></div>
+                    <div className="text-left">
+                      <p>Main</p>
+                      <p
+                        id="MainColorCode"
+                        className={style.colorText}
+                        style={{ color: color1 }}
+                      >
+                        #2C3E50
+                      </p>
+                    </div>
+                    <CloseIcon
+                      className="text-red-500 hover:text-red-800 scale-150"
+                      onClick={() => closeColor("Main")}
+                    />
+                  </li>
+                  <li
+                    id="Accent"
+                    className={style.colorListItem}
+                    style={{ display: "none" }}
                   >
-                    #2C3E50
-                  </p>
-                  </div>
-                  <CloseIcon className="text-red-500 hover:text-red-800 scale-150" onClick={() => closeColor("Accent")} />
-                </li>
-                <li
-                  id="Action"
-                  className={style.colorListItem}
-                  style={{ display: "none" }}
-                >
-                  <div
-                    id="ActionColor"
-                    className={style.colorDisplayBox}
-                    style={{ backgroundColor: color3 }}
-                    onClick={() => colorSwitch("Action")}
-                  ></div>
-                  <div className="text-left">
-                  <p>Action</p>
-                  <p
-                    id="ActionColorCode"
-                    className={style.colorText}
-                    style={{ color: color3 }}
+                    <div
+                      id="AccentColor"
+                      className={style.colorDisplayBox}
+                      style={{ backgroundColor: color2 }}
+                      onClick={() => colorSwitch("Accent")}
+                    ></div>
+                    <div className="text-left">
+                      <p>Accent</p>
+                      <p
+                        id="AccentColorCode"
+                        className={style.colorText}
+                        style={{ color: color2 }}
+                      >
+                        #2C3E50
+                      </p>
+                    </div>
+                    <CloseIcon
+                      className="text-red-500 hover:text-red-800 scale-150"
+                      onClick={() => closeColor("Accent")}
+                    />
+                  </li>
+                  <li
+                    id="Action"
+                    className={style.colorListItem}
+                    style={{ display: "none" }}
                   >
-                    #2C3E50
-                  </p>
-                  </div>
-                  <CloseIcon className="text-red-500 hover:text-red-800 scale-150" onClick={() => closeColor("Action")} />
-                </li>
-              </ul>
+                    <div
+                      id="ActionColor"
+                      className={style.colorDisplayBox}
+                      style={{ backgroundColor: color3 }}
+                      onClick={() => colorSwitch("Action")}
+                    ></div>
+                    <div className="text-left">
+                      <p>Action</p>
+                      <p
+                        id="ActionColorCode"
+                        className={style.colorText}
+                        style={{ color: color3 }}
+                      >
+                        #2C3E50
+                      </p>
+                    </div>
+                    <CloseIcon
+                      className="text-red-500 hover:text-red-800 scale-150"
+                      onClick={() => closeColor("Action")}
+                    />
+                  </li>
+                </ul>
               </div>
               <SketchPicker
                 color={color}
                 className={style.sketchPicker}
-                onChangeComplete={(newColor: Color) => handleColorChange(newColor)}
+                onChangeComplete={(newColor: Color) =>
+                  handleColorChange(newColor)
+                }
               />
               <div className={style.drop}>
                 <div>
@@ -648,7 +774,7 @@ export const Home = () => {
                     <option className={style.selectOption}>tailwindcss</option>
                     <option className={style.selectOption}>materialui</option>
                   </select>
-              </div>
+                </div>
                 <div>
                   <h1>Font style:</h1>
                   <select
@@ -687,9 +813,95 @@ export const Home = () => {
                     </option>
                   </select>
                 </div>
+              </div>
             </div>
           </div>
-          </div>
+
+          {toggleImageBank ? (
+            <div className={style.imageBank}>
+              <div className={style.imageBankHeding}>
+                <h2 className={style.imageBankHeader}>Image Bank</h2>
+                <button
+                  className={style.previewImageInfo}
+                  onMouseEnter={handleMouseEnterImage}
+                  onMouseLeave={handleMouseLeaveImage}
+                >
+                  <InfoIcon />
+                  {isTooltipImageVisible && (
+                    <div className={style.infoTooltip}>
+                      Save images to the image bank by adding a name and a link.
+                      Use the select menu to add an image to the prompt.
+                    </div>
+                  )}
+                </button>
+              </div>
+
+              <div className={style.imageBankaInputs}>
+                <input
+                  type="text"
+                  placeholder="Name of the image..."
+                  className={style.imageNameInput}
+                  value={imageName}
+                  onChange={(e) => setImageName(e.target.value)}
+                />
+                <input
+                  type="text"
+                  placeholder="Add a new image link..."
+                  className={style.imageAddInput}
+                  value={imageLink}
+                  onChange={(e) => setImageLink(e.target.value)}
+                />
+                <button
+                  className={style.buttonAddImage}
+                  onClick={handleAddImage}
+                >
+                  Add new image
+                </button>
+              </div>
+              <select
+                name="images"
+                id="imageBank"
+                className={style.addImageSelect}
+                onChange={handleImageSelection}
+              >
+                <option className={style.selectOption}>Saved images</option>
+                {imageList.map((image, index) => (
+                  <option key={index} value={image.name}>
+                    {image.name}
+                  </option>
+                ))}
+              </select>
+              {selectedImage && (
+                <>
+                  <div className={style.imagePreview}>
+                    <h3 className={style.imagePreviewH3}>Selected Image:</h3>
+                    <div className={style.imagePreviewImgContainer}>
+                      <img
+                        src={selectedImage}
+                        alt="Selected image"
+                        className={style.imagePreviewImg}
+                      />
+                    </div>
+                  </div>
+                  <div className={style.buttonAddContainer}>
+                    <button
+                      className={style.buttonRemoveSelectedImage}
+                      onClick={() => setIsRemoveModalOpen(true)}
+                    >
+                      Remove image
+                    </button>
+                    <button
+                      className={style.buttonAddSelectedImage}
+                      onClick={handleAddSelectedImage}
+                    >
+                      Use image
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+          ) : null}
+
           <div className={style.navHomePrompt}>
             {response !== "" ? (
               <button className={style.buttonClear} onClick={clearPrompt}>

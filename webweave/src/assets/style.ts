@@ -175,6 +175,10 @@ const style = {
     "bg-action p-2 text-black rounded-lg h-12 col-start-3 transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",
   buttonRemoveSelectedImage:
     "bg-red-500 p-2 text-black rounded-lg h-12 col-start-2 transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",
+
+  ternanryContainer: "grid gap-20 grid-cols-2",
+  ternarySetting: "justify-self-end",
+  ternaryImage: "justify-self-start",
 };
 
 export default style;
