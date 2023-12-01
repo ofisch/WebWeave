@@ -177,6 +177,13 @@ const style = {
     "bg-action p-2 text-black rounded-lg h-12 col-start-3 transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",
   buttonRemoveSelectedImage:
     "bg-red-500 p-2 text-black rounded-lg h-12 col-start-2 transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",
+
+  creationsCard:
+    "font-sometype max-w-sm rounded overflow-hidden shadow-lg rounded-lg bg-primarylight",
+  creationsCardImg: "w-full h-80 object-cover",
+  creationsCardContent: "px-6 py-4",
+  creationsCardTitle: "font-bold text-xl mb-2 text-white",
+  creationsCardText: "text-white text-base",
 };
 
 export default style;
