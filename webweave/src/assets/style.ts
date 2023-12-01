@@ -32,7 +32,7 @@ const style = {
     "p-4 max-w-5xl grid gap-4 xs:grid-cols-2 bg-primarylight rounded-lg",
   main: "",
   select: "text-black p-2 rounded-md w-44",
-
+  colorSelect: "text-black p-2 rounded-md",
   selectOption: "text-black font-sometype",
   selectOptionArial: "text-black font-arial",
   selectOptionVerdana: "text-black font-verdana",
@@ -49,9 +49,9 @@ const style = {
     "absolute top-0 left-1/2 transform -translate-x-1/2 bg-white p-4 shadow-lg rounded-lg text-black",
   colorText: "drop-shadow-[0_1.2px_1.2px_rgba(0,0,0,0.8)]",
   profile: "mx-auto xs:w-full",
-  colorDisplayBox: "w-8 h-8 rounded-lg mx-auto",
+  colorDisplayBox: "w-full h-10 rounded-lg ",
   colors: "grid grid-cols-1 gap-4",
-  colorListItem: "rounded-lg",
+  colorListItem: "rounded-lg grid grid-cols-3 gap-4 items-center",
   colorList: "flex gap-4",
   prompt: "h-32 bg-blue-500 w-full bg-secondary rounded-lg text-black",
   settings: "h-56 bg-blue-500 bg-secondary rounded-lg text-black",
@@ -85,7 +85,6 @@ const style = {
   previewBlock: "flex flex-col gap-4",
   previewHeader: "font-sometype text-white text-2xl text-left self-start",
   previewInfo: "relative self-right justify-self-end",
-
   pageContainer: "flex items-center justify-center h-screen hidden",
   modal: "flex align-center justify-center",
   modalOverlay: "fixed inset-0 bg-black bg-opacity-40 z-50",
@@ -104,10 +103,10 @@ const style = {
   modalContainer:
     "bg-primary bg-opacity-90 rounded-lg overflow-hidden w-300p p-2 max-w-full mx-auto fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2",
   modalContent: "w-full p-4",
-
   sites: "grid grid-cols-3 gap-4",
   sitesEdit: "grid grid-cols-3 gap-8 mt-8",
   editH2: "text-white text-2xl col-start-2 my-10",
+  closeIcon: "text-red-500 hover:text-red-800",
   sitesButton:
     "bg-action p-2 text-black rounded-lg w-full col-start-2 col-span-1 transition-all duration-500 bg-gradient-to-tl from-emerald-500 via-cyan-300 to-action bg-size-200 bg-pos-0 hover:bg-pos-100",
   iconContainer: "justify-center flex flex-col",
@@ -119,18 +118,17 @@ const style = {
     "absolute right-1/3 top-1/2 w-32 bg-primary rounded-lg shadow-lg p-2 text-white border-2 border-primarylight z-10",
   infoTooltip:
     "absolute right-1 w-96 bg-primary rounded-lg shadow-lg p-2 text-white border-2 border-primarylight z-10",
-
   settingsHeader: "font-sometype text-white text-2xl text-left mb-4",
-  picker: "grid grid-cols-3 gap-4",
+  picker: "grid gap-4",
   drop: "grid grid-cols-1 gap-4",
   sketchPicker: "mx-auto",
-
+  colorPicker: "grid grid-cols-2 gap-4 col-span-1 ",
+  selectors: "grid gap-4 col-span-1",
   profileTop: "py-4 max-w-5xl grid gap-4 xs:grid-cols-2 mb-32",
   editSection:
     "bg-primary h-32 fixed inset-x-0 bottom-0 grid grid-cols-3 gap-8 mt-8",
   editButton:
     "bg-red-500 w-32 h-fit m-auto self-center p-2 text-black rounded-lg col-start-2 col-span-1 transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",
-
   logsTop: "py-4 max-w-5xl grid gap-4 xs:grid-cols-2 mb-8",
   logsH1: "text-white text-3xl text-center m-2 mb-4",
   logData: "my-20",
