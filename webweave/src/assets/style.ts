@@ -156,7 +156,7 @@ const style = {
     "bg-action p-2 text-black rounded-lg transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",
 
   imageBank: "bg-primarylight p-4 rounded-lg grid gap-4 grid-cols-1",
-  imageBankHeding: "grid gap-4 grid-cols-2 mb-4",
+  imageBankHeading: "grid gap-4 grid-cols-2 mb-4",
   imageBankHeader: "font-sometype text-white text-2xl text-left self-start",
   previewImageInfo: "relative justify-self-end",
   addImageSelect: "text-black p-2 rounded-md w-44 mx-auto",

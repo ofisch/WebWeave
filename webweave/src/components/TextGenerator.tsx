@@ -4,6 +4,7 @@ import { makeApiRequest } from "../utils/openai";
 import { loadingAnimation } from "../utils/animation";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DoneIcon from "@mui/icons-material/Done";
+import InfoIcon from "@mui/icons-material/Info";
 
 const TextGenerator: React.FC = () => {
   const [prompt, setPrompt] = React.useState<string>("");
@@ -12,6 +13,7 @@ const TextGenerator: React.FC = () => {
   const [response, setResponse] = React.useState<string>("");
   const [loading, setLoading] = React.useState<boolean>(false);
   const [copied, setCopied] = React.useState<boolean>(false);
+  const [isTooltipVisible, setTooltipVisible] = React.useState<boolean>(false);
 
   const handlePromptChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setPrompt(e.target.value);
@@ -25,6 +27,7 @@ const TextGenerator: React.FC = () => {
 
     const apiResponse = await makeApiRequest(prompt, role);
     setResponse(apiResponse);
+    localStorage.setItem("textGeneratorResponse", apiResponse);
     setLoading(false);
     setCopied(false);
   };
@@ -52,10 +55,25 @@ const TextGenerator: React.FC = () => {
     setCopied(true);
   };
 
+  const handleMouseEnter = () => {
+    setTooltipVisible(true);
+  };
+
+  const handleMouseLeave = () => {
+    setTooltipVisible(false);
+  };
+
   useEffect(() => {
     const prompt = localStorage.getItem("textGeneratorPrompt");
     if (prompt) {
       setPrompt(prompt);
+    }
+  }, []);
+
+  useEffect(() => {
+    const textGeneratorResponse = localStorage.getItem("textGeneratorResponse");
+    if (textGeneratorResponse) {
+      setResponse(textGeneratorResponse);
     }
   }, []);
 
@@ -69,10 +87,22 @@ const TextGenerator: React.FC = () => {
     <div className={style.imageBank}>
       <div className={style.imageBankHeding}>
         <h2 className={style.imageBankHeader}>Text generator</h2>
+        <button
+          className={style.previewImageInfo}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
+          <InfoIcon />
+          {isTooltipVisible && (
+            <div className={style.infoTooltip}>
+              Create contextually relevant text content by entering prompts.
+            </div>
+          )}
+        </button>
       </div>
 
       <textarea
-        placeholder="generate text from..."
+        placeholder="generate text about..."
         spellCheck="false"
         className={style.textGeneratorPrompt}
         value={prompt}

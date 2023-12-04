@@ -819,7 +819,7 @@ export const Home = () => {
 
           {toggleImageBank ? (
             <div className={style.imageBank}>
-              <div className={style.imageBankHeding}>
+              <div className={style.imageBankHeading}>
                 <h2 className={style.imageBankHeader}>Image Bank</h2>
                 <button
                   className={style.previewImageInfo}

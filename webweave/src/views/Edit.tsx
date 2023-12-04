@@ -366,6 +366,7 @@ export const Edit = () => {
   const goToProfile = () => {
     navigate("/profile");
     localStorage.setItem("html", "");
+    localStorage.setItem("textGeneratorResponse", "");
   };
 
   checkPageName();
@@ -600,14 +601,14 @@ export const Edit = () => {
                   className={"text-action"}
                   onClick={() => handleImageBankToggle()}
                 >
-                  Image Bank <ArrowDropUpIcon />
+                  Image bank <ArrowDropUpIcon />
                 </button>
               ) : (
                 <button
                   className={"text-action"}
                   onClick={() => handleImageBankToggle()}
                 >
-                  Image Bank <ArrowDropDownIcon />
+                  Image bank <ArrowDropDownIcon />
                 </button>
               )}
             </div>
@@ -632,8 +633,8 @@ export const Edit = () => {
 
           {toggleImageBank ? (
             <div className={style.imageBank}>
-              <div className={style.imageBankHeding}>
-                <h2 className={style.imageBankHeader}>Image Bank</h2>
+              <div className={style.imageBankHeading}>
+                <h2 className={style.imageBankHeader}>Image bank</h2>
                 <button
                   className={style.previewImageInfo}
                   onMouseEnter={handleMouseEnterImage}
@@ -714,11 +715,7 @@ export const Edit = () => {
               )}
             </div>
           ) : null}
-          {toggleTextGenerator ? (
-            <div>
-              <TextGenerator />
-            </div>
-          ) : null}
+          {toggleTextGenerator ? <TextGenerator /> : null}
           <textarea
             placeholder="ehdota muutoksia sivuun tähän..."
             spellCheck="false"
