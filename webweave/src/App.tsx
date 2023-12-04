@@ -5,6 +5,7 @@ import { Login } from "./views/Login";
 import { Profile } from "./views/Profile";
 import { Edit } from "./views/Edit";
 import { LogData } from "./views/LogData";
+import Creations from "./views/Creations";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/profile" element={<Profile />} />
         <Route path="/edit" element={<Edit />}></Route>
         <Route path="/logs" element={<LogData />}></Route>
+        <Route path="/creations" element={<Creations />}></Route>
       </Routes>
     </BrowserRouter>
   );
