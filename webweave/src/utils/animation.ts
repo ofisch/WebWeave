@@ -15,15 +15,21 @@ export function typePlaceholder(textArea: HTMLTextAreaElement, text: string) {
   type(); // Call the function to start the typewriter animation
 }
 
-export const loadingAnimation = (element: HTMLElement) => {
+export const loadingAnimation = (element: HTMLElement, color: string) => {
   const speed = 150;
 
   const animationElement = document.createElement("div");
   element.appendChild(animationElement);
 
   function load() {
-    const color = "#00BFFF";
-    const dot = `<span style="color: ${color}">.</span>`;
+    let dotColor;
+    if (color === "action") {
+      dotColor = "#00BFFF";
+    } else {
+      dotColor = "white";
+    }
+
+    const dot = `<span style="color: ${dotColor}">.</span>`;
     animationElement.innerHTML = dot;
     setTimeout(() => {
       animationElement.innerHTML = dot + dot;

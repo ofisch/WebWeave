@@ -149,7 +149,7 @@ export const Home = () => {
 
   useEffect(() => {
     if (loading) {
-      loadingAnimation(document.getElementById("loading")!);
+      loadingAnimation(document.getElementById("loading")!, "action");
     }
   }, [loading]);
 

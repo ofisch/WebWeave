@@ -24,6 +24,7 @@ import SaveModal from "../components/modals/SaveModal";
 import DownloadModal from "../components/modals/DownloadModal";
 import SaveChangesModal from "../components/modals/SaveChangesModal";
 import RemoveImageModal from "../components/modals/RemoveImageModal";
+import TextGenerator from "../components/TextGenerator";
 
 export const Edit = () => {
   const user = useContext(AuthContext);
@@ -43,6 +44,8 @@ export const Edit = () => {
 
   const [toggleAdvEditor, setToggleAdvEditor] = useState<boolean>(false);
   const [toggleImageBank, setToggleImageBank] = useState<boolean>(false);
+  const [toggleTextGenerator, setToggleTextGenerator] =
+    useState<boolean>(false);
 
   const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
   const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false);
@@ -317,7 +320,7 @@ export const Edit = () => {
 
   useEffect(() => {
     if (loading) {
-      loadingAnimation(document.getElementById("loading")!);
+      loadingAnimation(document.getElementById("loading")!, "action");
     }
   }, [loading]);
 
@@ -402,6 +405,12 @@ export const Edit = () => {
 
   const handleImageBankToggle = () => {
     setToggleImageBank(!toggleImageBank);
+    setToggleTextGenerator(false);
+  };
+
+  const handleTextGeneratorToggle = () => {
+    setToggleTextGenerator(!toggleTextGenerator);
+    setToggleImageBank(false);
   };
 
   const [imageName, setImageName] = useState("");
@@ -584,21 +593,43 @@ export const Edit = () => {
               Save changes
             </button>
           </div>
-          {toggleImageBank ? (
-            <button
-              className={"text-action"}
-              onClick={() => handleImageBankToggle()}
-            >
-              Image Bank <ArrowDropUpIcon />
-            </button>
-          ) : (
-            <button
-              className={"text-action"}
-              onClick={() => handleImageBankToggle()}
-            >
-              Image Bank <ArrowDropDownIcon />
-            </button>
-          )}
+          <div className={style.ternanryContainer}>
+            <div className={style.ternarySetting}>
+              {toggleImageBank ? (
+                <button
+                  className={"text-action"}
+                  onClick={() => handleImageBankToggle()}
+                >
+                  Image Bank <ArrowDropUpIcon />
+                </button>
+              ) : (
+                <button
+                  className={"text-action"}
+                  onClick={() => handleImageBankToggle()}
+                >
+                  Image Bank <ArrowDropDownIcon />
+                </button>
+              )}
+            </div>
+            <div className={style.textGeneratorSetting}>
+              {toggleTextGenerator ? (
+                <button
+                  className={"text-action"}
+                  onClick={() => handleTextGeneratorToggle()}
+                >
+                  Text generator <ArrowDropUpIcon />
+                </button>
+              ) : (
+                <button
+                  className={"text-action"}
+                  onClick={() => handleTextGeneratorToggle()}
+                >
+                  Text generator <ArrowDropDownIcon />
+                </button>
+              )}
+            </div>
+          </div>
+
           {toggleImageBank ? (
             <div className={style.imageBank}>
               <div className={style.imageBankHeding}>
@@ -681,6 +712,11 @@ export const Edit = () => {
                   </div>
                 </>
               )}
+            </div>
+          ) : null}
+          {toggleTextGenerator ? (
+            <div>
+              <TextGenerator />
             </div>
           ) : null}
           <textarea
