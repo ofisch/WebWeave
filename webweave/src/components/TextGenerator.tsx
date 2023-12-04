@@ -85,7 +85,7 @@ const TextGenerator: React.FC = () => {
 
   return (
     <div className={style.imageBank}>
-      <div className={style.imageBankHeding}>
+      <div className={style.imageBankHeading}>
         <h2 className={style.imageBankHeader}>Text generator</h2>
         <button
           className={style.previewImageInfo}
