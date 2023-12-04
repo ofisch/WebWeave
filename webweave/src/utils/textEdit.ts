@@ -18,7 +18,7 @@ const textEdit = {
   .input:focus {
     outline-color: #00BFFF;
     background-color: #2C3E50;
-    box-shadow: 5px 5px #96ADC5;
+    box-shadow: 0 0 10px rgba(0, 191, 255, 0.5);
   }
 
   
