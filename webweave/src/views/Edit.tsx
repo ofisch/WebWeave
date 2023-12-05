@@ -175,7 +175,9 @@ export const Edit = () => {
     setRequestStatus("Request in progress");
     setFormToggle(false);
 
-    const editPrompt = `edit this code: "${htmlEdit}" ${prompt} do not do any other changes.`;
+    const editPrompt = `edit this code: "${localStorage.getItem(
+      "html"
+    )}" ${prompt} do not do any other changes.`;
     setLoading(true);
 
     const apiResponse = await makeApiRequest(editPrompt, roleContent);
