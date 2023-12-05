@@ -679,7 +679,7 @@ export const Home = () => {
           >
             <h2 className={style.settingsHeader}>Settings</h2>
             <div className="grid gap-4 grid-cols-4 xs:grid-cols-1">
-              <div className="col-span-1">
+              <div className="flex flex-col">
                 <select
                   name="colorpicker"
                   className={style.colorSelect}

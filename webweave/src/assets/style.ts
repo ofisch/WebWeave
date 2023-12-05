@@ -41,7 +41,7 @@ const style = {
     "p-4 max-w-5xl grid gap-4 xs:grid-cols-2 bg-primarylight rounded-lg",
   main: "",
   select: "text-black p-2 rounded-md w-44",
-  colorSelect: "text-black p-2 rounded-md",
+  colorSelect: "text-black p-2 rounded-md w-44",
   selectOption: "text-black font-sometype",
   selectOptionArial: "text-black font-arial",
   selectOptionVerdana: "text-black font-verdana",
