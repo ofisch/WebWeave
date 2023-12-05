@@ -130,6 +130,7 @@ const style = {
   settingsHeader: "font-sometype text-white text-2xl text-left mb-4",
   picker: "grid gap-4",
   drop: "grid grid-cols-1 gap-4",
+  settingsDropdown: "grid grid-cols-1 col-span-2 gap-4",
   sketchPicker: "mx-auto",
   colorPicker: "grid grid-cols-2 gap-4 col-span-1 ",
   selectors: "grid gap-4 col-span-1",

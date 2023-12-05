@@ -21,6 +21,7 @@ import ClearModal from "../components/modals/ClearModal";
 import RemoveImageModal from "../components/modals/RemoveImageModal";
 
 export const Home = () => {
+  const [fontSizeSettings, setFontSizeSettings] = React.useState<string>("normal (16px)");
   const [settingsMode, setSettingsMode] = useState(false);
   const [color, setColor] = useState("#2C3E50");
   const [currentColor, setCurrentColor] = useState(1);
@@ -146,7 +147,11 @@ export const Home = () => {
 
     return () => clearInterval(interval);
   }, []);
-
+  const handleFontSizeSettingsChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    setFontSizeSettings(event.target.value);
+  };
   useEffect(() => {
     if (loading) {
       loadingAnimation(document.getElementById("loading")!, "action");
@@ -212,22 +217,21 @@ export const Home = () => {
     if (font === "none selected") {
       fontPrompt = "";
     } else {
-      fontPrompt = " Use " + font + " font.";
+      fontPrompt = " Use " + fontSizeSettings + " " + font + " font.";
     }
-    if (document.getElementById("Main")!.style.display === "block") {
+    if (document.getElementById("Main")!.style.display === "grid") {
       mainColorPrompt = " Use " + color1 + " as main color.";
     }
-    if (document.getElementById("Accent")!.style.display === "block") {
+    if (document.getElementById("Accent")!.style.display === "grid") {
       accentColorPrompt = " Use " + color2 + " as accent color.";
     }
-    if (document.getElementById("Action")!.style.display === "block") {
+    if (document.getElementById("Action")!.style.display === "grid") {
       actionColorPrompt = " Use " + color3 + " as action color.";
     }
     colorPrompt =
       mainColorPrompt +
       accentColorPrompt +
-      actionColorPrompt +
-      " implement the colors using the 60 30 10 rule. Use every color in the ratio of 60 30 10. Main being 60. Accent being 30. Action being 10.";
+      actionColorPrompt;
     finalPrompt = prompt + fontPrompt + frameworkPrompt + colorPrompt;
     if (settingsMode === false) {
       return prompt;
@@ -760,7 +764,7 @@ export const Home = () => {
                   handleColorChange(newColor)
                 }
               />
-              <div className={style.drop}>
+              <div className={style.settingsDropdown}>
                 <div>
                   <h1>Css framework:</h1>
                   <select
@@ -810,6 +814,24 @@ export const Home = () => {
                     </option>
                     <option className={style.selectOptionComic}>
                       Comic Sans MS
+                    </option>
+                  </select>
+                </div>
+                <div>
+                  <h1>Font size:</h1>
+                  <select
+                    name="fontSizeSelect"
+                    className={style.select}
+                    onChange={handleFontSizeSettingsChange}
+                  >
+                    <option className={style.selectOption}>
+                      small (12px)
+                    </option>
+                    <option className={style.selectOption}>
+                      normal (16px)
+                    </option>
+                    <option className={style.selectOption}>
+                      big (20px)
                     </option>
                   </select>
                 </div>
