@@ -11,7 +11,7 @@ export const Heading = () => {
   const navigate = useNavigate();
 
   const goToIndex = () => {
-    navigate("/");
+    navigate("/generator");
   };
 
   const goToProfile = () => {
@@ -26,7 +26,7 @@ export const Heading = () => {
 
   return (
     <>
-      {location.pathname === "/" ? (
+      {location.pathname === "/generator" ? (
         <div className="flex justify-between">
           <div className="w-6"></div>
           <div onClick={goToIndex}>
