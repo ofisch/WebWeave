@@ -5,7 +5,7 @@ import { firestore } from "../utils/firebase";
 import { AuthContext } from "../context/AuthContext";
 import { pageToEdit } from "../context/PageEditContext";
 import { useNavigate } from "react-router-dom";
-
+import cleanCode from "../utils/codeCleaner";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import InfoIcon from "@mui/icons-material/Info";
 import SaveIcon from "@mui/icons-material/Save";
@@ -179,22 +179,23 @@ export const Edit = () => {
     setLoading(true);
 
     const apiResponse = await makeApiRequest(editPrompt, roleContent);
-
+    const apiResponseHtml = cleanCode(apiResponse);
+    console.log(apiResponseHtml);
     // lisätään sivun sisältöön textEdit.script, jotta sivun tekstielementtejä voidaan muokata
     const textEditScript = textEdit.script;
-    const contentWithScript = apiResponse + textEditScript;
+    const contentWithScript = apiResponseHtml + textEditScript;
 
-    console.log("apiResponse: ", apiResponse);
+    console.log("apiResponse: ", apiResponseHtml);
     console.log("contentWithScript: ", contentWithScript);
 
-    setHtmlEdit(apiResponse);
+    setHtmlEdit(apiResponseHtml);
     setLoading(false);
 
     const currentHtml = localStorage.getItem("html") || "";
     localStorage.setItem("undo", currentHtml);
     localStorage.setItem("redo", "");
 
-    localStorage.setItem("html", apiResponse);
+    localStorage.setItem("html", apiResponseHtml);
     localStorage.setItem("editPrompt", prompt);
 
     // lasketaan API-pyynnön kesto ja asetetaan se requestTime-stateen
