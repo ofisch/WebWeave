@@ -66,19 +66,31 @@ const textEdit = {
   
       // Handle the blur event to save changes when the input loses focus
       editableElement.addEventListener('blur', function () {
-        handleTextEdit(targetElement, editableElement.value);
-        // Call the function to save doctype to localStorage
-        saveHtmlToLocalStorage()
-      console.log("saved");
+        // Check if the editableElement value is not empty
+        if (editableElement.value.trim() !== "") {
+          handleTextEdit(targetElement, editableElement.value);
+          // Call the function to save doctype to localStorage
+          saveHtmlToLocalStorage();
+          console.log("saved");
+        } else {
+          console.log("Cannot save. Element is empty.");
+          // You may want to notify the user that they cannot save an empty element.
+        }
       });
-  
+      
       // Handle the "Enter" key press to save changes
       editableElement.addEventListener('keypress', function (e) {
         if (e.key === 'Enter') {
-          handleTextEdit(targetElement, editableElement.value);
-          // Call the function to save doctype to localStorage
-          saveHtmlToLocalStorage()
-      console.log("saved");
+          // Check if the editableElement value is not empty
+          if (editableElement.value.trim() !== "") {
+            handleTextEdit(targetElement, editableElement.value);
+            // Call the function to save doctype to localStorage
+            saveHtmlToLocalStorage();
+            console.log("saved");
+          } else {
+            console.log("Cannot save. Element is empty.");
+            // You may want to notify the user that they cannot save an empty element.
+          }
         }
       });
     }

@@ -1,3 +1,24 @@
+// vanha textEdit.ts tallennus ilman tsekkausta
+
+   // Handle the blur event to save changes when the input loses focus
+      editableElement.addEventListener('blur', function () {
+        handleTextEdit(targetElement, editableElement.value);
+        // Call the function to save doctype to localStorage
+        saveHtmlToLocalStorage()
+      console.log("saved");
+      });
+  
+      // Handle the "Enter" key press to save changes
+      editableElement.addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+          handleTextEdit(targetElement, editableElement.value);
+          // Call the function to save doctype to localStorage
+          saveHtmlToLocalStorage()
+      console.log("saved");
+        }
+      });
+
+
 // huikee tekstielementtien muokkaus
 
  <script>

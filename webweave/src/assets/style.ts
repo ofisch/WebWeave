@@ -194,6 +194,11 @@ const style = {
     "bg-action p-2 text-black rounded-lg h-12 transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",
   textGenerateCopyButton:
     "bg-action p-2 text-black rounded-lg h-12 transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",
+
+  advSettings: "grid gap-4 grid-cols-2",
+  advSettingsToggleOff: "text-action scale-150 justify-self-end col-span-1",
+  advSettingsText: "text-action justify-self-start col-span-1",
+  advSettingsToggleOn: "text-gray-500 scale-150 justify-self-end col-span-1",
 };
 
 export default style;

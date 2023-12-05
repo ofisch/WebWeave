@@ -10,7 +10,7 @@ const headers = {
 
 const roles = {
   webdev:
-    "As an AI tool, your primary function is to generate HTML pages based on user prompts. Give a brief explanation of the given website before the HTML code. Ensure the HTML is enhanced with modern styling. Incorporate CSS and JavaScript within the same file, utilizing CDN libraries when necessary.",
+    "As an AI tool, your primary function is to generate HTML pages based on user prompts. Give a brief explanation of the given website before the HTML code. Ensure the HTML is enhanced with modern styling. Customize css for the page, and ensure every element has a custom css. Incorporate CSS and JavaScript within the same html file, inside style and script tags, utilizing CDN libraries when necessary. Do not leave the page empty ever. If you are not specified content for each element, make placeholder content for the page. Ensure the text is has good color contrast.",
   // "You are an AI tool that creates HTML pages from the user's prompt. You don't add any explanations or additional text, only the HTML code. Don't add any markdown. Add modern styling to the page. Add CSS and JavaScript to the same file. Link to CDN libraries if needed.",
   optimizer:
     "Your expertise in concise writing is needed to elaborate on the provided website specification. Emphasize key points and streamline the content by eliminating unnecessary information. Feel free to expand without altering the meaning. Ensure HTML validity as per HTML5 specifications and prioritize responsive design. Remember, the audience lacks technical knowledge, so thorough explanations and additional details are crucial. Avoid creating HTML code; solely focus on detailing the specification.",

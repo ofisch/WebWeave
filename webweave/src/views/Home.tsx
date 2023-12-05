@@ -14,6 +14,8 @@ import InfoIcon from "@mui/icons-material/Info";
 import CloseIcon from "@mui/icons-material/Close";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import ArrowDropUpIcon from "@mui/icons-material/ArrowDropUp";
+import ToggleOnIcon from "@mui/icons-material/ToggleOn";
+import ToggleOffIcon from "@mui/icons-material/ToggleOff";
 import DownloadModal from "../components/modals/DownloadModal";
 import { makeApiRequest, roles } from "../utils/openai";
 import NotSignedInModal from "../components/modals/NotSignedInModal";
@@ -110,10 +112,8 @@ export const Home = () => {
   const hideSettings = () => {
     if (document.getElementById("settingsDiv")!.style.display === "none") {
       document.getElementById("settingsDiv")!.style.display = "block";
-      setSettingsMode(true);
     } else {
       document.getElementById("settingsDiv")!.style.display = "none";
-      setSettingsMode(false);
     }
   };
   // asetetaan font stateen
@@ -619,19 +619,37 @@ export const Home = () => {
           <div className={style.ternanryContainer}>
             <div className={style.ternarySetting}>
               {settingsMode ? (
-                <button
-                  className={"text-action"}
-                  onClick={() => hideSettings()}
-                >
-                  Advanced settings <ArrowDropUpIcon />
-                </button>
+                <div className={style.advSettings}>
+                  <button
+                    className={style.advSettingsToggleOff}
+                    onClick={() => setSettingsMode(false)}
+                  >
+                    <ToggleOnIcon />
+                  </button>
+                  <button
+                    className={style.advSettingsText}
+                    onClick={() => hideSettings()}
+                  >
+                    Advanced settings
+                    <ArrowDropDownIcon />
+                  </button>
+                </div>
               ) : (
-                <button
-                  className={"text-action"}
-                  onClick={() => hideSettings()}
-                >
-                  Advanced settings <ArrowDropDownIcon />
-                </button>
+                <div className={style.advSettings}>
+                  <button
+                    className={style.advSettingsToggleOn}
+                    onClick={() => setSettingsMode(true)}
+                  >
+                    <ToggleOffIcon />
+                  </button>
+                  <button
+                    className={style.advSettingsText}
+                    onClick={() => hideSettings()}
+                  >
+                    Advanced settings
+                    <ArrowDropUpIcon />
+                  </button>
+                </div>
               )}
             </div>
 
