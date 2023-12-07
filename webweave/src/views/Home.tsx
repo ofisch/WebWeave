@@ -25,6 +25,10 @@ import RemoveImageModal from "../components/modals/RemoveImageModal";
 export const Home = () => {
   const [fontSizeSettings, setFontSizeSettings] = React.useState<string>("normal (16px)");
   const [settingsToggleMode, setSettingsToggleMode] = useState(false);
+  const [currentColor, setCurrentColor] = useState(1);
+  const [color1, setColor1] = useState(localStorage.getItem('color1') || "#2C3E50");
+  const [color2, setColor2] = useState(localStorage.getItem('color2') || "#2C3E50");
+  const [color3, setColor3] = useState(localStorage.getItem('color3') || "#2C3E50");
   const [settingsMode, setSettingsMode] = useState(false);
   const [color, setColor] = useState("#2C3E50");
   const [framework, setFrameworkSettings] = React.useState<string>("");
@@ -54,25 +58,7 @@ export const Home = () => {
   const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false);
 
   const [content, setContent] = useState("");
-  const getColor = (color: string) => {
-    if (color === "Main" && localStorage.getItem('color1') != null) {
-      return localStorage.getItem('color1');
-    }
-    else if (color === "Accent" && localStorage.getItem('color2') != null) {
-      return localStorage.getItem('color2');
-    }
-    else if (color === "Action" && localStorage.getItem('color3') != null) {
-      return localStorage.getItem('color3');
-    }
-    else {
-      return "#2C3E50";
-    }
 
-  }
-  const [currentColor, setCurrentColor] = useState(1);
-  const [color1, setColor1] = useState(getColor("Main"));
-  const [color2, setColor2] = useState(getColor("Accent"));
-  const [color3, setColor3] = useState(getColor("Action"));
   const savePage = async (content: string) => {
     if (user === null) {
       setIsNotSignedInModalOpen(true);
@@ -81,7 +67,6 @@ export const Home = () => {
       setIsSaveModalOpen(true);
     }
   };
-
   const closeModal = () => {
     setIsSaveModalOpen(false);
     setIsDownloadModalOpen(false);
