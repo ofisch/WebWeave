@@ -27,10 +27,6 @@ export const Home = () => {
   const [settingsToggleMode, setSettingsToggleMode] = useState(false);
   const [settingsMode, setSettingsMode] = useState(false);
   const [color, setColor] = useState("#2C3E50");
-  const [currentColor, setCurrentColor] = useState(1);
-  const [color1, setColor1] = useState("#2C3E50");
-  const [color2, setColor2] = useState("#CCCCCC");
-  const [color3, setColor3] = useState("#00BFFF");
   const [framework, setFrameworkSettings] = React.useState<string>("");
   const [font, setFontSettings] = React.useState<string>("");
   const [prompt, setPrompt] = React.useState<string>("");
@@ -58,7 +54,25 @@ export const Home = () => {
   const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false);
 
   const [content, setContent] = useState("");
+  const getColor = (color: string) => {
+    if (color === "Main" && localStorage.getItem('color1') != null) {
+      return localStorage.getItem('color1');
+    }
+    else if (color === "Accent" && localStorage.getItem('color2') != null) {
+      return localStorage.getItem('color2');
+    }
+    else if (color === "Action" && localStorage.getItem('color3') != null) {
+      return localStorage.getItem('color3');
+    }
+    else {
+      return "#2C3E50";
+    }
 
+  }
+  const [currentColor, setCurrentColor] = useState(1);
+  const [color1, setColor1] = useState(getColor("Main"));
+  const [color2, setColor2] = useState(getColor("Accent"));
+  const [color3, setColor3] = useState(getColor("Action"));
   const savePage = async (content: string) => {
     if (user === null) {
       setIsNotSignedInModalOpen(true);
@@ -99,7 +113,6 @@ export const Home = () => {
       }
     }
   };
-
   const handleDownloadModalSubmit = async () => {
     closeModal();
   };
@@ -110,7 +123,6 @@ export const Home = () => {
   ) => {
     setPrompt(event.target.value);
   };
-
   const hideSettings = () => {
     if (document.getElementById("settingsDiv")!.style.display === "none") {
       setSettingsMode(true);
@@ -171,9 +183,9 @@ export const Home = () => {
   // luodaan prompt openai-API:lle
   const colorSwitch = (id: string) => {
     if (id === "Main") {
-      console.log("Maini läpi");
       setCurrentColor(1);
       setColor(color1);
+      localStorage.setItem("color1", color1);
       document.getElementById("MainColor")!.style.border = "2px solid #486584";
       document.getElementById("AccentColor")!.style.border =
         "2px solid #96ADC5";
@@ -181,9 +193,9 @@ export const Home = () => {
         "2px solid #96ADC5";
     }
     if (id === "Accent") {
-      console.log("Accent läpi");
       setCurrentColor(2);
       setColor(color2);
+      localStorage.setItem("color2", color2);
       document.getElementById("MainColor")!.style.border = "2px solid #96ADC5";
       document.getElementById("AccentColor")!.style.border =
         "2px solid #486584";
@@ -191,9 +203,9 @@ export const Home = () => {
         "2px solid #96ADC5";
     }
     if (id === "Action") {
-      console.log("Action läpi");
       setCurrentColor(3);
       setColor(color3);
+      localStorage.setItem("color3", color3);
       document.getElementById("MainColor")!.style.border = "2px solid #96ADC5";
       document.getElementById("AccentColor")!.style.border =
         "2px solid #96ADC5";
