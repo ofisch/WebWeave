@@ -405,10 +405,16 @@ Welcome to our cozy neighborhood coffee shop! We are dedicated to providing our 
                 </p>
                 <p>Socials</p>
                 <div className="flex flex-row justify-center gap-1">
-                  <a href="https://www.instagram.com/lassiaa_/">
+                  <a
+                    className={frontPageStyle.icon}
+                    href="https://www.instagram.com/lassiaa_/"
+                  >
                     <InstagramIcon />
                   </a>
-                  <a href="https://www.linkedin.com/in/lassi-aaltonen-033042298">
+                  <a
+                    className={frontPageStyle.icon}
+                    href="https://www.linkedin.com/in/lassi-aaltonen-033042298"
+                  >
                     <LinkedInIcon />
                   </a>
                 </div>
@@ -433,10 +439,16 @@ Welcome to our cozy neighborhood coffee shop! We are dedicated to providing our 
                 </p>
                 <p>Socials</p>
                 <div className="flex flex-row justify-center gap-1">
-                  <a href="https://www.instagram.com/olioonni/">
+                  <a
+                    className={frontPageStyle.icon}
+                    href="https://www.instagram.com/olioonni/"
+                  >
                     <InstagramIcon />
                   </a>
-                  <a href="https://www.linkedin.com/in/onni-fischer-ab3923266/">
+                  <a
+                    className={frontPageStyle.icon}
+                    href="https://www.linkedin.com/in/onni-fischer-ab3923266/"
+                  >
                     <LinkedInIcon />
                   </a>
                 </div>
@@ -461,10 +473,16 @@ Welcome to our cozy neighborhood coffee shop! We are dedicated to providing our 
                 </p>
                 <p>Socials</p>
                 <div className="flex flex-row justify-center gap-1">
-                  <a href="https://www.instagram.com/eetupasonen/">
+                  <a
+                    className={frontPageStyle.icon}
+                    href="https://www.instagram.com/eetupasonen/"
+                  >
                     <InstagramIcon />
                   </a>
-                  <a href="https://www.linkedin.com/in/eetu-pasonen-246b6b2a3/">
+                  <a
+                    className={frontPageStyle.icon}
+                    href="https://www.linkedin.com/in/eetu-pasonen-246b6b2a3/"
+                  >
                     <LinkedInIcon />
                   </a>
                 </div>

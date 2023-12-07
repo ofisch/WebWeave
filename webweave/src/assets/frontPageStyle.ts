@@ -62,6 +62,7 @@ const frontPageStyle = {
   name: "text-sm title-font font-medium text-gray-900 tracking-widest",
   email: "leading-relaxed mb-3 text-xs",
   info: "leading-relaxed mb-3",
+  icon: "hover:text-action transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110",
 
   imgDarken:
     "ease-in-out duration-300 bg-black bg-opacity-20 hover:bg-opacity-0 h-full w-full",
