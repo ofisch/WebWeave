@@ -3,7 +3,7 @@ const frontPageStyle = {
 
   header: "hidden",
   headerSticky: "sticky top-0 left-0 font-sometype mx-4 z-10 h-20",
-  headerContent: "ease-in-out duration-300 flex flex-row gap-4",
+  headerContent: "ease-in-out duration-300 rounded-b-md flex flex-row gap-4",
   headerContentContrast:
     "ease-in-out duration-300 bg-gray-100 rounded-b-md flex flex-row gap-4",
   headerH1: "text-4xl text-left text-action font-sourcecode p-4",
@@ -11,7 +11,7 @@ const frontPageStyle = {
   headerA:
     "text-white relative cursor-pointer transition-all duration-500 before:content-[''] before:absolute before:-bottom-1 before:left-0 before:w-0 before:h-0.5 before:rounded-md before:opacity-0 before:transition-all before:duration-500 before:bg-white hover:before:w-full hover:before:opacity-100",
   headerAContrast:
-    "text-gray-700 text-white relative cursor-pointer transition-all duration-500 before:content-[''] before:absolute before:-bottom-1 before:left-0 before:w-0 before:h-0.5 before:rounded-md before:opacity-0 before:transition-all before:duration-500 before:bg-white hover:before:w-full hover:before:opacity-100",
+    "text-gray-700 text-white relative cursor-pointer transition-all duration-500 before:content-[''] before:absolute before:-bottom-1 before:left-0 before:w-0 before:h-0.5 before:rounded-md before:opacity-0 before:transition-all before:duration-500 before:bg-gray-700 hover:before:w-full hover:before:opacity-100",
   headerButtons: "space-x-4 justify-self-end ml-auto p-4",
   startCreatingButton: "text-white bg-action px-4 py-2 rounded-full shadow-md",
 
