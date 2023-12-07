@@ -14,6 +14,10 @@ export const Heading = () => {
     navigate("/generator");
   };
 
+  const goToLanding = () => {
+    navigate("/");
+  };
+
   const goToProfile = () => {
     if (!user) {
       navigate("/login");
@@ -29,7 +33,7 @@ export const Heading = () => {
       {location.pathname === "/generator" ? (
         <div className="flex justify-between">
           <div className="w-6"></div>
-          <div onClick={goToIndex}>
+          <div onClick={goToLanding} style={{ cursor: "pointer" }}>
             <h1>&lt;Webweave/&gt;</h1>
           </div>
           <button
@@ -42,7 +46,7 @@ export const Heading = () => {
       ) : location.pathname === "/profile" ? (
         <div className="flex justify-between">
           <div className="w-6"></div>
-          <div onClick={goToIndex}>
+          <div onClick={goToLanding}>
             <h1>&lt;Webweave/&gt;</h1>
           </div>
           <button
@@ -55,7 +59,7 @@ export const Heading = () => {
       ) : location.pathname === "/login" ? (
         <div className="flex justify-between">
           <div className="w-6"></div>
-          <div onClick={goToIndex}>
+          <div onClick={goToLanding}>
             <h1>&lt;Webweave/&gt;</h1>
           </div>
           <button
@@ -68,7 +72,7 @@ export const Heading = () => {
       ) : (
         <div className="flex justify-between">
           <div className="w-14"></div>
-          <div onClick={goToIndex}>
+          <div onClick={goToLanding}>
             <h1>&lt;Webweave/&gt;</h1>
           </div>
           <div className="flex gap-2">

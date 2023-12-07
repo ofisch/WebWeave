@@ -185,7 +185,7 @@ export const Profile = () => {
   const signOut = async () => {
     localStorage.removeItem("pages");
     await auth.signOut();
-    navigate("/login");
+    navigate("/");
   };
 
   const goEdit = (page: string) => {
