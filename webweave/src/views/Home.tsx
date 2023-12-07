@@ -23,6 +23,7 @@ import ClearModal from "../components/modals/ClearModal";
 import RemoveImageModal from "../components/modals/RemoveImageModal";
 
 export const Home = () => {
+  const [settingsToggleMode, setSettingsToggleMode] = useState(false);
   const [settingsMode, setSettingsMode] = useState(false);
   const [color, setColor] = useState("#2C3E50");
   const [currentColor, setCurrentColor] = useState(1);
@@ -111,8 +112,10 @@ export const Home = () => {
 
   const hideSettings = () => {
     if (document.getElementById("settingsDiv")!.style.display === "none") {
+      setSettingsMode(true);
       document.getElementById("settingsDiv")!.style.display = "block";
     } else {
+      setSettingsMode(false);
       document.getElementById("settingsDiv")!.style.display = "none";
     }
   };
@@ -214,13 +217,13 @@ export const Home = () => {
     } else {
       fontPrompt = " Use " + font + " font.";
     }
-    if (document.getElementById("Main")!.style.display === "block") {
+    if (document.getElementById("Main")!.style.display === "grid") {
       mainColorPrompt = " Use " + color1 + " as main color.";
     }
-    if (document.getElementById("Accent")!.style.display === "block") {
+    if (document.getElementById("Accent")!.style.display === "grid") {
       accentColorPrompt = " Use " + color2 + " as accent color.";
     }
-    if (document.getElementById("Action")!.style.display === "block") {
+    if (document.getElementById("Action")!.style.display === "grid") {
       actionColorPrompt = " Use " + color3 + " as action color.";
     }
     colorPrompt =
@@ -229,9 +232,9 @@ export const Home = () => {
       actionColorPrompt +
       " implement the colors using the 60 30 10 rule. Use every color in the ratio of 60 30 10. Main being 60. Accent being 30. Action being 10.";
     finalPrompt = prompt + fontPrompt + frameworkPrompt + colorPrompt;
-    if (settingsMode === false) {
+    if (settingsToggleMode === false) {
       return prompt;
-    } else if (settingsMode === true) {
+    } else if (settingsToggleMode === true) {
       return finalPrompt;
     } else {
       return prompt;
@@ -618,11 +621,11 @@ export const Home = () => {
 
           <div className={style.ternanryContainer}>
             <div className={style.ternarySetting}>
-              {settingsMode ? (
+              {settingsToggleMode ? (
                 <div className={style.advSettings}>
                   <button
                     className={style.advSettingsToggleOff}
-                    onClick={() => setSettingsMode(false)}
+                    onClick={() => setSettingsToggleMode(false)}
                   >
                     <ToggleOnIcon />
                   </button>
@@ -631,14 +634,14 @@ export const Home = () => {
                     onClick={() => hideSettings()}
                   >
                     Advanced settings
-                    <ArrowDropDownIcon />
+                    {settingsMode ? <ArrowDropDownIcon /> : <ArrowDropUpIcon />}
                   </button>
                 </div>
               ) : (
                 <div className={style.advSettings}>
                   <button
                     className={style.advSettingsToggleOn}
-                    onClick={() => setSettingsMode(true)}
+                    onClick={() => setSettingsToggleMode(true)}
                   >
                     <ToggleOffIcon />
                   </button>
@@ -647,7 +650,7 @@ export const Home = () => {
                     onClick={() => hideSettings()}
                   >
                     Advanced settings
-                    <ArrowDropUpIcon />
+                    {settingsMode ? <ArrowDropDownIcon /> : <ArrowDropUpIcon />}
                   </button>
                 </div>
               )}
