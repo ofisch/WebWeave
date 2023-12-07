@@ -439,20 +439,26 @@ export const Edit = () => {
     const updatedList = [...imageList, newImage];
     setImageList(updatedList);
 
-    const imagePrompt = `Add this image to the site: ${imageLink}`;
-
-    setPrompt((prevPrompt) => `${prevPrompt}\n\n${imagePrompt}`);
-
     localStorage.setItem("imageList", JSON.stringify(updatedList));
+
+    const selectedImage = updatedList.find((image) => image.name === imageName);
+    if (selectedImage) {
+      setSelectedImageName(selectedImage.name);
+      setSelectedImage(selectedImage.link);
+    } else {
+      setSelectedImage("");
+    }
 
     setImageName("");
     setImageLink("");
   };
 
   const handleAddSelectedImage = () => {
+    console.log(alert);
     if (selectedImage) {
       const imagePrompt = `Add this image to the site: ${selectedImage}`;
       setPrompt((prevPrompt) => `${prevPrompt}\n\n${imagePrompt}`);
+      console.log(alert);
     } else {
       console.error("No image selected");
     }
@@ -599,23 +605,6 @@ export const Edit = () => {
           </div>
           <div className={style.ternanryContainer}>
             <div className={style.ternarySetting}>
-              {toggleImageBank ? (
-                <button
-                  className={"text-action"}
-                  onClick={() => handleImageBankToggle()}
-                >
-                  Image bank <ArrowDropUpIcon />
-                </button>
-              ) : (
-                <button
-                  className={"text-action"}
-                  onClick={() => handleImageBankToggle()}
-                >
-                  Image bank <ArrowDropDownIcon />
-                </button>
-              )}
-            </div>
-            <div className={style.textGeneratorSetting}>
               {toggleTextGenerator ? (
                 <button
                   className={"text-action"}
@@ -629,6 +618,23 @@ export const Edit = () => {
                   onClick={() => handleTextGeneratorToggle()}
                 >
                   Text generator <ArrowDropDownIcon />
+                </button>
+              )}
+            </div>
+            <div className={style.textGeneratorSetting}>
+              {toggleImageBank ? (
+                <button
+                  className={"text-action"}
+                  onClick={() => handleImageBankToggle()}
+                >
+                  Image bank <ArrowDropUpIcon />
+                </button>
+              ) : (
+                <button
+                  className={"text-action"}
+                  onClick={() => handleImageBankToggle()}
+                >
+                  Image bank <ArrowDropDownIcon />
                 </button>
               )}
             </div>
