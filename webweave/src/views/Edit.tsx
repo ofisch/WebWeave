@@ -190,14 +190,14 @@ export const Edit = () => {
     console.log("apiResponse: ", apiResponseHtml);
     console.log("contentWithScript: ", contentWithScript);
 
-    setHtmlEdit(apiResponseHtml);
+    setHtmlEdit(contentWithScript);
     setLoading(false);
 
     const currentHtml = localStorage.getItem("html") || "";
     localStorage.setItem("undo", currentHtml);
     localStorage.setItem("redo", "");
 
-    localStorage.setItem("html", apiResponseHtml);
+    localStorage.setItem("html", contentWithScript);
     localStorage.setItem("editPrompt", prompt);
 
     // lasketaan API-pyynnön kesto ja asetetaan se requestTime-stateen

@@ -23,12 +23,19 @@ import ClearModal from "../components/modals/ClearModal";
 import RemoveImageModal from "../components/modals/RemoveImageModal";
 
 export const Home = () => {
-  const [fontSizeSettings, setFontSizeSettings] = React.useState<string>("normal (16px)");
+  const [fontSizeSettings, setFontSizeSettings] =
+    React.useState<string>("normal (16px)");
   const [settingsToggleMode, setSettingsToggleMode] = useState(false);
   const [currentColor, setCurrentColor] = useState(1);
-  const [color1, setColor1] = useState(localStorage.getItem('color1') || "#2C3E50");
-  const [color2, setColor2] = useState(localStorage.getItem('color2') || "#2C3E50");
-  const [color3, setColor3] = useState(localStorage.getItem('color3') || "#2C3E50");
+  const [color1, setColor1] = useState(
+    localStorage.getItem("color1") || "#2C3E50"
+  );
+  const [color2, setColor2] = useState(
+    localStorage.getItem("color2") || "#CCCCCC"
+  );
+  const [color3, setColor3] = useState(
+    localStorage.getItem("color3") || "#00BFFF"
+  );
   const [settingsMode, setSettingsMode] = useState(false);
   const [color, setColor] = useState("#2C3E50");
   const [framework, setFrameworkSettings] = React.useState<string>("");
@@ -228,10 +235,7 @@ export const Home = () => {
     if (document.getElementById("Action")!.style.display === "grid") {
       actionColorPrompt = " Use " + color3 + " as action color.";
     }
-    colorPrompt =
-      mainColorPrompt +
-      accentColorPrompt +
-      actionColorPrompt;
+    colorPrompt = mainColorPrompt + accentColorPrompt + actionColorPrompt;
     finalPrompt = prompt + fontPrompt + frameworkPrompt + colorPrompt;
     if (settingsToggleMode === false) {
       return prompt;
@@ -250,17 +254,20 @@ export const Home = () => {
     const action = document.getElementById("ActionColorCode");
     if (currentColor === 1) {
       setColor1(newColor.hex);
+      localStorage.setItem("color1", newColor.hex);
       if (main !== null) {
         main.innerHTML = newColor.hex;
       }
     }
     if (currentColor === 2) {
+      localStorage.setItem("color2", newColor.hex);
       setColor2(newColor.hex);
       if (accent !== null) {
         accent.innerHTML = newColor.hex;
       }
     }
     if (currentColor === 3) {
+      localStorage.setItem("color3", newColor.hex);
       setColor3(newColor.hex);
       if (action !== null) {
         action.innerHTML = newColor.hex;
@@ -635,7 +642,7 @@ export const Home = () => {
                     onClick={() => hideSettings()}
                   >
                     Advanced settings
-                    {settingsMode ? <ArrowDropDownIcon /> : <ArrowDropUpIcon />}
+                    {settingsMode ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
                   </button>
                 </div>
               ) : (
@@ -651,7 +658,7 @@ export const Home = () => {
                     onClick={() => hideSettings()}
                   >
                     Advanced settings
-                    {settingsMode ? <ArrowDropDownIcon /> : <ArrowDropUpIcon />}
+                    {settingsMode ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
                   </button>
                 </div>
               )}
@@ -842,15 +849,11 @@ export const Home = () => {
                     className={style.select}
                     onChange={handleFontSizeSettingsChange}
                   >
-                    <option className={style.selectOption}>
-                      small (12px)
-                    </option>
+                    <option className={style.selectOption}>small (12px)</option>
                     <option className={style.selectOption}>
                       normal (16px)
                     </option>
-                    <option className={style.selectOption}>
-                      big (20px)
-                    </option>
+                    <option className={style.selectOption}>big (20px)</option>
                   </select>
                 </div>
               </div>

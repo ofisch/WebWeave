@@ -11,7 +11,7 @@ const frontPageStyle = {
   headerA:
     "text-white relative cursor-pointer transition-all duration-500 before:content-[''] before:absolute before:-bottom-1 before:left-0 before:w-0 before:h-0.5 before:rounded-md before:opacity-0 before:transition-all before:duration-500 before:bg-white hover:before:w-full hover:before:opacity-100",
   headerAContrast:
-    "text-gray-700 text-white relative cursor-pointer transition-all duration-500 before:content-[''] before:absolute before:-bottom-1 before:left-0 before:w-0 before:h-0.5 before:rounded-md before:opacity-0 before:transition-all before:duration-500 before:bg-gray-700 hover:before:w-full hover:before:opacity-100",
+    "text-gray-700 relative cursor-pointer transition-all duration-500 before:content-[''] before:absolute before:-bottom-1 before:left-0 before:w-0 before:h-0.5 before:rounded-md before:opacity-0 before:transition-all before:duration-500 before:bg-gray-700 hover:before:w-full hover:before:opacity-100",
   headerButtons: "space-x-4 justify-self-end ml-auto p-4",
   startCreatingButton: "text-white bg-action px-4 py-2 rounded-full shadow-md",
 
@@ -62,6 +62,7 @@ const frontPageStyle = {
   name: "text-sm title-font font-medium text-gray-900 tracking-widest",
   email: "leading-relaxed mb-3 text-xs",
   info: "leading-relaxed mb-3",
+  icon: "hover:text-action transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110",
 
   imgDarken:
     "ease-in-out duration-300 bg-black bg-opacity-20 hover:bg-opacity-0 h-full w-full",
