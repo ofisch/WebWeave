@@ -295,25 +295,17 @@ Welcome to our cozy neighborhood coffee shop! We are dedicated to providing our 
             </div>
             <div className={frontPageStyle.infoText}>
               <p>
-                <span className="text-action">Webweave</span> offers a variety
-                of benefits and functionalities for users looking to create a
-                professional and polished website. Users can effortlessly design
-                custom websites with minimal technical knowledge or experience
-                required. The AI technology leverages data and information
-                provided by the user to generate a visually appealing and
-                responsive website tailored to their specific needs and
-                preferences. Users can easily choose from a range of color
-                schemes, fonts, and layouts to customize the look and feel of
-                their website. Additionally,{" "}
-                <span className="text-action">Webweave</span> can help optimize
-                the site for search engines, ensuring maximum visibility and
-                traffic. With its intuitive interface and automated design
-                capabilities, users can save time and effort while still
-                achieving a high-quality web presence. Whether it's for a
-                personal blog, business portfolio, or e-commerce site,{" "}
-                <span className="text-action">Webweave</span> provides a
-                user-friendly solution for creating a professional and engaging
-                online platform at a low cost.
+                <span className={"text-action"}>Webweave</span> simplifies
+                website creation by offering a user-friendly platform with AI
+                technology. Users, even those with minimal technical expertise,
+                can effortlessly design custom websites. The AI leverages
+                user-provided data to generate visually appealing, responsive
+                sites tailored to specific preferences. Customization options
+                include color schemes, fonts, and layouts. Ideal for personal
+                blogs, business portfolios, or e-commerce sites,{" "}
+                <span className={"text-action"}>Webweave</span> provides a
+                cost-effective solution for creating professional and engaging
+                online platforms.
               </p>
             </div>
           </div>

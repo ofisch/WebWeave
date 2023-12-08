@@ -32,7 +32,7 @@ const frontPageStyle = {
   infoContainer:
     "h-full border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden",
   infoImg: "bg-cover bg-top bg-no-repeat w-full h-96",
-  infoText: "self-center text-left text-md",
+  infoText: "self-center text-center text-md",
 
   tutorialSection: "mx-auto text-gray-700",
   moveButtonL:
