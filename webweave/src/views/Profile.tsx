@@ -154,7 +154,10 @@ export const Profile = () => {
     setEditModalOpen(false);
   };
 
-  pages.sort();
+  // Convert all items to lowercase and then sort
+  pages.sort(function (a, b) {
+    return a.toLowerCase().localeCompare(b.toLowerCase());
+  });
 
   // tulostetaan sivut listaksi
   const listPages = pages.map((item, index) => (

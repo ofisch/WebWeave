@@ -45,7 +45,7 @@ const frontPageStyle = {
   explanationH4: "text-2xl text-left pb-4",
   explanation: "",
   tutorialPrompt: "self-end",
-  promptH4: "text-2xl text-left font-sourcecode p-4",
+  promptH4: "text-2xl text-left font-sourcecode py-4",
   prompt: "h-32 bg-blue-500 w-full bg-secondary rounded-lg text-black",
   iframeContainer: "w-full",
   iframe: "min-w-full h-full max-w-full rounded-lg shadow-lg",

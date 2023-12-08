@@ -17,7 +17,7 @@ const style = {
   buttonGenerate:
     "p-1 text-black rounded-lg col-span-2 h-14 font-semibold  transition-all duration-500 bg-gradient-to-tl from-emerald-500 via-cyan-300 to-action bg-size-200 bg-pos-0 hover:bg-pos-100",
   buttonGenerateEdit:
-    "p-1 text-black rounded-lg col-span-3 h-14 font-semibold  transition-all duration-500 bg-gradient-to-tl from-emerald-500 via-cyan-300 to-action bg-size-200 bg-pos-0 hover:bg-pos-100",
+    "p-1 text-black rounded-lg col-span-2 h-14 font-semibold  transition-all duration-500 bg-gradient-to-tl from-emerald-500 via-cyan-300 to-action bg-size-200 bg-pos-0 hover:bg-pos-100",
   textGenerate: "flex-auto animate-pulse",
   buttonClear:
     "bg-action p-1 text-black rounded-lg transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",

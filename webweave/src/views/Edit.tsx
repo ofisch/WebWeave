@@ -25,6 +25,7 @@ import DownloadModal from "../components/modals/DownloadModal";
 import SaveChangesModal from "../components/modals/SaveChangesModal";
 import RemoveImageModal from "../components/modals/RemoveImageModal";
 import TextGenerator from "../components/TextGenerator";
+import ClearModal from "../components/modals/ClearModal";
 
 export const Edit = () => {
   const user = useContext(AuthContext);
@@ -486,6 +487,23 @@ export const Edit = () => {
     }
   };
 
+  const [clearModalIsOpen, setClearModalIsOpen] = useState(false);
+
+  const closeClearModal = () => {
+    setClearModalIsOpen(false);
+  };
+
+  const clearPrompt = () => {
+    setClearModalIsOpen(true);
+  };
+
+  const handleClearModalSubmit = async () => {
+    setClearModalIsOpen(false);
+
+    setPrompt("");
+    localStorage.setItem("editPrompt", "");
+  };
+
   return (
     <>
       <div className={style.pageContainer}>
@@ -507,6 +525,12 @@ export const Edit = () => {
           isOpen={isDownloadModalOpen}
           onClose={closeModal}
           onSubmit={handleDownloadModalSubmit}
+        />
+
+        <ClearModal
+          isOpen={clearModalIsOpen}
+          onClose={closeClearModal}
+          onConfirm={handleClearModalSubmit}
         />
       </div>
 
@@ -730,16 +754,24 @@ export const Edit = () => {
 
           <div className={style.navHomePrompt}>
             {prompt !== "" ? (
-              <button
-                className={style.buttonLog}
-                onClick={() => handleOptimize()}
-              >
-                Optimize prompt
-              </button>
+              <>
+                <button className={style.buttonClear} onClick={clearPrompt}>
+                  Clear
+                </button>
+                <button
+                  className={style.buttonLog}
+                  onClick={() => handleOptimize()}
+                >
+                  Optimize prompt
+                </button>
+              </>
             ) : (
-              <button className={style.buttonClearDisabled}>
-                Optimize prompt
-              </button>
+              <>
+                <button className={style.buttonClearDisabled}>Clear</button>
+                <button className={style.buttonClearDisabled}>
+                  Optimize prompt
+                </button>
+              </>
             )}
             <button
               className={`${
