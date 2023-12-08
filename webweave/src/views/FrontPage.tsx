@@ -383,7 +383,7 @@ Welcome to our cozy neighborhood coffee shop! We are dedicated to providing our 
       <section className={frontPageStyle.teamSection}>
         <div className={frontPageStyle.teamContainer}>
           <h2 className={frontPageStyle.teamHeading} id="team">
-            About us
+            Team <span className="text-action">Webweave</span>
           </h2>
           <div className="grid grid-cols-3 gap-4">
             <div className={frontPageStyle.memberContainer}>
@@ -391,7 +391,7 @@ Welcome to our cozy neighborhood coffee shop! We are dedicated to providing our 
                 className={frontPageStyle.teamImg}
                 style={{
                   backgroundImage:
-                    "url('https://cdn.discordapp.com/attachments/1077685085916102781/1181234424084434964/IMG_5737.JPG?ex=65805148&is=656ddc48&hm=3b44922c81afc186e35fb909471807346583b83e286b4c42d80e90528da18124&')",
+                    "url('https://cdn.discordapp.com/attachments/1181546521397821440/1182687046008053860/IMG_1529.png?ex=65859a25&is=65732525&hm=80efd7f9070d8eb97c57196267947ee98cd0b098fd930fe9210bf359b6b759bb&')",
                 }}
               >
                 <div className={frontPageStyle.imgDarken}></div>
@@ -401,9 +401,6 @@ Welcome to our cozy neighborhood coffee shop! We are dedicated to providing our 
                 <h2 className={frontPageStyle.name}>Lassi Aaltonen</h2>
                 <p className={frontPageStyle.email}>
                   lassi.antero.aaltonen@gmail.com
-                </p>
-                <p className={frontPageStyle.info}>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
                 </p>
                 <p>Socials</p>
                 <div className="flex flex-row justify-center gap-1">
@@ -428,7 +425,7 @@ Welcome to our cozy neighborhood coffee shop! We are dedicated to providing our 
                 className={frontPageStyle.teamImg}
                 style={{
                   backgroundImage:
-                    "url('https://cdn.discordapp.com/attachments/1077685085916102781/1181219686763991080/IMG_2152.jpg?ex=6580438f&is=656dce8f&hm=30bac9527c13ead3787b847355647f62c1c823ae58245ca3562c996fd91323d3&')",
+                    "url('https://cdn.discordapp.com/attachments/1181546521397821440/1182687635676872735/kuva.jpg?ex=65859ab1&is=657325b1&hm=d118ec7ca44a73d8ff9382016a1b9e9e97f293b7f5c3cad15ead7a61406db7b8&')",
                 }}
               >
                 <div className={frontPageStyle.imgDarken}></div>
@@ -436,9 +433,7 @@ Welcome to our cozy neighborhood coffee shop! We are dedicated to providing our 
               <div className="py-6">
                 <h2 className={frontPageStyle.name}>Onni Fischer</h2>
                 <p className={frontPageStyle.email}>onni.fischer@gmail.com</p>
-                <p className={frontPageStyle.info}>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                </p>
+
                 <p>Socials</p>
                 <div className="flex flex-row justify-center gap-1">
                   <a
@@ -462,7 +457,7 @@ Welcome to our cozy neighborhood coffee shop! We are dedicated to providing our 
                 className={frontPageStyle.teamImg}
                 style={{
                   backgroundImage:
-                    "url('https://cdn.discordapp.com/attachments/1077685085916102781/1181219926481063956/IMG-20220922-WA0003.jpg?ex=658043c8&is=656dcec8&hm=727ce7c5919a485dd6cdf3cd12189a56fadaf6fca6ac80a2d1f7d9d26e5cbfc9&')",
+                    "url('https://cdn.discordapp.com/attachments/1077685085916102781/1182687552180846602/IMG-20231208-WA0001.jpg?ex=65859a9d&is=6573259d&hm=20e978cf459369a6040d91f4de0c3de392e118ee234a5a04d21016211331f24f&')",
                 }}
               >
                 <div className={frontPageStyle.imgDarken}></div>
@@ -470,9 +465,7 @@ Welcome to our cozy neighborhood coffee shop! We are dedicated to providing our 
               <div className="py-6">
                 <h2 className={frontPageStyle.name}>Eetu Pasonen</h2>
                 <p className={frontPageStyle.email}>eetu.pasonen@hotmail.com</p>
-                <p className={frontPageStyle.info}>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                </p>
+
                 <p>Socials</p>
                 <div className="flex flex-row justify-center gap-1">
                   <a

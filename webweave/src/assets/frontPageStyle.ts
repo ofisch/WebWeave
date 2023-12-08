@@ -13,7 +13,8 @@ const frontPageStyle = {
   headerAContrast:
     "text-gray-700 relative cursor-pointer transition-all duration-500 before:content-[''] before:absolute before:-bottom-1 before:left-0 before:w-0 before:h-0.5 before:rounded-md before:opacity-0 before:transition-all before:duration-500 before:bg-gray-700 hover:before:w-full hover:before:opacity-100",
   headerButtons: "space-x-4 justify-self-end ml-auto p-4",
-  startCreatingButton: "text-white bg-action px-4 py-2 rounded-full shadow-md",
+  startCreatingButton:
+    "text-white bg-action px-4 py-2 rounded-full shadow-md hover:bg-action-hover transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110",
 
   bgImage: "w-screen h-screen bg-cover bg-center bg-no-repeat font-sometype",
   imgContent: "bg-black bg-opacity-50 h-screen grid grid-cols-1 gap-4",
@@ -23,7 +24,7 @@ const frontPageStyle = {
   imgContentButtons:
     "h-20 pb-20 self-center justify-self-center grid grid-cols-1 gap-4",
   imgContentCreateButton:
-    "mx-2 p-4 w-80 text-white text-xl bg-action rounded-full shadow-md ",
+    "mx-2 p-4 w-80 text-white text-xl bg-action rounded-full shadow-md hover:bg-action-hover transition duration-500 ease-in-out transform hover:-translate-y-1 hover:scale-110",
   imgContentSignButton:
     "w-fit mx-auto text-white relative cursor-pointer transition-all duration-500 before:content-[''] before:absolute before:-bottom-1 before:left-0 before:w-0 before:h-1 before:rounded-md before:opacity-0 before:transition-all before:duration-500 before:bg-white hover:before:w-full hover:before:opacity-100",
 
