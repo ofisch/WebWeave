@@ -96,7 +96,6 @@ Welcome to our cozy neighborhood coffee shop! We are dedicated to providing our 
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
       setIsScrolled(scrollPosition > 100);
-      console.log(scrollPosition);
     };
 
     window.addEventListener("scroll", handleScroll);
@@ -110,9 +109,6 @@ Welcome to our cozy neighborhood coffee shop! We are dedicated to providing our 
       const scrollPosition = window.scrollY;
       const screenHeight = window.innerHeight;
       setContrast(scrollPosition > screenHeight);
-      if (scrollPosition > screenHeight) {
-        console.log("Contrast true");
-      }
     };
 
     window.addEventListener("scroll", handleContrast);

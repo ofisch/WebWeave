@@ -292,7 +292,7 @@ export const Login = () => {
                 <li>
                   <button
                     className={style.buttonPage}
-                    onClick={() => goTo("/")}
+                    onClick={() => goTo("/generator")}
                   >
                     Start creating!
                   </button>
