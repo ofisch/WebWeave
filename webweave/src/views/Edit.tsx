@@ -281,14 +281,15 @@ export const Edit = () => {
   };
 
   const handleOptimize = async () => {
-    await setRoleContent(roles.optimizer);
+    await setRoleContent(roles.optimizerEdit);
   };
 
   useEffect(() => {
     const handleEffect = async () => {
       if (roleContent === roles.editor) {
         await handleApiRequest();
-      } else if (roleContent === roles.optimizer) {
+        console.log("roleContent", roleContent);
+      } else if (roleContent === roles.optimizerEdit) {
         await handleOptimizeApiRequest();
       }
     };
