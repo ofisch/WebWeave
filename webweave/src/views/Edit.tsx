@@ -288,7 +288,6 @@ export const Edit = () => {
     const handleEffect = async () => {
       if (roleContent === roles.editor) {
         await handleApiRequest();
-        console.log("roleContent", roleContent);
       } else if (roleContent === roles.optimizerEdit) {
         await handleOptimizeApiRequest();
       }
