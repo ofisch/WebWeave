@@ -27,6 +27,7 @@ import RemoveImageModal from "../components/modals/RemoveImageModal";
 import TextGenerator from "../components/TextGenerator";
 import ClearModal from "../components/modals/ClearModal";
 
+// Komponentti joka renderöi sivun muokkausnäkymän
 export const Edit = () => {
   const user = useContext(AuthContext);
 
@@ -37,6 +38,7 @@ export const Edit = () => {
   );
   const [prompt, setPrompt] = React.useState<string>("");
   const promptAreaRef = React.useRef<HTMLTextAreaElement>(null);
+  const [content, setContent] = useState("");
 
   const [loading, setLoading] = useState(false);
   const [requestStatus, setRequestStatus] = useState<string>("");
@@ -50,6 +52,9 @@ export const Edit = () => {
 
   const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
   const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false);
+  const [clearModalIsOpen, setClearModalIsOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isChangeModalOpen, setChangeModalOpen] = useState(false);
 
   const usersCollection = firestore.collection("users");
   const userDocRef = usersCollection.doc(user?.uid);
@@ -57,12 +62,20 @@ export const Edit = () => {
 
   const [roleContent, setRoleContent] = useState<string>("");
 
+  const [isTooltipVisible, setTooltipVisible] = useState(false);
+  const [isTooltipImageVisible, setTooltipImageVisible] = useState(false);
+
+  const [imageName, setImageName] = useState("");
+  const [imageLink, setImageLink] = useState("");
+  const [imageList, setImageList] = useState<{ name: string; link: string }[]>(
+    []
+  );
+  const [selectedImageName, setSelectedImageName] = useState<string>("");
+  const [selectedImage, setSelectedImage] = useState<string>("");
+
   let currentPage: string = "";
 
-  //tyhjennetään localStorage, jotta käyttäjä ei näe vilausta edellisestä muokatusta sivusta
-  //debugia varten kommentoitu
-  //localStorage.setItem("html", "");
-
+  // tarkistetaan onko sivu olemassa
   const checkPageName = () => {
     if (pageToEdit === undefined || pageToEdit === null) {
       currentPage = ""; // annetaan oletusarvo, jotta sivu ei ole null tai undefined
@@ -75,7 +88,7 @@ export const Edit = () => {
 
   // sivun sisällön haku firestoresta
   // tehokkaampi tapa hakea sivun sisältö firestoresta, vähemmän kutsuja.
-  //  ei iteroi koko kokoelmaa läpi, vaan hakee tiettyä dokumenttia heti
+  // ei iteroi koko kokoelmaa läpi, vaan hakee tiettyä dokumenttia heti
   const getPageContent = async () => {
     try {
       const docSnapshot = await pagesSubcollectionRef
@@ -84,7 +97,6 @@ export const Edit = () => {
 
       if (!docSnapshot.empty) {
         const docData = docSnapshot.docs[0].data();
-        console.log("docData", docData);
         const content = docData.content;
 
         // lisätään sivun sisältöön textEdit.script, jotta sivun tekstielementtejä voidaan muokata
@@ -94,7 +106,6 @@ export const Edit = () => {
         localStorage.setItem("html", contentWithScript);
         setHtmlEdit(localStorage.getItem("html")!);
       } else {
-        // jos sivun dokumenttia ei löydy, tulostetaan virheilmoitus
         console.log("Document not found for pageName:", currentPage);
       }
     } catch (error) {
@@ -128,11 +139,6 @@ export const Edit = () => {
     }
   };
 
-  //uuden version tallennus firestoreen
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isChangeModalOpen, setChangeModalOpen] = useState(false);
-  const [content, setContent] = useState("");
-
   const savePage = async (content: string) => {
     setContent(content);
     setIsModalOpen(true);
@@ -145,6 +151,7 @@ export const Edit = () => {
     setIsRemoveModalOpen(false);
   };
 
+  // tallennetaan sivu firestoreen modalin kautta
   const handleModalSubmit = async (pageNameInput: string) => {
     const page = {
       pageName: pageNameInput,
@@ -170,7 +177,7 @@ export const Edit = () => {
     }
   };
 
-  // ai-editori
+  // Muokkauspyynnön lähettäminen OpenAI:n API:lle
   const handleApiRequest = async () => {
     const startTime = performance.now();
     setRequestStatus("Request in progress");
@@ -183,13 +190,9 @@ export const Edit = () => {
 
     const apiResponse = await makeApiRequest(editPrompt, roleContent);
     const apiResponseHtml = cleanCode(apiResponse);
-    console.log(apiResponseHtml);
     // lisätään sivun sisältöön textEdit.script, jotta sivun tekstielementtejä voidaan muokata
     const textEditScript = textEdit.script;
     const contentWithScript = apiResponseHtml + textEditScript;
-
-    console.log("apiResponse: ", apiResponseHtml);
-    console.log("contentWithScript: ", contentWithScript);
 
     setHtmlEdit(contentWithScript);
     setLoading(false);
@@ -228,8 +231,6 @@ export const Edit = () => {
           lastObject.requestTime = formattedTime;
 
           const updatedData = JSON.stringify(dataArray);
-          // console.log("updated json: " + updatedData);
-
           localStorage.setItem("log.json", updatedData);
         } else {
           console.error("Existing data is not a valid array or is empty.");
@@ -244,6 +245,7 @@ export const Edit = () => {
     setRoleContent("");
   };
 
+  // Optimointipyynnön lähettäminen OpenAI:n API:lle
   const handleOptimizeApiRequest = async () => {
     // ajastetaan API-pyynnön kesto ja tulostetaan se requestStatusiin
     const startTime = performance.now();
@@ -254,7 +256,6 @@ export const Edit = () => {
     // lähetetään prompt openai-API:lle ja asetetaan vastaus responseen-stateen
     const settingPrompt = prompt;
     const apiResponse = await makeApiRequest(settingPrompt, roleContent);
-    //const apiResponse = await makeApiRequest(settingPrompt);
 
     setPrompt(apiResponse);
     localStorage.setItem("userPrompt", prompt);
@@ -287,10 +288,8 @@ export const Edit = () => {
     const handleEffect = async () => {
       if (roleContent === roles.editor) {
         await handleApiRequest();
-        console.log("roleContent", roleContent);
       } else if (roleContent === roles.optimizer) {
         await handleOptimizeApiRequest();
-        console.log("roleContent", roleContent);
       }
     };
 
@@ -334,6 +333,7 @@ export const Edit = () => {
     setPrompt(event.target.value);
   };
 
+  // undo redo toiminnallisuus
   const handleUndo = () => {
     const currentHtml = localStorage.getItem("html") || "";
     localStorage.setItem("redo", currentHtml);
@@ -358,6 +358,7 @@ export const Edit = () => {
     }
   };
 
+  // tallennetaan html-editorin sisältö localStorageen
   const handleHtmlEditChange = (
     event: React.ChangeEvent<HTMLTextAreaElement>
   ) => {
@@ -380,9 +381,6 @@ export const Edit = () => {
     localStorage.setItem("undo", "");
     localStorage.setItem("redo", "");
   }, []);
-
-  const [isTooltipVisible, setTooltipVisible] = useState(false);
-  const [isTooltipImageVisible, setTooltipImageVisible] = useState(false);
 
   const handleDownloadModalSubmit = async () => {
     closeModal();
@@ -418,14 +416,6 @@ export const Edit = () => {
     setToggleImageBank(false);
   };
 
-  const [imageName, setImageName] = useState("");
-  const [imageLink, setImageLink] = useState("");
-  const [imageList, setImageList] = useState<{ name: string; link: string }[]>(
-    []
-  );
-  const [selectedImageName, setSelectedImageName] = useState<string>("");
-  const [selectedImage, setSelectedImage] = useState<string>("");
-
   useEffect(() => {
     const storedImages = localStorage.getItem("imageList");
     if (storedImages) {
@@ -435,6 +425,7 @@ export const Edit = () => {
     }
   }, []);
 
+  // tallennetaan kuvat localStorageen
   const handleAddImage = () => {
     const newImage = { name: imageName, link: imageLink };
     const updatedList = [...imageList, newImage];
@@ -450,6 +441,7 @@ export const Edit = () => {
     setImageLink("");
   };
 
+  // lisätään valittu kuva promptiin
   const handleAddSelectedImage = () => {
     if (selectedImage) {
       const imagePrompt = `Add this image to the site: ${selectedImage}`;
@@ -459,6 +451,7 @@ export const Edit = () => {
     }
   };
 
+  // poistetaan valittu kuva tallennetuista kuvista
   const handleRemoveSelectedImage = () => {
     if (selectedImage) {
       const updatedImageList = imageList.filter(
@@ -474,6 +467,7 @@ export const Edit = () => {
     }
   };
 
+  // valitaan kuva select menusta
   const handleImageSelection = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedImageName = e.target.value;
     setSelectedImageName(selectedImageName);
@@ -486,8 +480,6 @@ export const Edit = () => {
       setSelectedImage("");
     }
   };
-
-  const [clearModalIsOpen, setClearModalIsOpen] = useState(false);
 
   const closeClearModal = () => {
     setClearModalIsOpen(false);
@@ -623,23 +615,6 @@ export const Edit = () => {
           </div>
           <div className={style.ternanryContainer}>
             <div className={style.ternarySetting}>
-              {toggleImageBank ? (
-                <button
-                  className={"text-action"}
-                  onClick={() => handleImageBankToggle()}
-                >
-                  Image bank <ArrowDropUpIcon />
-                </button>
-              ) : (
-                <button
-                  className={"text-action"}
-                  onClick={() => handleImageBankToggle()}
-                >
-                  Image bank <ArrowDropDownIcon />
-                </button>
-              )}
-            </div>
-            <div className={style.textGeneratorSetting}>
               {toggleTextGenerator ? (
                 <button
                   className={"text-action"}
@@ -653,6 +628,23 @@ export const Edit = () => {
                   onClick={() => handleTextGeneratorToggle()}
                 >
                   Text generator <ArrowDropDownIcon />
+                </button>
+              )}
+            </div>
+            <div className={style.textGeneratorSetting}>
+              {toggleImageBank ? (
+                <button
+                  className={"text-action"}
+                  onClick={() => handleImageBankToggle()}
+                >
+                  Image bank <ArrowDropUpIcon />
+                </button>
+              ) : (
+                <button
+                  className={"text-action"}
+                  onClick={() => handleImageBankToggle()}
+                >
+                  Image bank <ArrowDropDownIcon />
                 </button>
               )}
             </div>

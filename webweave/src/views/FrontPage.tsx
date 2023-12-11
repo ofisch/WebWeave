@@ -11,11 +11,13 @@ import LinkedInIcon from "@mui/icons-material/LinkedIn";
 
 import { tutorials } from "../components/tutorialPages/tutorials";
 
+// Landing sivu, jossa esitellään Webweave ja sen ominaisuudet
 const FrontPage: React.FC = () => {
   const navigate = useNavigate();
   const [isScrolled, setIsScrolled] = useState(false);
   const [contrast, setContrast] = useState(false);
 
+  // Tutoriaalin data
   const jsonData = [
     {
       heading: "Generate a homepage for a small local coffee shop",
@@ -53,6 +55,7 @@ Welcome to our cozy neighborhood coffee shop! We are dedicated to providing our 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [currentData, setCurrentData] = useState(jsonData[currentIndex]);
 
+  // Navigointi tutoriaalin sivujen välillä
   const goToNext = () => {
     if (currentIndex < jsonData.length - 1) {
       const nextIndex = currentIndex + 1;
@@ -122,6 +125,7 @@ Welcome to our cozy neighborhood coffee shop! We are dedicated to providing our 
     navigate(endpoint);
   };
 
+  // Navigaatioscrollaus
   const smoothScroll = (linkId: string, targetId: string): void => {
     const scrollLink = document.getElementById(linkId);
 

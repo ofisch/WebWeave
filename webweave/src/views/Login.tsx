@@ -6,6 +6,7 @@ import { firestore } from "../utils/firebase";
 import { useNavigate } from "react-router-dom";
 import { Heading } from "../components/Heading";
 
+// Login-sivu
 export const Login = () => {
   const user = useContext(AuthContext);
 
@@ -17,10 +18,13 @@ export const Login = () => {
   const passwordConfRef = useRef<HTMLInputElement>(null);
   const [errorMessage, setErrorMessage] = useState<string>("");
 
+  const [formToggle, setFormToggle] = useState(true);
+
   const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
   const navigate = useNavigate();
 
+  // Lisätään käyttäjä firestore-dokumenttiin
   const addUserToDatabase = async (
     id: string,
     username: string,
@@ -36,6 +40,7 @@ export const Login = () => {
     }
   };
 
+  // Luodaan käyttäjä firebaseen
   const createAccount = async () => {
     const usernameValue = usernameRef.current!.value;
     const emailValue = emailRef.current!.value;
@@ -46,6 +51,7 @@ export const Login = () => {
 
     const errors = [];
 
+    // Login validaatioita
     if (!emailValue || !passwordValue || !passwordConfValue) {
       errors.push("Please fill in all of the fields");
     }
@@ -83,7 +89,6 @@ export const Login = () => {
 
     try {
       await auth.createUserWithEmailAndPassword(emailValue, passwordValue);
-      //lisätään käyttäjä firestore-dokumenttiin sivujen tallennusta varten
       auth.onAuthStateChanged((user) => {
         if (user) {
           const uid = user.uid;
@@ -108,6 +113,7 @@ export const Login = () => {
     }
   };
 
+  // Siosäänkirjautuminen
   const signIn = async () => {
     const input = emailRef.current!.value;
     const passwordValue = passwordRef.current!.value;
@@ -181,7 +187,6 @@ export const Login = () => {
     navigate(endpoint);
   };
 
-  const [formToggle, setFormToggle] = useState(true);
   const toggle = () => {
     setFormToggle(!formToggle);
     setErrorMessage("");

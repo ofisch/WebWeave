@@ -4,9 +4,13 @@ import { exportToJSONFile } from "../utils/openai";
 import Chart from "chart.js/auto";
 import { Heading } from "../components/Heading";
 
+// Visualisoitu lokidata sivu
 export const LogData = () => {
   const [jsonData, setJsonData] = useState<any>(null);
   const [modelData, setModelData] = useState<any[]>([]);
+
+  const avgRequestTimeChartRef = useRef<HTMLCanvasElement | null>(null);
+  const avgTokensUsedChartRef = useRef<HTMLCanvasElement | null>(null);
 
   const parseTimeToSeconds = (timeString: string): number => {
     const [value, unit] = timeString?.split(" ");
@@ -27,6 +31,7 @@ export const LogData = () => {
     }
   }, []);
 
+  // Lasketaan keskiarvot logidatasta
   useEffect(() => {
     if (jsonData) {
       const models: Record<
@@ -71,9 +76,7 @@ export const LogData = () => {
     }
   }, [jsonData]);
 
-  const avgRequestTimeChartRef = useRef<HTMLCanvasElement | null>(null);
-  const avgTokensUsedChartRef = useRef<HTMLCanvasElement | null>(null);
-
+  // Visuaaliset kaaviot
   useEffect(() => {
     if (modelData.length > 0) {
       if (avgRequestTimeChartRef.current) {

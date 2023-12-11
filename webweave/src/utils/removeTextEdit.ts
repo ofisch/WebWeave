@@ -1,3 +1,4 @@
+// Poista tekstieditointi-skripti html-koodista
 const removeTextEdit = (commentText: string, htmlCode: string) => {
   const htmlContent = htmlCode;
 

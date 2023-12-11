@@ -6,6 +6,7 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DoneIcon from "@mui/icons-material/Done";
 import InfoIcon from "@mui/icons-material/Info";
 
+// Komponentti joka renderöi tekstigeneraattorin
 const TextGenerator: React.FC = () => {
   const [prompt, setPrompt] = React.useState<string>("");
   const promptAreaRef = React.useRef<HTMLTextAreaElement>(null);
@@ -15,12 +16,14 @@ const TextGenerator: React.FC = () => {
   const [copied, setCopied] = React.useState<boolean>(false);
   const [isTooltipVisible, setTooltipVisible] = React.useState<boolean>(false);
 
+  // Käsittele promptin muutokset
   const handlePromptChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setPrompt(e.target.value);
     localStorage.setItem("textGeneratorPrompt", e.target.value);
     setCopied(false);
   };
 
+  // Käsittele API-pyynnön tekeminen
   const handleApiRequest = async (prompt: string) => {
     const role = "writer";
     setLoading(true);
@@ -32,25 +35,21 @@ const TextGenerator: React.FC = () => {
     setCopied(false);
   };
 
+  // Kopioi vastaus leikepöydälle napin painalluksesta
   const copyToClipboard = () => {
-    // Create a textarea element to temporarily hold the text
     const textarea = document.createElement("textarea");
     textarea.value = response;
 
-    // Set the textarea to be invisible
     textarea.style.position = "fixed";
     textarea.style.left = "0";
     textarea.style.top = "0";
     textarea.style.opacity = "0";
 
-    // Append the textarea to the DOM
     document.body.appendChild(textarea);
 
-    // Select and copy the text
     textarea.select();
     document.execCommand("copy");
 
-    // Remove the textarea from the DOM
     document.body.removeChild(textarea);
     setCopied(true);
   };

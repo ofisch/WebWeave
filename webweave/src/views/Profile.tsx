@@ -1,8 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../context/AuthContext";
-// tyylikirjasto
 import style from "../assets/style";
-// ikonit
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
@@ -14,6 +12,7 @@ import { Heading } from "../components/Heading";
 import DeleteModal from "../components/modals/DeleteModal";
 import EditModal from "../components/modals/EditModal";
 
+// Profiili-sivu
 export const Profile = () => {
   const user = useContext(AuthContext);
 
@@ -29,9 +28,13 @@ export const Profile = () => {
   const [pages, setPages] = useState<string[]>([]);
   const [pagesLoaded, setPagesLoaded] = useState<boolean>(false);
 
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [pageToDelete, setPageToDelete] = useState("");
+
+  const [editModalOpen, setEditModalOpen] = useState(false);
+  const [pageNameToEdit, setPageNameToEdit] = useState("");
+
   // haetaan sivut firestoresta ja lisätään pages-statetaulukoon
-  // TEHTY: tarkista, onko pages-taulukossa jo sisältöä, jos on, ei tarvitse hakea uudestaan
-  // TEHTY: tee haku kuitenkin uudestaan, kun käyttäjä tallentaa uuden sivun
   useEffect(() => {
     const getPages = async () => {
       try {
@@ -40,7 +43,6 @@ export const Profile = () => {
         setPagesLoaded(true);
         setPages(pageNames);
         localStorage.setItem("pages", JSON.stringify(pageNames));
-        console.log("pages:", pages);
       } catch (error) {
         console.error("Error fetching pages:", error);
       }
@@ -71,9 +73,6 @@ export const Profile = () => {
     setIsEditMode((prevMode) => !prevMode);
   };
 
-  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [pageToDelete, setPageToDelete] = useState("");
-
   const handleDelete = (pageName: string) => {
     setPageToDelete(pageName);
     setDeleteModalOpen(true);
@@ -97,8 +96,6 @@ export const Profile = () => {
         const updatedPages = pages.filter((page) => page !== pageToDelete);
         setPages(updatedPages);
         localStorage.setItem("pages", JSON.stringify(updatedPages));
-
-        console.log(`Page "${pageToDelete}" deleted successfully.`);
       } else {
         console.log("Document not found for page:", pageToDelete);
       }
@@ -111,12 +108,8 @@ export const Profile = () => {
     setDeleteModalOpen(false);
   };
 
-  const [editModalOpen, setEditModalOpen] = useState(false);
-  const [pageNameToEdit, setPageNameToEdit] = useState("");
-
   const handleEdit = (pageName: string) => {
     setPageNameToEdit(pageName);
-    console.log("pageNameToEdit:", pageNameToEdit);
     setEditModalOpen(true);
   };
 

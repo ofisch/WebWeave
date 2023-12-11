@@ -5,6 +5,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import HomeIcon from "@mui/icons-material/Home";
 import { AuthContext } from "../context/AuthContext";
 
+// Komponentti joka renderöi sivun yläreunan navigaatiopalkin
 export const Heading = () => {
   const user = useContext(AuthContext);
 

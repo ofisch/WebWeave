@@ -22,6 +22,7 @@ import NotSignedInModal from "../components/modals/NotSignedInModal";
 import ClearModal from "../components/modals/ClearModal";
 import RemoveImageModal from "../components/modals/RemoveImageModal";
 
+// Generaattori-sivu
 export const Home = () => {
   const [fontSizeSettings, setFontSizeSettings] =
     React.useState<string>("normal (16px)");
@@ -40,6 +41,7 @@ export const Home = () => {
   const [color, setColor] = useState("#2C3E50");
   const [framework, setFrameworkSettings] = React.useState<string>("");
   const [font, setFontSettings] = React.useState<string>("");
+
   const [prompt, setPrompt] = React.useState<string>("");
   const [response, setResponse] = useState<string>("");
   const [requestTime, setRequestTime] = useState<string>("");
@@ -47,25 +49,33 @@ export const Home = () => {
   const [formToggle, setFormToggle] = useState(true);
   const [loading, setLoading] = useState(false);
   const [roleContent, setRoleContent] = useState<string>("");
+  const promptAreaRef = React.useRef<HTMLTextAreaElement>(null);
+  const [content, setContent] = useState("");
 
   const user = useContext(AuthContext);
-
   const usersCollection = firestore.collection("users");
   const usersDocRef = usersCollection.doc(user?.uid);
   const pagesSubCollection = usersDocRef.collection("pages");
 
-  const promptAreaRef = React.useRef<HTMLTextAreaElement>(null);
-
   const [toggleImageBank, setToggleImageBank] = useState<boolean>(false);
+  const [imageName, setImageName] = useState("");
+  const [imageLink, setImageLink] = useState("");
+  const [imageList, setImageList] = useState<{ name: string; link: string }[]>(
+    []
+  );
+  const [selectedImageName, setSelectedImageName] = useState<string>("");
+  const [selectedImage, setSelectedImage] = useState<string>("");
 
-  // tallennetaan sivu firestoreen
+  const [clearModalIsOpen, setClearModalIsOpen] = useState(false);
   const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
   const [isDownloadModalOpen, setIsDownloadModalOpen] = useState(false);
   const [isNotSignedInModalOpen, setIsNotSignedInModalOpen] = useState(false);
   const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false);
 
-  const [content, setContent] = useState("");
+  const [isTooltipVisible, setTooltipVisible] = useState(false);
+  const [isTooltipImageVisible, setTooltipImageVisible] = useState(false);
 
+  // tallennetaan sivun sisältö stateen
   const savePage = async (content: string) => {
     if (user === null) {
       setIsNotSignedInModalOpen(true);
@@ -81,6 +91,7 @@ export const Home = () => {
     setIsRemoveModalOpen(false);
   };
 
+  // tallennetaan sivu tietokantaan modalin kautta
   const handleModalSubmit = async (pageNameInput: string) => {
     const page = {
       pageName: pageNameInput,
@@ -105,6 +116,7 @@ export const Home = () => {
       }
     }
   };
+
   const handleDownloadModalSubmit = async () => {
     closeModal();
   };
@@ -137,11 +149,6 @@ export const Home = () => {
     setFrameworkSettings(event.target.value);
   };
 
-  // skaalataan iframe sen sisällä olevan sivun kokoiseksi, kun sivu ladataan
-  window.onload = () => {
-    //resizeIframeToFiContent(iFrame);
-  };
-
   useEffect(() => {
     if (promptAreaRef.current) {
       typePlaceholder(promptAreaRef.current, "describe the page here...");
@@ -154,6 +161,8 @@ export const Home = () => {
 
     return () => clearInterval(interval);
   }, []);
+
+  // Fontin koon valinta settingsissä
   const handleFontSizeSettingsChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
@@ -172,7 +181,7 @@ export const Home = () => {
     setFontSettings("none selected");
   }, []);
 
-  // luodaan prompt openai-API:lle
+  // Vaihdetaan valittu väri
   const colorSwitch = (id: string) => {
     if (id === "Main") {
       setCurrentColor(1);
@@ -206,6 +215,7 @@ export const Home = () => {
     }
   };
 
+  // Tehdään muokattu versio promptista asetuksien kanssa
   const makePrompt = () => {
     let finalPrompt = "";
     let frameworkPrompt = framework;
@@ -219,8 +229,6 @@ export const Home = () => {
     } else {
       frameworkPrompt = " Use " + framework + " css framework.";
     }
-    console.log("framework = " + framework);
-    console.log("fontti = " + font);
     if (font === "none selected") {
       fontPrompt = "";
     } else {
@@ -245,9 +253,9 @@ export const Home = () => {
       return prompt;
     }
   };
+
+  // Vaihdetaan väriä colorpickerillä
   const handleColorChange = (newColor: { hex: string }) => {
-    console.log("color: ", newColor);
-    console.log("colorHex: ", newColor.hex);
     setColor(newColor.hex);
     const main = document.getElementById("MainColorCode");
     const accent = document.getElementById("AccentColorCode");
@@ -291,21 +299,23 @@ export const Home = () => {
     }
     event.target.value = "Add new color";
   };
+
+  // Valitaan avoinna oleva colorpicker
   const selectOpenColor = () => {
     if (document.getElementById("Main")!.style.display === "grid") {
-      console.log("Main");
       colorSwitch("Main");
     } else if (document.getElementById("Accent")!.style.display === "grid") {
-      console.log("Accent");
       colorSwitch("Accent");
     } else if (document.getElementById("Action")!.style.display === "grid") {
-      console.log("Action");
       colorSwitch("Action");
     }
   };
+
   interface Color {
     hex: string;
   }
+
+  // Suljetaan valittu väri
   const closeColor = (id: string) => {
     if (id === "Main") {
       document.getElementById("Main")!.style.display = "none";
@@ -316,7 +326,8 @@ export const Home = () => {
     }
     selectOpenColor();
   };
-  // lähetetään prompt openai-API:lle ja asetetaan vastaus responseen-stateen
+
+  // lähetetään prompt openai-API:lle ja asetetaan vastaus responseen
   const handleApiRequest = async () => {
     // ajastetaan API-pyynnön kesto ja tulostetaan se requestStatusiin
     const startTime = performance.now();
@@ -324,39 +335,29 @@ export const Home = () => {
     setFormToggle(false);
     setLoading(true);
 
-    // lähetetään prompt openai-API:lle ja asetetaan vastaus responseen-stateen
+    // lähetetään prompt openai-API:lle ja asetetaan vastaus responseen
     const settingPrompt = makePrompt();
     const apiResponse = await makeApiRequest(settingPrompt, roleContent);
-    //const apiResponse = await makeApiRequest(settingPrompt);
 
-    // Find the indices of <!DOCTYPE html> and </html>
     const doctypeStartIndex = apiResponse.indexOf("<!DOCTYPE html>");
     const htmlEndIndex = apiResponse.indexOf("</html>") + "</html>".length;
 
-    // Extract the HTML content
+    // haetaan API-pyynnön vastauksesta html-sisältö ja tallennetaan se htmlResponse-stateen
     const htmlContent = apiResponse
       .substring(doctypeStartIndex, htmlEndIndex)
       .trim();
 
-    // Extract the rest of the content
     let nonHtmlContent =
       apiResponse.substring(0, doctypeStartIndex) +
       apiResponse.substring(htmlEndIndex).trim();
-    // Remove "```html ```"
     nonHtmlContent = nonHtmlContent.replace("```html", " ");
     nonHtmlContent = nonHtmlContent.replace("```", " ");
-    // Replace ":" with "."
     nonHtmlContent = nonHtmlContent.replace(/:/g, ".");
     localStorage.setItem("explanation", nonHtmlContent);
-
-    // Print the results (you can use these variables as needed in your project)
-    // console.log("HTML Content:", htmlContent);
-    // console.log("\nNon-HTML Content:", nonHtmlContent);
     localStorage.setItem("htmlResponse", htmlContent);
     localStorage.setItem("userPrompt", prompt);
 
     setResponse(localStorage.getItem("htmlResponse") || "");
-    // console.log(apiResponse);
 
     // lasketaan API-pyynnön kesto ja asetetaan se requestTime-stateen
     const endTime = performance.now();
@@ -373,7 +374,6 @@ export const Home = () => {
 
     // lisätään API-pyynnön kesto log.json-tiedostoon
     const existingData = localStorage.getItem("log.json");
-    console.log(existingData);
 
     // jos log.json-tiedosto on olemassa, lisätään siihen API-pyynnön kesto
     if (existingData) {
@@ -386,7 +386,6 @@ export const Home = () => {
           lastObject.requestTime = formattedTime;
 
           const updatedData = JSON.stringify(dataArray);
-          // console.log("updated json: " + updatedData);
 
           localStorage.setItem("log.json", updatedData);
         } else {
@@ -402,6 +401,7 @@ export const Home = () => {
     setRoleContent("");
   };
 
+  // Optimointi API-pyynnön käsittely
   const handleOptimizeApiRequest = async () => {
     // ajastetaan API-pyynnön kesto ja tulostetaan se requestStatusiin
     const startTime = performance.now();
@@ -412,7 +412,6 @@ export const Home = () => {
     // lähetetään prompt openai-API:lle ja asetetaan vastaus responseen-stateen
     const settingPrompt = makePrompt();
     const apiResponse = await makeApiRequest(settingPrompt, roleContent);
-    //const apiResponse = await makeApiRequest(settingPrompt);
 
     setPrompt(apiResponse);
     localStorage.setItem("userPrompt", prompt);
@@ -453,8 +452,6 @@ export const Home = () => {
     handleEffect();
   }, [roleContent]);
 
-  const [clearModalIsOpen, setClearModalIsOpen] = useState(false);
-
   const closeClearModal = () => {
     setClearModalIsOpen(false);
   };
@@ -472,7 +469,6 @@ export const Home = () => {
     setRequestStatus("");
   };
 
-  // päivitetään requestStatusiin API-pyynnön kesto
   useEffect(() => {
     if (formToggle) {
       setRequestStatus(requestTime ? "Request Time: " + requestTime : "");
@@ -481,9 +477,6 @@ export const Home = () => {
       setRequestStatus("Request in progress");
     }
   }, [formToggle, requestTime]);
-
-  const [isTooltipVisible, setTooltipVisible] = useState(false);
-  const [isTooltipImageVisible, setTooltipImageVisible] = useState(false);
 
   const handleMouseEnter = () => {
     setTooltipVisible(true);
@@ -505,14 +498,6 @@ export const Home = () => {
     setToggleImageBank(!toggleImageBank);
   };
 
-  const [imageName, setImageName] = useState("");
-  const [imageLink, setImageLink] = useState("");
-  const [imageList, setImageList] = useState<{ name: string; link: string }[]>(
-    []
-  );
-  const [selectedImageName, setSelectedImageName] = useState<string>("");
-  const [selectedImage, setSelectedImage] = useState<string>("");
-
   useEffect(() => {
     const storedImages = localStorage.getItem("imageList");
     if (storedImages) {
@@ -522,6 +507,7 @@ export const Home = () => {
     }
   }, []);
 
+  // Tallennetaan uusi kuva imageListiin
   const handleAddImage = () => {
     const newImage = { name: imageName, link: imageLink };
     const updatedList = [...imageList, newImage];
@@ -537,6 +523,7 @@ export const Home = () => {
     setImageLink("");
   };
 
+  // Lisätään valittu kuva promptiin
   const handleAddSelectedImage = () => {
     if (selectedImage) {
       const imagePrompt = `Add this image to the site: ${selectedImage}`;
@@ -546,6 +533,7 @@ export const Home = () => {
     }
   };
 
+  // Poistetaan valittu kuva imageLististä
   const handleRemoveSelectedImage = () => {
     if (selectedImage) {
       const updatedImageList = imageList.filter(
@@ -561,6 +549,7 @@ export const Home = () => {
     }
   };
 
+  // Valitaan kuva imageLististä
   const handleImageSelection = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedImageName = e.target.value;
     setSelectedImageName(selectedImageName);
@@ -670,14 +659,14 @@ export const Home = () => {
                   className={"text-action"}
                   onClick={() => handleImageBankToggle()}
                 >
-                  Image Bank <ArrowDropUpIcon />
+                  Image bank <ArrowDropUpIcon />
                 </button>
               ) : (
                 <button
                   className={"text-action"}
                   onClick={() => handleImageBankToggle()}
                 >
-                  Image Bank <ArrowDropDownIcon />
+                  Image bank <ArrowDropDownIcon />
                 </button>
               )}
             </div>
@@ -863,7 +852,7 @@ export const Home = () => {
           {toggleImageBank ? (
             <div className={style.imageBank}>
               <div className={style.imageBankHeading}>
-                <h2 className={style.imageBankHeader}>Image Bank</h2>
+                <h2 className={style.imageBankHeader}>Image bank</h2>
                 <button
                   className={style.previewImageInfo}
                   onMouseEnter={handleMouseEnterImage}

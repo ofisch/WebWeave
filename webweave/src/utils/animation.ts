@@ -21,7 +21,7 @@ export const loadingAnimation = (element: HTMLElement, color: string) => {
   const animationElement = document.createElement("div");
   element.appendChild(animationElement);
 
-  function load() {
+  const load = () => {
     let dotColor;
     if (color === "action") {
       dotColor = "#00BFFF";
@@ -41,6 +41,6 @@ export const loadingAnimation = (element: HTMLElement, color: string) => {
         }, speed);
       }, speed);
     }, speed);
-  }
+  };
   load();
 };

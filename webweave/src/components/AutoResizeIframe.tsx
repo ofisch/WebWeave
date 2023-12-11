@@ -5,6 +5,7 @@ interface AutoResizeIframeProps {
   contentSrc: string;
 }
 
+// Komponentti joka renderöi iframe-elementin, joka skaalautuu automaattisesti
 const AutoResizeIframe: React.FC<AutoResizeIframeProps> = ({ contentSrc }) => {
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
 
@@ -12,6 +13,7 @@ const AutoResizeIframe: React.FC<AutoResizeIframeProps> = ({ contentSrc }) => {
     if (iframeRef.current) {
       const iframe = iframeRef.current;
 
+      // Mukauta iframen koko sisällön mukaan
       const adjustIframeSize = () => {
         if (iframe.contentWindow && iframe.contentWindow.document) {
           iframe.style.height = `${

@@ -1,3 +1,4 @@
+// Tekstieditorin scripti, joka mahdollistaa sivun tekstisisällön muokkaamisen
 const textEdit = {
   script: `
 
