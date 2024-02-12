@@ -679,7 +679,7 @@ export const Home = () => {
           >
             <h2 className={style.settingsHeader}>Settings</h2>
             <div className="grid gap-4 grid-cols-4 xs:grid-cols-1">
-              <div className="flex flex-col">
+              <div className="flex col-span-2 flex-col md:col-span-1">
                 <select
                   name="colorpicker"
                   className={style.colorSelect}
@@ -1017,7 +1017,7 @@ export const Home = () => {
                   onClick={() => setIsDownloadModalOpen(true)}
                 >
                   <p className="flex-auto">
-                    Download page <DownloadIcon />
+                    Download <DownloadIcon />
                   </p>
                 </button>
                 <button
@@ -1025,7 +1025,7 @@ export const Home = () => {
                   onClick={() => savePage(response)}
                 >
                   <p className="flex-auto">
-                    Save page to profile <SaveIcon />
+                    Save to profile <SaveIcon />
                   </p>
                 </button>
               </div>

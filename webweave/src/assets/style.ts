@@ -28,12 +28,12 @@ const style = {
   buttonSave:
     "p-1 bg-action text-black rounded-lg col-span-2 h-12 transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",
   buttonSaveHome:
-    "p-1 bg-action text-black rounded-lg col-span-3 h-12 transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",
+    "p-1 bg-action text-black rounded-lg col-span-2 h-12 transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",
 
   buttonSaveNew:
     "p-1 bg-action text-black rounded-lg h-12 transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",
   buttonDownload:
-    "p-1 bg-action text-black rounded-lg h-12 transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",
+    "p-1 bg-action text-black rounded-lg col-span-2 h-12 transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",
   buttonDownloadEdit:
     "p-1 bg-action text-black rounded-lg h-12 transition ease-in-out delay-70 hover:-translate-y-1 hover:scale-125 hover:cursor-pointer hover:opacity-75 duration-70",
   top: "py-4 max-w-5xl grid gap-4 xs:grid-cols-2",
@@ -130,7 +130,7 @@ const style = {
   settingsHeader: "font-sometype text-white text-2xl text-left mb-4",
   picker: "grid gap-4",
   drop: "grid grid-cols-1 gap-4",
-  settingsDropdown: "grid grid-cols-1 col-span-2 gap-4",
+  settingsDropdown: "grid grid-cols-1 col-span-4 gap-4 md:col-span-2",
   sketchPicker: "mx-auto",
   colorPicker: "grid grid-cols-2 gap-4 col-span-1 ",
   selectors: "grid gap-4 col-span-1",
