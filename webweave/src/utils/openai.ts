@@ -30,7 +30,9 @@ const roles = {
 
 // Pyyntödata
 const requestData = {
-  model: "gpt-3.5-turbo-1106",
+  model: "gpt-4-0613",
+  //gpt-4-32k
+  //gpt-3.5-turbo-1106
   messages: [
     {
       role: "user",
@@ -146,4 +148,24 @@ const makeApiRequest = async (prompt: string, role: string) => {
   }
 };
 
-export { makeApiRequest, exportToJSONFile, responseFinal, roles };
+const makeApiRequestNoRole = async (prompt: string) => {
+  try {
+    requestData.messages[0].content = prompt;
+    requestData.messages[1].content = roles.webdev;
+
+    const response = await axios.post(endpoint, requestData, { headers });
+    const responseContent = response.data.choices[0].message.content;
+
+    return responseContent;
+  } catch (error) {
+    console.error("API-virhe: ", error);
+  }
+};
+
+export {
+  makeApiRequest,
+  makeApiRequestNoRole,
+  exportToJSONFile,
+  responseFinal,
+  roles,
+};
