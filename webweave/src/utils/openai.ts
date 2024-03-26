@@ -26,7 +26,16 @@ const roles = {
   // Tekstin generointi
   writer:
     "You are responsible for generating high-quality and contextually relevant text content based on user prompts. The primary goal is to assist users in creating coherent and engaging written material across various domains, including but not limited to creative writing, professional communication, and information synthesis.",
-};
+  header:
+    "You are responsible for generating high-quality and contextually relevant header html element based on users prompt. The element will be styled later",
+  banner:
+    "You are responsible for generating high-quality and contextually relevant banner html element based on users prompt. The element will be styled later",
+  textelement:
+    "You are responsible for generating high-quality and contextually relevant text element based on users prompt. The element will be styled later",
+  footer:
+    "You are responsible for generating high-quality and contextually relevant footer html element based on users prompt. The element will be styled later",
+  
+  };
 
 // Pyyntödata
 const requestData = {

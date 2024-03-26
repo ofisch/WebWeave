@@ -61,6 +61,7 @@ const style = {
   colorDisplayBox: "w-full h-10 rounded-lg ",
   colors: "grid grid-cols-1 gap-4",
   colorListItem: "rounded-lg grid grid-cols-3 gap-4 items-center",
+  
   colorList: "flex gap-4",
   prompt: "h-32 bg-blue-500 w-full bg-secondary rounded-lg text-black",
   settings: "h-56 bg-blue-500 bg-secondary rounded-lg text-black",
