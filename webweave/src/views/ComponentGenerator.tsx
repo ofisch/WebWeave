@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { GeneratorBox } from "../components/componentGenerator/GeneratorBox";
 import { Preview } from "../components/componentGenerator/Preview";
-import { generateSite, makeApiRequestWithBusiness } from "../utils/openai";
+import { makeApiRequestWithBusiness } from "../utils/openai";
 // import cleanCode from "../utils/codeCleaner";
 import "../utils/cssAnimations/generateLoading.css";
 
@@ -24,6 +24,9 @@ export const ComponentGenerator = () => {
     setResponse(apiResponse);
     localStorage.setItem("htmlResponse", apiResponse);
     */
+
+    setPrompt(prompt);
+    localStorage.setItem("userPrompt", prompt);
 
     console.log("apiResponse", apiResponse);
 
