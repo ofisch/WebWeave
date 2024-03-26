@@ -1,3 +1,8 @@
+import cleanCode, {
+  getBannerContent,
+  getBannerContentWithTags,
+  getComponentFromCode,
+} from "./codeCleaner.ts";
 import { API_KEY } from "./secret.ts";
 import axios from "axios";
 const apiKey = API_KEY;
@@ -26,12 +31,27 @@ const roles = {
   // Tekstin generointi
   writer:
     "You are responsible for generating high-quality and contextually relevant text content based on user prompts. The primary goal is to assist users in creating coherent and engaging written material across various domains, including but not limited to creative writing, professional communication, and information synthesis.",
+
+  // roolit eri komponenttien generointiin:
+  header:
+    "You are responsible for generating high-quality and contextually relevant header html element based on users prompt. Return only the header tag, nothing else. Return only HTML code, nothing else. The element will be styled later",
+  banner:
+    "You are responsible for generating high-quality and contextually relevant banner html element based on users prompt. Return only the banner tag, nothing else. Return only HTML code, nothing else. The element will be styled later",
+  textElement:
+    "You are responsible for generating high-quality and contextually relevant text element based on users prompt. Return only HTML code, nothing else. Return only the textelement, nothing else. Don't add a header or a footer. The element will be styled later",
+  footer:
+    "You are responsible for generating high-quality and contextually relevant footer html element based on users prompt. Return only the footer tag, nothing else. Return only HTML code, nothing else. The element will be styled later",
+  style:
+    "You are responsible for generating high-quality and contextually relevant style element based on users prompt. Make a good looking and modern styling. Make the page responsive. Return only the style tag and css code inside it, nothing else.",
+  script:
+    "You are responsible for generating high-quality and contextually relevant script element based on users prompt. Return only javascript code, nothing else.",
 };
 
 // Pyyntödata
 const requestData = {
-  model: "gpt-4-0613",
+  model: "gpt-3.5-turbo-1106",
   //gpt-4-32k
+  //gpt-4-1106-preview
   //gpt-3.5-turbo-1106
   messages: [
     {
@@ -148,6 +168,7 @@ const makeApiRequest = async (prompt: string, role: string) => {
   }
 };
 
+// uuden generointisivun testaamiseen
 const makeApiRequestNoRole = async (prompt: string) => {
   try {
     requestData.messages[0].content = prompt;
@@ -162,9 +183,161 @@ const makeApiRequestNoRole = async (prompt: string) => {
   }
 };
 
+/*
+const cafeWebsite = [
+  {
+    header: "<header> <h1></h1> </header>",
+    banner: `<div class="banner"> <h2></h2> </div>`,
+    menu: `<div class="menu"> <h3>Menu</h3> <ul></ul> </div>`,
+    contact: `<div class="contact"> <h3>Contact</h3> <p></p> </div>`,
+    footer: `<footer> <p></p> </footer>`,
+    style: `<style> </style>`,
+    script: `<script> </script>`,
+  },
+];
+*/
+
+const convertStructureToHTML = (siteStructure: any) => {
+  const { header, banner, textElement, footer } = siteStructure;
+
+  const html: string = `
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Document</title>
+    </head>
+    <body>
+      ${header}
+      ${banner}
+      ${textElement}
+      ${footer}
+    </body>
+    </html>
+  `;
+
+  return html;
+};
+
+// funktio, joka lisää tyylittelyn ja tarvittavat skripit sivulle ja palauttaa valmiin sivun
+const addStyleAndScript = async (html: string) => {
+  requestData.messages[0].content = `Make a good looking and modern styling to this page: ${html}`;
+  requestData.messages[1].content = roles.style;
+
+  await delay(5000);
+
+  const responseStyle = await axios.post(endpoint, requestData, { headers });
+  const responseStyleContent = responseStyle.data.choices[0].message.content;
+
+  console.log("responseStyleContent: ", responseStyleContent);
+
+  return html.replace("</head>", `${responseStyleContent}</head>`);
+};
+
+const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+
+const componentRoles: { [key: string]: string } = {
+  // roolit eri komponenttien generointiin:
+  header:
+    "You are responsible for generating high-quality and contextually relevant header html element based on users prompt. Return only the header tag, nothing else. Return only HTML code, nothing else. The element will be styled later",
+  banner:
+    "You are responsible for generating high-quality and contextually relevant banner html element based on users prompt. Return only the div with id=banner, nothing else. Return only HTML code, nothing else. The element will be styled later",
+  textElement:
+    "You are responsible for generating high-quality and contextually relevant main element based on users prompt. Make a main html tag and add content inside it. Return only HTML code, nothing else. Return only the main element, nothing else. Don't add a header or a footer. The element will be styled later",
+  footer:
+    "You are responsible for generating high-quality and contextually relevant footer html element based on users prompt. Return only the footer tag, nothing else. Return only HTML code, nothing else. The element will be styled later",
+};
+
+// api-kutsu, jossa mukana generointisivulla valittu toimiala
+const makeApiRequestWithBusiness = async (prompt: string) => {
+  try {
+    // asetetaan käyttäjän syöte pyyntödataan
+    requestData.messages[0].content = prompt;
+
+    // olio, johon kerätään generoidut komponentit
+    const components: { [key: string]: string } = {
+      header: "",
+      banner: "",
+      textElement: "",
+      footer: "",
+    };
+
+    // roolit ja niiden vastaavat tagit elementtien nappaamiseksi apin vastauksesta
+    const roletags: { [key: string]: string } = {
+      header: "header",
+      banner: `div id="banner"`,
+      textElement: "main",
+      footer: "footer",
+    };
+
+    // käydään läpi jokainen rooli ja tehdään sille api-kutsu
+    // generoidaan jokainen komponentti yksitellen ja lisätään ne components-olioon
+    for (const role in componentRoles) {
+      // asetetaan rooli pyyntödataan
+
+      await delay(5000);
+
+      requestData.messages[1].content = componentRoles[role];
+      const response = await axios.post(endpoint, requestData, { headers });
+
+      // haetaan vastauksesta elementin sisältö
+      const responseContent = response.data.choices[0].message.content;
+      console.log(`${role}-response: `, responseContent);
+
+      if (role === "banner") {
+        // jos rooli on banner, käytetään eri funktiota, joka nappaa bannerin
+        components[role] = getBannerContentWithTags(responseContent);
+      } else {
+        // jos rooli on mikään muu, käytetään funktiota joka nappaa elementin
+        components[role] = getComponentFromCode(
+          responseContent,
+          roletags[role]
+        );
+      }
+      console.log(`${role}-komponentti: `, components[role]);
+      await delay(5000);
+    }
+
+    const html = convertStructureToHTML(components);
+    console.log("html: ", html);
+
+    await delay(5000);
+
+    const completeHtml = await addStyleAndScript(html);
+    console.log("completeHtml: ", completeHtml);
+
+    return completeHtml;
+  } catch (error) {
+    console.error("API-virhe: ", error);
+  }
+};
+
+const generateSite = async (prompt: string) => {
+  const siteStructure = await makeApiRequestWithBusiness(prompt);
+  console.log("siteStructure: ", siteStructure);
+  /*
+  await delay(2000);
+
+  const plainHtml = convertStructureToHTML(siteStructure);
+  console.log("plainHtml: ", plainHtml);
+
+  await delay(2000);
+
+  const completeHtml = await addStyleAndScript(plainHtml);
+  console.log("completeHtml: ", completeHtml);
+
+  await delay(2000);
+
+  return completeHtml;
+  */
+};
+
 export {
   makeApiRequest,
   makeApiRequestNoRole,
+  makeApiRequestWithBusiness,
+  generateSite,
   exportToJSONFile,
   responseFinal,
   roles,

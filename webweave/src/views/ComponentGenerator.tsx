@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { GeneratorBox } from "../components/componentGenerator/GeneratorBox";
 import { Preview } from "../components/componentGenerator/Preview";
-import { makeApiRequestNoRole } from "../utils/openai";
-import cleanCode from "../utils/codeCleaner";
+import { generateSite, makeApiRequestWithBusiness } from "../utils/openai";
+// import cleanCode from "../utils/codeCleaner";
 import "../utils/cssAnimations/generateLoading.css";
 
 export const ComponentGenerator = () => {
@@ -17,11 +17,20 @@ export const ComponentGenerator = () => {
   // API-pyynnön käsittely
   const handleApiRequest = async () => {
     setLoading(true);
-    const apiResponse = await makeApiRequestNoRole(prompt);
+    const apiResponse = await makeApiRequestWithBusiness(prompt);
 
+    /*
     cleanCode(apiResponse);
     setResponse(apiResponse);
     localStorage.setItem("htmlResponse", apiResponse);
+    */
+
+    console.log("apiResponse", apiResponse);
+
+    setResponse(apiResponse || "");
+    localStorage.setItem("htmlResponse", apiResponse || "");
+
+    console.log(apiResponse);
     setLoading(false);
   };
 
@@ -36,6 +45,7 @@ export const ComponentGenerator = () => {
         <div className="mb-12">
           <GeneratorBox
             prompt={prompt}
+            setPrompt={setPrompt}
             handlePromptChange={handlePromptChange}
             promptAreaRef={promptAreaRef}
             handleApiRequest={handleApiRequest}
@@ -54,7 +64,9 @@ export const ComponentGenerator = () => {
         ) : null}
 
         <div>
-          <Preview response={response} setResponse={setResponse} />
+          {response.length > 0 ? (
+            <Preview response={response} setResponse={setResponse} />
+          ) : null}
         </div>
       </div>
     </>

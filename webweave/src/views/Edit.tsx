@@ -5,7 +5,7 @@ import { firestore } from "../utils/firebase";
 import { AuthContext } from "../context/AuthContext";
 import { pageToEdit } from "../context/PageEditContext";
 import { useNavigate } from "react-router-dom";
-import cleanCode from "../utils/codeCleaner";
+import { cleanCode } from "../utils/codeCleaner";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import InfoIcon from "@mui/icons-material/Info";
 import SaveIcon from "@mui/icons-material/Save";
