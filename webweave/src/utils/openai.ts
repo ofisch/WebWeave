@@ -2,6 +2,7 @@ import cleanCode, {
   getBannerContent,
   getBannerContentWithTags,
   getComponentFromCode,
+  getStyleComponent,
 } from "./codeCleaner.ts";
 import { API_KEY } from "./secret.ts";
 import axios from "axios";
@@ -42,7 +43,7 @@ const roles = {
   footer:
     "You are responsible for generating high-quality and contextually relevant footer html element based on users prompt. Return only the footer tag, nothing else. Return only HTML code, nothing else. The element will be styled later",
   style:
-    "You are responsible for generating high-quality and contextually relevant style element based on users prompt. Make a good looking and modern styling. Make the page responsive. Return only the style tag and css code inside it, nothing else.",
+    "You are responsible for generating high-quality and contextually relevant style element based on users prompt. Make a good looking and modern styling. Make the page responsive. Always add the styling html tag. Return only the style tag and css code inside it, nothing else.",
   script:
     "You are responsible for generating high-quality and contextually relevant script element based on users prompt. Return only javascript code, nothing else.",
 };
@@ -50,9 +51,10 @@ const roles = {
 // Pyyntödata
 const requestData = {
   model: "gpt-3.5-turbo-1106",
-  //gpt-4-32k
-  //gpt-4-1106-preview
-  //gpt-3.5-turbo-1106
+  //gpt-4-32k // ei toimi tällä hetkellä
+  //gpt-4-1106-preview // ei toimi tällä hetkellä
+  //gpt-3.5-turbo-1106 // tää on se paras
+  //gpt-3.5-turbo-0125 // vaihtoehto, jos ratelimit täynnä
   messages: [
     {
       role: "user",
@@ -225,14 +227,16 @@ const addStyleAndScript = async (html: string) => {
   requestData.messages[0].content = `Make a good looking and modern styling to this page: ${html}`;
   requestData.messages[1].content = roles.style;
 
-  await delay(5000);
-
   const responseStyle = await axios.post(endpoint, requestData, { headers });
   const responseStyleContent = responseStyle.data.choices[0].message.content;
 
   console.log("responseStyleContent: ", responseStyleContent);
 
-  return html.replace("</head>", `${responseStyleContent}</head>`);
+  const style = getStyleComponent(responseStyleContent);
+
+  console.log("style: ", style);
+
+  return html.replace("</head>", `${style}</head>`);
 };
 
 const delay = (ms) => new Promise((res) => setTimeout(res, ms));
@@ -252,10 +256,10 @@ const componentRoles: { [key: string]: string } = {
 // api-kutsu, jossa mukana generointisivulla valittu toimiala
 const makeApiRequestWithBusiness = async (prompt: string) => {
   try {
-    // asetetaan käyttäjän syöte pyyntödataan
+    // Set user input to request data
     requestData.messages[0].content = prompt;
 
-    // olio, johon kerätään generoidut komponentit
+    // Object to collect generated components
     const components: { [key: string]: string } = {
       header: "",
       banner: "",
@@ -263,7 +267,7 @@ const makeApiRequestWithBusiness = async (prompt: string) => {
       footer: "",
     };
 
-    // roolit ja niiden vastaavat tagit elementtien nappaamiseksi apin vastauksesta
+    // Roles and their corresponding tags for capturing elements from the API response
     const roletags: { [key: string]: string } = {
       header: "header",
       banner: `div id="banner"`,
@@ -271,45 +275,40 @@ const makeApiRequestWithBusiness = async (prompt: string) => {
       footer: "footer",
     };
 
-    // käydään läpi jokainen rooli ja tehdään sille api-kutsu
-    // generoidaan jokainen komponentti yksitellen ja lisätään ne components-olioon
+    // Iterate through each role and make an API call for it
+    // Generate each component one by one and add them to the components object
     for (const role in componentRoles) {
-      // asetetaan rooli pyyntödataan
-
-      await delay(5000);
+      // Set role to request data
 
       requestData.messages[1].content = componentRoles[role];
       const response = await axios.post(endpoint, requestData, { headers });
 
-      // haetaan vastauksesta elementin sisältö
+      // Get the content of the element from the response
       const responseContent = response.data.choices[0].message.content;
       console.log(`${role}-response: `, responseContent);
 
       if (role === "banner") {
-        // jos rooli on banner, käytetään eri funktiota, joka nappaa bannerin
+        // If the role is banner, use a different function to capture the banner
         components[role] = getBannerContentWithTags(responseContent);
       } else {
-        // jos rooli on mikään muu, käytetään funktiota joka nappaa elementin
+        // If the role is anything else, use a function to capture the element
         components[role] = getComponentFromCode(
           responseContent,
           roletags[role]
         );
       }
-      console.log(`${role}-komponentti: `, components[role]);
-      await delay(5000);
+      console.log(`${role}-component: `, components[role]);
     }
 
     const html = convertStructureToHTML(components);
     console.log("html: ", html);
-
-    await delay(5000);
 
     const completeHtml = await addStyleAndScript(html);
     console.log("completeHtml: ", completeHtml);
 
     return completeHtml;
   } catch (error) {
-    console.error("API-virhe: ", error);
+    console.error("API error: ", error);
   }
 };
 

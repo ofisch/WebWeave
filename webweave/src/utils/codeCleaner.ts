@@ -32,4 +32,26 @@ const getBannerContentWithTags = (html: string): string | null => {
   return bannerContent;
 };
 
-export { cleanCode, getComponentFromCode, getBannerContentWithTags };
+const getStyleComponent = (html: string): string | null => {
+  const startTag = "<style>";
+  const endTag = "</style>";
+
+  const startIndex = html.indexOf(startTag);
+  if (startIndex === -1) return null; // If start tag not found
+
+  const endIndex = html.indexOf(endTag, startIndex);
+  if (endIndex === -1) return null; // If end tag not found
+
+  // Extract the content including the start and end tags
+  const styleContent = html
+    .substring(startIndex, endIndex + endTag.length)
+    .trim();
+  return styleContent;
+};
+
+export {
+  cleanCode,
+  getComponentFromCode,
+  getBannerContentWithTags,
+  getStyleComponent,
+};
