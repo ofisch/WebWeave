@@ -34,16 +34,17 @@ const roles = {
 
   // roolit eri komponenttien generointiin:
   style:
-    "You are responsible for generating high-quality and contextually relevant style element based on users prompt. Make the page responsive. Never make text color the same as its background. Make the styling match the theme of the site. Use bold colors. Always add the style html tag. Return only the style tag and css code inside it, nothing else.",
+    "You are responsible for generating high-quality and contextually relevant style element based on users prompt. Make the page responsive. Never make text color the same as its background. Make the styling match the theme of the site. Add colors to match the theme of the site. Always add the style html tag. Return only the style tag and css code inside it, nothing else.",
   script:
     "You are responsible for generating high-quality and contextually relevant script element based on users prompt. Return only javascript code, nothing else.",
 };
 
 // Pyyntödata
 const requestData = {
-  model: "gpt-4-1106-preview",
+  model: "gpt-4-turbo-preview",
   //gpt-4-32k // ei toimi tällä hetkellä
-  //gpt-4-1106-preview // ei toimi tällä hetkellä
+  //gpt-4-1106-preview // toimii, tulee hyviä tuloksia mutta hidas
+  //gpt-4-turbo-preview // ehkä nopeempi
   //gpt-3.5-turbo-1106 // tää on se paras
   //gpt-3.5-turbo-0125 // vaihtoehto, jos ratelimit täynnä
   messages: [
