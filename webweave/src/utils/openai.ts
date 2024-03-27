@@ -33,8 +33,15 @@ const roles = {
     "You are responsible for generating high-quality and contextually relevant text content based on user prompts. The primary goal is to assist users in creating coherent and engaging written material across various domains, including but not limited to creative writing, professional communication, and information synthesis.",
 
   // roolit eri komponenttien generointiin:
+  styletailwind:
+    `You are responsible for generating a good looking, visual, high-quality and contextually relevant style element based on users prompt. Make the page responsive.
+    Never make text color the same as its background. Make the styling with Tailwind css as framework. Link the tailwind with cdn in the head element. Make the styling match 
+    the theme of the site. Add colors to match the theme of the site. Add hover effects and use styling on all elements, links and buttons included.`,
   style:
-    "You are responsible for generating high-quality and contextually relevant style element based on users prompt. Make the page responsive. Never make text color the same as its background. Make the styling match the theme of the site. Add colors to match the theme of the site. Always add the style html tag. Return only the style tag and css code inside it, nothing else.",
+    `You are responsible for generating a good looking, visual, high-quality and contextually relevant style element based on users prompt. Make the page responsive. 
+    Never make text color the same as its background. Make the styling match the theme of the site. Keep margins and padding xl to not make the page seem too stuffed.
+    Add colors to match the theme of the site. Add hover effects and use styling on all elements, links and buttons included. Always add the style html tag.
+    Return only the style tag and css code inside it, nothing else.`,
   script:
     "You are responsible for generating high-quality and contextually relevant script element based on users prompt. Return only the script html tag with javascript code inside, nothing else.",
 };
@@ -249,7 +256,8 @@ const addStyleAndScript = async (html: string) => {
 const componentRoles: { [key: string]: string } = {
   // roolit eri komponenttien generointiin:
   header:
-    "You are responsible for generating high-quality and contextually relevant header html element based on users prompt. Return only the header tag, nothing else. Return only HTML code, nothing else. Make the header clear and easy to read. Add a title to the header that matches the theme of the site. ",
+    `You are responsible for generating high-quality and contextually relevant header for a html element based on users prompt. Return only the header tag, nothing else. 
+    Return only HTML code, nothing else. Make the header clear and easy to read. Add a title to the header that matches the theme of the site.`,
   banner:
     "You are responsible for generating high-quality and contextually relevant banner html element based on users prompt. Return only the div with id=banner, nothing else. Return only HTML code, nothing else. Style the banner to be big and eye-catching. Add text to the banner. You can also add an image or a button to it.",
   textElement:
