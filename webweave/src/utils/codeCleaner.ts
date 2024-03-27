@@ -21,36 +21,41 @@ const getComponentFromCode = (code: string, component: string) => {
 
 // uus, joka toivottavasti ei leikkaa stylen takia pois
 const getComponentFromCode = (code: string, component: string) => {
-  const startIndex = code.indexOf(`<${component}>`);
-  if (startIndex === -1) {
+  // Construct regex pattern to match opening and closing tags with any attributes
+  const regex = new RegExp(
+    `(<${component}\\b[^>]*>[\\s\\S]*?<\\/${component}>)`,
+    "i"
+  );
+  const match = code.match(regex);
+
+  if (!match || match.length < 1) {
     // Component not found
     return "";
   }
 
-  // Find the endIndex dynamically based on startIndex and component tag
-  const endIndex =
-    code.indexOf(`</${component}>`, startIndex) + `</${component}>`.length;
-
-  // Extract the component content
-  const componentContent = code.substring(startIndex, endIndex).trim();
+  // Extract the entire matched tag including its content
+  const componentContent = match[0].trim();
   return componentContent;
 };
 
 const getBannerContentWithTags = (html: string): string | null => {
-  const startTag = '<div id="banner">';
+  // Define the start and end tags
+  const startTag = '<div id="banner"';
   const endTag = "</div>";
 
+  // Find the index of the start tag
   const startIndex = html.indexOf(startTag);
   if (startIndex === -1) return null; // If start tag not found
 
+  // Find the index of the end tag starting from the startIndex
   const endIndex = html.indexOf(endTag, startIndex);
   if (endIndex === -1) return null; // If end tag not found
 
   // Extract the content including the start and end tags
-  const bannerContent = html
+  const bannerContentWithTags = html
     .substring(startIndex, endIndex + endTag.length)
     .trim();
-  return bannerContent;
+  return bannerContentWithTags;
 };
 
 const getStyleComponent = (html: string): string | null => {
@@ -70,9 +75,27 @@ const getStyleComponent = (html: string): string | null => {
   return styleContent;
 };
 
+const getScriptComponent = (html: string): string | null => {
+  const startTag = "<script>";
+  const endTag = "</script>";
+
+  const startIndex = html.indexOf(startTag);
+  if (startIndex === -1) return null; // If start tag not found
+
+  const endIndex = html.indexOf(endTag, startIndex);
+  if (endIndex === -1) return null; // If end tag not found
+
+  // Extract the content including the start and end tags
+  const scriptContent = html
+    .substring(startIndex, endIndex + endTag.length)
+    .trim();
+  return scriptContent;
+};
+
 export {
   cleanCode,
   getComponentFromCode,
   getBannerContentWithTags,
   getStyleComponent,
+  getScriptComponent,
 };

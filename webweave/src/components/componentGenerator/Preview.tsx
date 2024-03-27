@@ -14,7 +14,7 @@ export const Preview = ({
 
   return (
     <>
-      <div className="flex  flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-md">
+      <div className="flex w-[1000px] m-auto flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-md">
         <h5 className="mb-2 mt-2 block font-sans text-xl font-semibold leading-snug tracking-normal text-blue-gray-900 antialiased">
           Esikatselu
         </h5>

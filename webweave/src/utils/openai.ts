@@ -36,7 +36,7 @@ const roles = {
   style:
     "You are responsible for generating high-quality and contextually relevant style element based on users prompt. Make the page responsive. Never make text color the same as its background. Make the styling match the theme of the site. Add colors to match the theme of the site. Always add the style html tag. Return only the style tag and css code inside it, nothing else.",
   script:
-    "You are responsible for generating high-quality and contextually relevant script element based on users prompt. Return only javascript code, nothing else.",
+    "You are responsible for generating high-quality and contextually relevant script element based on users prompt. Return only the script html tag with javascript code inside, nothing else.",
 };
 
 // Pyyntödata
@@ -209,6 +209,7 @@ const convertStructureToHTML = (siteStructure: SiteStructure) => {
 
 // funktio, joka lisää tyylittelyn ja tarvittavat skripit sivulle ja palauttaa valmiin sivun
 const addStyleAndScript = async (html: string) => {
+  // tyylin lisääminen sivulle
   requestData.messages[0].content = `Make a good looking and modern styling to this page: ${html}`;
   requestData.messages[1].content = roles.style;
 
@@ -221,7 +222,28 @@ const addStyleAndScript = async (html: string) => {
 
   console.log("style: ", style);
 
-  return html.replace("</head>", `${style}</head>`);
+  const styledHtml = html.replace("</head>", `${style}</head>`);
+
+  /*
+  // skriptin lisääminen sivulle
+  requestData.messages[0].content = `Add some JavaScript to this page if needed: ${styledHtml}`;
+  requestData.messages[1].content = roles.script;
+
+  const responseScript = await axios.post(endpoint, requestData, { headers });
+  const responseScriptContent = responseScript.data.choices[0].message.content;
+
+  console.log("responseScriptContent: ", responseScriptContent);
+
+  const script = getScriptComponent(responseScriptContent);
+
+  console.log("script: ", script);
+
+  const completeHtml = styledHtml.replace("</body>", `${script}</body>`);
+
+  return completeHtml;
+  */
+
+  return styledHtml;
 };
 
 const componentRoles: { [key: string]: string } = {
@@ -231,7 +253,7 @@ const componentRoles: { [key: string]: string } = {
   banner:
     "You are responsible for generating high-quality and contextually relevant banner html element based on users prompt. Return only the div with id=banner, nothing else. Return only HTML code, nothing else. Style the banner to be big and eye-catching. Add text to the banner. You can also add an image or a button to it.",
   textElement:
-    "You are responsible for generating high-quality and contextually relevant main element based on users prompt. Make a main html tag and add content inside it. Make many different sections. Return only HTML code, nothing else. Return only the main element, nothing else. Don't add a header or a footer. You can add images, text, and buttons. Make the text easy to read. You can add different kinds of sections and elements like cards and testimonials. Make the page look professional.",
+    "You are responsible for generating high-quality and contextually relevant main element based on users prompt. Make a main html tag and add content inside it. Make many different sections. Return only HTML code, nothing else. Return only the main element, nothing else. Don't make a banner or hero section. Don't add a header or a footer. You can add images, text, and buttons. Make the text easy to read. You can add different kinds of sections and elements like cards and testimonials. Make the page look professional.",
   footer:
     "You are responsible for generating high-quality and contextually relevant footer html element based on users prompt. Return only the footer tag, nothing else. Return only HTML code, nothing else. Make the footer match the style of the page. Add a copyright notice. Add links and info. Make the footer easy to read.",
 };
