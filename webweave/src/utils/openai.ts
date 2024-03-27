@@ -42,6 +42,7 @@ const roles = {
 // Pyyntödata
 const requestData = {
   model: "gpt-4-turbo-preview",
+  //model: "gpt-3.5-turbo-1106",
   //gpt-4-32k // ei toimi tällä hetkellä
   //gpt-4-1106-preview // toimii, tulee hyviä tuloksia mutta hidas
   //gpt-4-turbo-preview // ehkä nopeempi

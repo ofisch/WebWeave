@@ -4,6 +4,7 @@ import { Preview } from "../components/componentGenerator/Preview";
 import { makeApiRequestWithBusiness } from "../utils/openai";
 // import cleanCode from "../utils/codeCleaner";
 import "../utils/cssAnimations/generateLoading.css";
+import LoadVisualsWithDelay from "../components/componentGenerator/ComponentLoadVisual";
 
 export const ComponentGenerator = () => {
   // prompt ja response -statet
@@ -17,6 +18,7 @@ export const ComponentGenerator = () => {
   // API-pyynnön käsittely
   const handleApiRequest = async () => {
     setLoading(true);
+    setResponse("");
     const apiResponse = await makeApiRequestWithBusiness(prompt);
 
     /*
@@ -69,6 +71,8 @@ export const ComponentGenerator = () => {
         <div>
           {response.length > 0 ? (
             <Preview response={response} setResponse={setResponse} />
+          ) : loading ? (
+            <LoadVisualsWithDelay></LoadVisualsWithDelay>
           ) : null}
         </div>
       </div>
